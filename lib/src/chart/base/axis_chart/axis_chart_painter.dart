@@ -1,8 +1,6 @@
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/chart/bar_chart/bar_chart_painter.dart';
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_helper.dart';
 import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
-import 'package:fl_chart/src/chart/line_chart/line_chart_painter.dart';
 import 'package:fl_chart/src/extensions/paint_extension.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
 import 'package:fl_chart/src/utils/utils.dart';
@@ -10,9 +8,10 @@ import 'package:flutter/material.dart';
 
 /// This class is responsible to draw the grid behind all axis base charts.
 /// also we have two useful function [getPixelX] and [getPixelY] that used
-/// in child classes -> [BarChartPainter], [LineChartPainter]
-/// [dataList] is the currently showing data (it may produced by an animation using lerp function),
-/// [targetData] is the target data, that animation is going to show (if animating)
+/// in child classes -> BarChartPainter, BarChartPainter
+/// dataList is the currently showing data (it may produced by an animation
+/// using lerp function), targetData is the target data, that animation is
+/// going to show (if animating)
 abstract class AxisChartPainter<D extends AxisChartData>
     extends BaseChartPainter<D> {
   AxisChartPainter() {
@@ -26,6 +25,7 @@ abstract class AxisChartPainter<D extends AxisChartData>
 
     _imagePaint = Paint();
   }
+
   late Paint _gridPaint;
   late Paint _backgroundPaint;
   late Paint _extraLinesPaint;

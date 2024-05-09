@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 
 class BarChartSample7 extends StatefulWidget {
@@ -132,7 +132,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
                 ) {
                   return BarTooltipItem(
                     rod.toY.toString(),
-                    TextStyle(
+                    textStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: rod.color,
                       fontSize: 18,

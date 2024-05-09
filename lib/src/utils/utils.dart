@@ -9,6 +9,7 @@ class Utils {
   }
 
   Utils._internal();
+
   static Utils _singleton = Utils._internal();
 
   @visibleForTesting
@@ -282,6 +283,10 @@ class Utils {
       resultNumber = '0';
     }
 
+    if (resultNumber.contains('.') && resultNumber.endsWith('0')) {
+      resultNumber = resultNumber.substring(0, resultNumber.length - 1);
+    }
+
     return resultNumber + symbol;
   }
 
@@ -293,7 +298,9 @@ class Utils {
     final defaultTextStyle = DefaultTextStyle.of(context);
     var effectiveTextStyle = providedStyle;
     if (providedStyle == null || providedStyle.inherit) {
-      effectiveTextStyle = defaultTextStyle.style.merge(providedStyle);
+      effectiveTextStyle = defaultTextStyle.style
+          .copyWith(color: Colors.white)
+          .merge(providedStyle);
     }
     if (MediaQuery.boldTextOf(context)) {
       effectiveTextStyle = effectiveTextStyle!

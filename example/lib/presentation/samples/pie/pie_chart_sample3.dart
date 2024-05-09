@@ -1,5 +1,5 @@
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -51,7 +51,7 @@ class PieChartSample3State extends State {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 20.0 : 16.0;
-      final radius = isTouched ? 110.0 : 100.0;
+      final radius = isTouched ? 1.0 : 0.9;
       final widgetSize = isTouched ? 55.0 : 40.0;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
 
@@ -61,7 +61,7 @@ class PieChartSample3State extends State {
             color: AppColors.contentColorBlue,
             value: 40,
             title: '40%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -80,7 +80,7 @@ class PieChartSample3State extends State {
             color: AppColors.contentColorYellow,
             value: 30,
             title: '30%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -99,7 +99,7 @@ class PieChartSample3State extends State {
             color: AppColors.contentColorPurple,
             value: 16,
             title: '16%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -118,7 +118,7 @@ class PieChartSample3State extends State {
             color: AppColors.contentColorGreen,
             value: 15,
             title: '15%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,

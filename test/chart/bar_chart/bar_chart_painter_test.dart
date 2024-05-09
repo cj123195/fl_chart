@@ -1097,7 +1097,7 @@ void main() {
         ) {
           return BarTooltipItem(
             'helllo1',
-            textStyle1,
+            textStyle: textStyle1,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
             children: [
@@ -1297,7 +1297,7 @@ void main() {
         ) {
           return BarTooltipItem(
             'helllo1',
-            textStyle1,
+            textStyle: textStyle1,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
             children: [
@@ -1472,7 +1472,7 @@ void main() {
             'fasdfasdfhelllo1asdfasdfasdfasdfasdfasdfhelllo1asdf'
             'asdfasdfasdfasdfasdfhelllo1asdfasdfasdfasdfasdfasdfh'
             'elllo1asdfasdfasdfasdfasdfasdf',
-            textStyle1,
+            textStyle: textStyle1,
             textAlign: TextAlign.right,
             textDirection: TextDirection.rtl,
             children: List.generate(

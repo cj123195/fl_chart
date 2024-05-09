@@ -19,18 +19,22 @@ class SideTitleWidget extends StatefulWidget {
     required this.axisSide,
     this.space = 8.0,
     this.angle = 0.0,
+    this.alignment,
     this.fitInside = const SideTitleFitInsideData(
       enabled: false,
       distanceFromEdge: 0,
       parentAxisSize: 0,
       axisPosition: 0,
     ),
+    this.offset,
   });
 
   final AxisSide axisSide;
   final double space;
   final Widget child;
   final double angle;
+  final Alignment? alignment;
+  final Offset? offset;
 
   /// Define fitInside options with [SideTitleFitInsideData]
   ///
@@ -54,6 +58,9 @@ class SideTitleWidget extends StatefulWidget {
 
 class _SideTitleWidgetState extends State<SideTitleWidget> {
   Alignment _getAlignment() {
+    if (widget.alignment != null) {
+      return widget.alignment!;
+    }
     switch (widget.axisSide) {
       case AxisSide.left:
         return Alignment.centerRight;
@@ -119,15 +126,16 @@ class _SideTitleWidgetState extends State<SideTitleWidget> {
   @override
   Widget build(BuildContext context) {
     return Transform.translate(
-      offset: !widget.fitInside.enabled
-          ? Offset.zero
-          : AxisChartHelper().calcFitInsideOffset(
-              axisSide: widget.axisSide,
-              childSize: _childSize,
-              parentAxisSize: widget.fitInside.parentAxisSize,
-              axisPosition: widget.fitInside.axisPosition,
-              distanceFromEdge: widget.fitInside.distanceFromEdge,
-            ),
+      offset: widget.offset ??
+          (!widget.fitInside.enabled
+              ? Offset.zero
+              : AxisChartHelper().calcFitInsideOffset(
+                  axisSide: widget.axisSide,
+                  childSize: _childSize,
+                  parentAxisSize: widget.fitInside.parentAxisSize,
+                  axisPosition: widget.fitInside.axisPosition,
+                  distanceFromEdge: widget.fitInside.distanceFromEdge,
+                )),
       child: Transform.rotate(
         angle: widget.angle,
         child: Container(

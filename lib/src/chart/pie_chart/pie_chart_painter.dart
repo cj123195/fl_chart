@@ -11,13 +11,13 @@ import 'package:flutter/material.dart';
 
 /// Paints [PieChartData] in the canvas, it can be used in a [CustomPainter]
 class PieChartPainter extends BaseChartPainter<PieChartData> {
-  /// Paints [dataList] into canvas, it is the animating [PieChartData],
-  /// [targetData] is the animation's target and remains the same
+  /// Paints dataList into canvas, it is the animating [PieChartData],
+  /// targetData is the animation's target and remains the same
   /// during animation, then we should use it  when we need to show
-  /// tooltips or something like that, because [dataList] is changing constantly.
+  /// tooltips or something like that, because dataList is changing constantly.
   ///
-  /// [textScale] used for scaling texts inside the chart,
-  /// parent can use [MediaQuery.textScaleFactor] to respect
+  /// textScale used for scaling texts inside the chart,
+  /// parent can use MediaQuery.textScaleFactor to respect
   /// the system's font size.
   PieChartPainter() : super() {
     _sectionPaint = Paint()..style = PaintingStyle.stroke;
@@ -51,18 +51,9 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     final centerRadius = calculateCenterRadius(canvasWrapper.size, holder);
 
     drawCenterSpace(canvasWrapper, centerRadius, holder);
-    drawSections(canvasWrapper, sectionsAngle, centerRadius, holder);
-    drawTexts(context, canvasWrapper, holder, centerRadius);
-  }
-
-  @visibleForTesting
-  List<double> calculateSectionsAngle(
-    List<PieChartSectionData> sections,
-    double sumValue,
-  ) {
-    return sections.map((section) {
-      return 360 * (section.value / sumValue);
-    }).toList();
+    drawSections(context, canvasWrapper, sectionsAngle, centerRadius, holder);
+    drawBorder(canvasWrapper, centerRadius, holder);
+    drawTexts(context, canvasWrapper, holder, centerRadius, sectionsAngle);
   }
 
   @visibleForTesting
@@ -82,10 +73,83 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       centerRadius,
       _centerSpacePaint,
     );
+
+    if (data.centerSpaceBorder != null) {
+      final border = data.centerSpaceBorder!;
+      canvasWrapper.drawCircle(
+        Offset(centerX, centerY),
+        centerRadius + border.strokeOffset / 2,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..color = border.color
+          ..strokeWidth = border.width
+          ..strokeJoin,
+      );
+    }
+  }
+
+  @visibleForTesting
+  List<double> calculateSectionsAngle(
+    List<PieChartSectionData> sections,
+    double sumValue,
+  ) {
+    if (sections.every((e) => e.value == 0)) {
+      return List.generate(sections.length, (index) => 360 / sections.length);
+    }
+
+    return sections.map((section) {
+      return 360 * (section.value / sumValue);
+    }).toList();
+  }
+
+  double calculateSectionRadius(
+    Size viewSize,
+    PieChartData data,
+    PieChartSectionData section,
+  ) {
+    final radiusRatio = section.radiusRatio ?? 1;
+    var radius = math.min(viewSize.width, viewSize.height) / 2;
+    if (data.sectionsBorder != null) {
+      radius = radius - data.sectionsBorder!.strokeOffset;
+    }
+    return (radius -
+            data.centerSpaceRadius -
+            section.borderSide.strokeOffset * 2) *
+        radiusRatio;
+  }
+
+  @visibleForTesting
+  void drawBorder(
+    CanvasWrapper canvasWrapper,
+    double centerRadius,
+    PaintHolder<PieChartData> holder,
+  ) {
+    final data = holder.data;
+    final viewSize = canvasWrapper.size;
+    final center = Offset(viewSize.width / 2, viewSize.height / 2);
+
+    if (data.sectionsBorder == null || data.sections.isEmpty) {
+      return;
+    }
+
+    final border = data.sectionsBorder!;
+    final sectionRadius = calculateSectionRadius(
+      viewSize,
+      data,
+      data.sections.first,
+    );
+    final radius = centerRadius + sectionRadius + border.strokeOffset / 2;
+
+    canvasWrapper.drawCircle(
+      center,
+      radius,
+      border.toPaint(),
+    );
   }
 
   @visibleForTesting
   void drawSections(
+    BuildContext context,
     CanvasWrapper canvasWrapper,
     List<double> sectionsAngle,
     double centerRadius,
@@ -101,9 +165,10 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     for (var i = 0; i < data.sections.length; i++) {
       final section = data.sections[i];
       final sectionDegree = sectionsAngle[i];
+      final sectionRadius = calculateSectionRadius(viewSize, data, section);
 
       if (sectionDegree == 360) {
-        final radius = centerRadius + section.radius / 2;
+        final radius = centerRadius + sectionRadius / 2;
         final rect = Rect.fromCircle(center: center, radius: radius);
         _sectionPaint
           ..setColorOrGradient(
@@ -111,18 +176,18 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
             section.gradient,
             rect,
           )
-          ..strokeWidth = section.radius
+          ..strokeWidth = sectionRadius
           ..style = PaintingStyle.fill;
 
         final bounds = Rect.fromCircle(
           center: center,
-          radius: centerRadius + section.radius,
+          radius: centerRadius + sectionRadius,
         );
         canvasWrapper
           ..saveLayer(bounds, _sectionSaveLayerPaint)
           ..drawCircle(
             center,
-            centerRadius + section.radius,
+            centerRadius + sectionRadius,
             _sectionPaint..blendMode = BlendMode.srcOver,
           )
           ..drawCircle(
@@ -141,7 +206,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
           canvasWrapper
             ..drawCircle(
               center,
-              centerRadius + section.radius - (section.borderSide.width / 2),
+              centerRadius + sectionRadius - (section.borderSide.width / 2),
               _sectionStrokePaint,
             )
 
@@ -157,6 +222,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
       final sectionPath = generateSectionPath(
         section,
+        sectionRadius,
         data.sectionsSpace,
         tempAngle,
         sectionDegree,
@@ -164,7 +230,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         centerRadius,
       );
 
-      drawSection(section, sectionPath, canvasWrapper);
+      drawSection(context, section, sectionPath, canvasWrapper);
       drawSectionStroke(section, sectionPath, canvasWrapper, viewSize);
       tempAngle += sectionDegree;
     }
@@ -174,6 +240,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
   @visibleForTesting
   Path generateSectionPath(
     PieChartSectionData section,
+    double sectionRadius,
     double sectionSpace,
     double tempAngle,
     double sectionDegree,
@@ -182,7 +249,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
   ) {
     final sectionRadiusRect = Rect.fromCircle(
       center: center,
-      radius: centerRadius + section.radius,
+      radius: centerRadius + sectionRadius,
     );
 
     final centerRadiusRect = Rect.fromCircle(
@@ -198,20 +265,29 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         Offset(math.cos(startRadians), math.sin(startRadians));
 
     final startLineFrom = center + startLineDirection * centerRadius;
-    final startLineTo = startLineFrom + startLineDirection * section.radius;
+    final startLineTo = startLineFrom + startLineDirection * sectionRadius;
     final startLine = Line(startLineFrom, startLineTo);
 
     final endLineDirection = Offset(math.cos(endRadians), math.sin(endRadians));
 
     final endLineFrom = center + endLineDirection * centerRadius;
-    final endLineTo = endLineFrom + endLineDirection * section.radius;
+    final endLineTo = endLineFrom + endLineDirection * sectionRadius;
     final endLine = Line(endLineFrom, endLineTo);
+
+    final radius = Radius.circular(section.borderRadius ?? 0);
 
     var sectionPath = Path()
       ..moveTo(startLine.from.dx, startLine.from.dy)
-      ..lineTo(startLine.to.dx, startLine.to.dy)
+      ..arcToPoint(
+        startLine.to,
+        radius: radius,
+      )
       ..arcTo(sectionRadiusRect, startRadians, sweepRadians, false)
-      ..lineTo(endLine.from.dx, endLine.from.dy)
+      ..arcToPoint(
+        endLine.from,
+        radius: radius,
+        clockwise: false,
+      )
       ..arcTo(centerRadiusRect, endRadians, -sweepRadians, false)
       ..moveTo(startLine.from.dx, startLine.from.dy)
       ..close();
@@ -298,13 +374,14 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
   @visibleForTesting
   void drawSection(
+    BuildContext context,
     PieChartSectionData section,
     Path sectionPath,
     CanvasWrapper canvasWrapper,
   ) {
     _sectionPaint
       ..setColorOrGradient(
-        section.color,
+        section.color ?? Theme.of(context).colorScheme.primary,
         section.gradient,
         sectionPath.getBounds(),
       )
@@ -349,6 +426,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     CanvasWrapper canvasWrapper,
     PaintHolder<PieChartData> holder,
     double centerRadius,
+    List<double> sectionsAngle,
   ) {
     final data = holder.data;
     final viewSize = canvasWrapper.size;
@@ -358,8 +436,17 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
     for (var i = 0; i < data.sections.length; i++) {
       final section = data.sections[i];
-      final startAngle = tempAngle;
-      final sweepAngle = 360 * (section.value / data.sumValue);
+      final sweepAngle = sectionsAngle[i];
+      final sectionRadius = calculateSectionRadius(viewSize, data, section);
+      var startAngle = tempAngle;
+      if (section.borderRadius != null && section.borderRadius != 0) {
+        final angle = sectionRadius / 2 > section.borderRadius!
+            ? sectionRadius / 3
+            : sectionRadius > section.borderRadius!
+                ? (sectionRadius - section.borderRadius!) / 2
+                : 0;
+        startAngle -= angle;
+      }
       final sectionCenterAngle = startAngle + (sweepAngle / 2);
 
       double? rotateAngle;
@@ -371,13 +458,14 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         }
       }
 
+      final degree = Utils().radians(sectionCenterAngle);
       Offset sectionCenter(double percentageOffset) =>
           center +
           Offset(
-            math.cos(Utils().radians(sectionCenterAngle)) *
-                (centerRadius + (section.radius * percentageOffset)),
-            math.sin(Utils().radians(sectionCenterAngle)) *
-                (centerRadius + (section.radius * percentageOffset)),
+            math.cos(degree) *
+                (centerRadius + (sectionRadius * percentageOffset)),
+            math.sin(degree) *
+                (centerRadius + (sectionRadius * percentageOffset)),
           );
 
       final sectionCenterOffsetTitle =
@@ -416,8 +504,10 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     if (data.centerSpaceRadius.isFinite) {
       return data.centerSpaceRadius;
     }
-    final maxRadius =
-        data.sections.reduce((a, b) => a.radius > b.radius ? a : b).radius;
+    final sectionsRadius = data.sections
+        .map((e) => calculateSectionRadius(viewSize, data, e))
+        .toList();
+    final maxRadius = sectionsRadius.reduce((a, b) => a > b ? a : b);
     return (viewSize.shortestSide - (maxRadius * 2)) / 2;
   }
 
@@ -471,7 +561,8 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
       /// radius criteria
       final centerRadius = calculateCenterRadius(viewSize, holder);
-      final sectionRadius = centerRadius + section.radius;
+      final sectionRadius =
+          centerRadius + calculateSectionRadius(viewSize, data, section);
       final isInRadius = touchR > centerRadius && touchR <= sectionRadius;
 
       if (isInDegree && isInRadius) {
@@ -511,6 +602,8 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       final section = data.sections[i];
       final startAngle = tempAngle;
       final sweepAngle = sectionsAngle[i];
+
+      final sectionRadius = calculateSectionRadius(viewSize, data, section);
       final sectionCenterAngle = startAngle + (sweepAngle / 2);
       final centerRadius = calculateCenterRadius(viewSize, holder);
 
@@ -518,9 +611,9 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
           center +
           Offset(
             math.cos(Utils().radians(sectionCenterAngle)) *
-                (centerRadius + (section.radius * percentageOffset)),
+                (centerRadius + (sectionRadius * percentageOffset)),
             math.sin(Utils().radians(sectionCenterAngle)) *
-                (centerRadius + (section.radius * percentageOffset)),
+                (centerRadius + (sectionRadius * percentageOffset)),
           );
 
       final sectionCenterOffsetBadgeWidget =

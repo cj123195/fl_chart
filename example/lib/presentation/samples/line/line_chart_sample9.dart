@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -70,7 +70,7 @@ class LineChartSample9 extends StatelessWidget {
                         );
                         return LineTooltipItem(
                           '${touchedSpot.x}, ${touchedSpot.y.toStringAsFixed(2)}',
-                          textStyle,
+                          textStyle: textStyle,
                         );
                       }).toList();
                     },

@@ -544,7 +544,7 @@ class FlGridData with EquatableMixin {
     this.horizontalInterval,
     this.getDrawingHorizontalLine = defaultGridLine,
     this.checkToShowHorizontalLine = showAllGrids,
-    this.drawVerticalLine = true,
+    this.drawVerticalLine = false,
     this.verticalInterval,
     this.getDrawingVerticalLine = defaultGridLine,
     this.checkToShowVerticalLine = showAllGrids,
@@ -662,9 +662,8 @@ typedef GetDrawingGridLine = FlLine Function(double value);
 /// Returns a grey line for all values.
 FlLine defaultGridLine(double value) {
   return const FlLine(
-    color: Colors.blueGrey,
+    color: Colors.grey,
     strokeWidth: 0.4,
-    dashArray: [8, 4],
   );
 }
 

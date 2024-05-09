@@ -1,5 +1,5 @@
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart_app/presentation/widgets/indicator.dart';
 import 'package:flutter/material.dart';
 
@@ -101,7 +101,7 @@ class PieChart2State extends State {
     return List.generate(4, (i) {
       final isTouched = i == touchedIndex;
       final fontSize = isTouched ? 25.0 : 16.0;
-      final radius = isTouched ? 60.0 : 50.0;
+      final radius = isTouched ? 0.6 : 0.5;
       const shadows = [Shadow(color: Colors.black, blurRadius: 2)];
       switch (i) {
         case 0:
@@ -109,7 +109,7 @@ class PieChart2State extends State {
             color: AppColors.contentColorBlue,
             value: 40,
             title: '40%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -122,7 +122,7 @@ class PieChart2State extends State {
             color: AppColors.contentColorYellow,
             value: 30,
             title: '30%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -135,7 +135,7 @@ class PieChart2State extends State {
             color: AppColors.contentColorPurple,
             value: 15,
             title: '15%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,
@@ -148,7 +148,7 @@ class PieChart2State extends State {
             color: AppColors.contentColorGreen,
             value: 15,
             title: '15%',
-            radius: radius,
+            radiusRatio: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
               fontWeight: FontWeight.bold,

@@ -148,11 +148,14 @@ void main() {
         holder,
       );
 
+      final sectionsAngle =
+          pieChartPainter.calculateSectionsAngle(data.sections, data.sumValue);
       pieChartPainter.drawTexts(
         mockBuildContext,
         mockCanvasWrapper,
         holder,
         centerRadius,
+        sectionsAngle,
       );
 
       final results = verifyInOrder([
@@ -169,6 +172,7 @@ void main() {
 
   group('drawSections()', () {
     test('test 1', () {
+      final mockBuildContext = MockBuildContext();
       const viewSize = Size(200, 200);
 
       const radius = 30.0;
@@ -176,7 +180,7 @@ void main() {
       final sections = [
         PieChartSectionData(
           color: MockData.color2,
-          radius: radius,
+          radiusRatio: 0.8,
           value: 10,
           borderSide: const BorderSide(
             color: MockData.color3,
@@ -195,7 +199,13 @@ void main() {
       final mockCanvasWrapper = MockCanvasWrapper();
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
-      barChartPainter.drawSections(mockCanvasWrapper, [360], 10, holder);
+      barChartPainter.drawSections(
+        mockBuildContext,
+        mockCanvasWrapper,
+        [360],
+        10,
+        holder,
+      );
 
       final rect = Rect.fromCircle(
         center: viewSize.center(Offset.zero),
@@ -268,7 +278,9 @@ void main() {
         });
       });
 
+      final mockBuildContext = MockBuildContext();
       barChartPainter.drawSections(
+        mockBuildContext,
         mockCanvasWrapper,
         [36, 72, 108, 144],
         10,
@@ -280,6 +292,7 @@ void main() {
 
       final path0 = barChartPainter.generateSectionPath(
         data.sections[0],
+        12,
         10,
         0,
         36,
@@ -295,6 +308,7 @@ void main() {
 
       final path1 = barChartPainter.generateSectionPath(
         data.sections[1],
+        12,
         10,
         36,
         72,
@@ -310,6 +324,7 @@ void main() {
 
       final path2 = barChartPainter.generateSectionPath(
         data.sections[2],
+        12,
         10,
         108,
         108,
@@ -325,6 +340,7 @@ void main() {
 
       final path3 = barChartPainter.generateSectionPath(
         data.sections[3],
+        12,
         10,
         216,
         144,
@@ -356,6 +372,7 @@ void main() {
 
       final path0 = barChartPainter.generateSectionPath(
         data.sections[0],
+        12,
         10,
         0,
         36,
@@ -371,6 +388,7 @@ void main() {
 
       final path1 = barChartPainter.generateSectionPath(
         data.sections[1],
+        12,
         10,
         36,
         72,
@@ -386,6 +404,7 @@ void main() {
 
       final path2 = barChartPainter.generateSectionPath(
         data.sections[2],
+        12,
         10,
         108,
         108,
@@ -401,6 +420,7 @@ void main() {
 
       final path3 = barChartPainter.generateSectionPath(
         data.sections[3],
+        12,
         10,
         216,
         144,
@@ -430,6 +450,7 @@ void main() {
 
       final path0 = barChartPainter.generateSectionPath(
         data.sections[0],
+        12,
         0,
         0,
         36,
@@ -445,6 +466,7 @@ void main() {
 
       final path1 = barChartPainter.generateSectionPath(
         data.sections[1],
+        12,
         0,
         36,
         72,
@@ -460,6 +482,7 @@ void main() {
 
       final path2 = barChartPainter.generateSectionPath(
         data.sections[2],
+        12,
         0,
         108,
         108,
@@ -475,6 +498,7 @@ void main() {
 
       final path3 = barChartPainter.generateSectionPath(
         data.sections[3],
+        12,
         0,
         216,
         144,
@@ -504,6 +528,7 @@ void main() {
 
       final path0 = barChartPainter.generateSectionPath(
         data.sections[0],
+        12,
         0,
         0,
         36,
@@ -519,6 +544,7 @@ void main() {
 
       final path1 = barChartPainter.generateSectionPath(
         data.sections[1],
+        12,
         0,
         36,
         72,
@@ -534,6 +560,7 @@ void main() {
 
       final path2 = barChartPainter.generateSectionPath(
         data.sections[2],
+        12,
         0,
         108,
         108,
@@ -549,6 +576,7 @@ void main() {
 
       final path3 = barChartPainter.generateSectionPath(
         data.sections[3],
+        12,
         0,
         216,
         144,
@@ -621,23 +649,28 @@ void main() {
         });
       });
 
+      final mockContent = MockBuildContext();
       barChartPainter
         ..drawSection(
+          mockContent,
           data.sections[0],
           MockData.path1,
           mockCanvasWrapper,
         )
         ..drawSection(
+          mockContent,
           data.sections[1],
           MockData.path2,
           mockCanvasWrapper,
         )
         ..drawSection(
+          mockContent,
           data.sections[2],
           MockData.path3,
           mockCanvasWrapper,
         )
         ..drawSection(
+          mockContent,
           data.sections[3],
           MockData.path4,
           mockCanvasWrapper,
@@ -864,7 +897,7 @@ void main() {
           borderSide: MockData.borderSide1,
           showTitle: true,
           titleStyle: MockData.textStyle1,
-          radius: 11,
+          radiusRatio: 0.8,
         ),
         PieChartSectionData(
           color: MockData.color2,
@@ -872,7 +905,7 @@ void main() {
           borderSide: MockData.borderSide2,
           showTitle: true,
           titleStyle: MockData.textStyle2,
-          radius: 22,
+          radiusRatio: 0.6,
           title: '22-22',
         ),
         PieChartSectionData(
@@ -881,7 +914,7 @@ void main() {
           borderSide: MockData.borderSide3,
           showTitle: false,
           titleStyle: MockData.textStyle3,
-          radius: 33,
+          radiusRatio: 0.5,
         ),
         PieChartSectionData(
           color: MockData.color4,
@@ -889,7 +922,7 @@ void main() {
           borderSide: MockData.borderSide4,
           showTitle: true,
           titleStyle: MockData.textStyle4,
-          radius: 44,
+          radiusRatio: 0.9,
         ),
       ];
       final barChartPainter = PieChartPainter();
@@ -921,25 +954,25 @@ void main() {
             color: MockData.color1,
             value: 1,
             borderSide: MockData.borderSide1,
-            radius: 10,
+            radiusRatio: 0.4,
           ),
           PieChartSectionData(
             color: MockData.color2,
             value: 2,
             borderSide: MockData.borderSide2,
-            radius: 20,
+            radiusRatio: 0.6,
           ),
           PieChartSectionData(
             color: MockData.color3,
             value: 3,
             borderSide: MockData.borderSide3,
-            radius: 30,
+            radiusRatio: 0.8,
           ),
           PieChartSectionData(
             color: MockData.color4,
             value: 4,
             borderSide: MockData.borderSide4,
-            radius: 40,
+            radiusRatio: 1,
           ),
         ],
       );

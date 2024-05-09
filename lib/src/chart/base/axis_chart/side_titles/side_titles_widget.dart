@@ -15,6 +15,7 @@ class SideTitlesWidget extends StatelessWidget {
     required this.axisChartData,
     required this.parentSize,
   });
+
   final AxisSide side;
   final AxisChartData axisChartData;
   final Size parentSize;
@@ -198,18 +199,23 @@ class SideTitlesWidget extends StatelessWidget {
               width: isHorizontal ? axisViewSize : sideTitles.reservedSize,
               height: isHorizontal ? sideTitles.reservedSize : axisViewSize,
               margin: thisSidePadding,
-              child: SideTitlesFlex(
-                direction: direction,
-                axisSideMetaData: AxisSideMetaData(
-                  axisMin,
-                  axisMax,
-                  axisViewSize - thisSidePaddingTotal,
-                ),
-                widgetHolders: makeWidgets(
-                  axisViewSize - thisSidePaddingTotal,
-                  axisMin,
-                  axisMax,
-                  side,
+              child: DefaultTextStyle(
+                style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                      color: Theme.of(context).colorScheme.outline,
+                    ),
+                child: SideTitlesFlex(
+                  direction: direction,
+                  axisSideMetaData: AxisSideMetaData(
+                    axisMin,
+                    axisMax,
+                    axisViewSize - thisSidePaddingTotal,
+                  ),
+                  widgetHolders: makeWidgets(
+                    axisViewSize - thisSidePaddingTotal,
+                    axisMin,
+                    axisMax,
+                    side,
+                  ),
                 ),
               ),
             ),
@@ -231,6 +237,7 @@ class _AxisTitleWidget extends StatelessWidget {
     required this.side,
     required this.axisViewSize,
   });
+
   final AxisTitles axisTitles;
   final AxisSide side;
   final double axisViewSize;

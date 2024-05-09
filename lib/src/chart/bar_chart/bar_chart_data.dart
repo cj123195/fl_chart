@@ -813,7 +813,7 @@ BarTooltipItem? defaultBarTooltipItem(
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
-  return BarTooltipItem(rod.toY.toString(), textStyle);
+  return BarTooltipItem(rod.toY.toString(), textStyle: textStyle);
 }
 
 /// Holds data needed for showing custom tooltip content.
@@ -821,18 +821,19 @@ class BarTooltipItem with EquatableMixin {
   /// content of the tooltip, is a [text] String with a [textStyle],
   /// [textDirection] and optional [children].
   BarTooltipItem(
-    this.text,
-    this.textStyle, {
+    this.text, {
+    this.textStyle,
     this.textAlign = TextAlign.center,
     this.textDirection = TextDirection.ltr,
     this.children,
+    this.indicator,
   });
 
   /// Text of the content.
   final String text;
 
   /// TextStyle of the showing content.
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   /// TextAlign of the showing content.
   final TextAlign textAlign;
@@ -843,6 +844,8 @@ class BarTooltipItem with EquatableMixin {
   /// List<TextSpan> add further style and format to the text of the tooltip
   final List<TextSpan>? children;
 
+  final FlTooltipIndicator? indicator;
+
   /// Used for equality check, see [EquatableMixin].
   @override
   List<Object?> get props => [
@@ -851,6 +854,7 @@ class BarTooltipItem with EquatableMixin {
         textAlign,
         textDirection,
         children,
+        indicator,
       ];
 }
 

@@ -1001,8 +1001,7 @@ List<TouchedSpotIndicatorData> defaultTouchedIndicators(
     if (barData.dotData.show) {
       lineColor = _defaultGetDotColor(barData.spots[index], 0, barData);
     }
-    const lineStrokeWidth = 4.0;
-    final flLine = FlLine(color: lineColor, strokeWidth: lineStrokeWidth);
+    final flLine = FlLine(color: lineColor);
 
     var dotSize = 10.0;
     if (barData.dotData.show) {
@@ -1028,6 +1027,35 @@ double defaultGetTouchLineEnd(LineChartBarData barData, int spotIndex) {
   return barData.spots[spotIndex].y;
 }
 
+class LineTooltipTitle with EquatableMixin {
+  const LineTooltipTitle(
+    this.text, {
+    this.textStyle,
+    this.textAlign = TextAlign.left,
+    this.textDirection = TextDirection.ltr,
+  });
+
+  /// Showing text.
+  final String text;
+
+  /// Style of showing text.
+  final TextStyle? textStyle;
+
+  /// Align of showing text.
+  final TextAlign textAlign;
+
+  /// Direction of showing text.
+  final TextDirection textDirection;
+
+  @override
+  List<Object?> get props => [
+        text,
+        textStyle,
+        textAlign,
+        textDirection,
+      ];
+}
+
 /// Holds representation data for showing tooltip popup on top of spots.
 class LineTouchTooltipData with EquatableMixin {
   /// if [LineTouchData.handleBuiltInTouches] is true,
@@ -1044,6 +1072,7 @@ class LineTouchTooltipData with EquatableMixin {
   /// you can set [fitInsideHorizontally] true to force it to shift inside the chart horizontally,
   /// also you can set [fitInsideVertically] true to force it to shift inside the chart vertically.
   const LineTouchTooltipData({
+    this.getTooltipTitle,
     this.tooltipRoundedRadius = 4,
     this.tooltipPadding =
         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -1052,13 +1081,16 @@ class LineTouchTooltipData with EquatableMixin {
     this.tooltipHorizontalOffset = 0,
     this.maxContentWidth = 120,
     this.getTooltipItems = defaultLineTooltipItem,
-    this.getTooltipColor = defaultLineTooltipColor,
+    this.getTooltipColor,
     this.fitInsideHorizontally = false,
     this.fitInsideVertically = false,
     this.showOnTopOfTheChartBoxArea = false,
     this.rotateAngle = 0.0,
     this.tooltipBorder = BorderSide.none,
   });
+
+  /// 标题
+  final GetLineTooltipTitle? getTooltipTitle;
 
   /// Sets a rounded radius for the tooltip.
   final double tooltipRoundedRadius;
@@ -1069,7 +1101,8 @@ class LineTouchTooltipData with EquatableMixin {
   /// Applies a bottom margin for showing tooltip on top of rods.
   final double tooltipMargin;
 
-  /// Controls showing tooltip on left side, right side or center aligned with spot, default is center
+  /// Controls showing tooltip on left side, right side or center aligned with
+  /// spot, default is center
   final FLHorizontalAlignment tooltipHorizontalAlignment;
 
   /// Applies horizontal offset for showing tooltip, default is zero.
@@ -1081,10 +1114,12 @@ class LineTouchTooltipData with EquatableMixin {
   /// Retrieves data for showing content inside the tooltip.
   final GetLineTooltipItems getTooltipItems;
 
-  /// Forces the tooltip to shift horizontally inside the chart, if overflow happens.
+  /// Forces the tooltip to shift horizontally inside the chart, if overflow
+  /// happens.
   final bool fitInsideHorizontally;
 
-  /// Forces the tooltip to shift vertically inside the chart, if overflow happens.
+  /// Forces the tooltip to shift vertically inside the chart, if overflow
+  /// happens.
   final bool fitInsideVertically;
 
   /// Forces the tooltip container to top of the line, default 'false'
@@ -1097,11 +1132,12 @@ class LineTouchTooltipData with EquatableMixin {
   final BorderSide tooltipBorder;
 
   // /// Retrieves data for setting background color of the tooltip.
-  final GetLineTooltipColor getTooltipColor;
+  final GetLineTooltipColor? getTooltipColor;
 
   /// Used for equality check, see [EquatableMixin].
   @override
   List<Object?> get props => [
+        getTooltipTitle,
         tooltipRoundedRadius,
         tooltipPadding,
         tooltipMargin,
@@ -1117,6 +1153,10 @@ class LineTouchTooltipData with EquatableMixin {
         getTooltipColor,
       ];
 }
+
+typedef GetLineTooltipTitle = LineTooltipTitle? Function(
+  List<LineBarSpot> touchedSpots,
+);
 
 /// Provides a [LineTooltipItem] for showing content inside the [LineTouchTooltipData].
 ///
@@ -1139,7 +1179,7 @@ List<LineTooltipItem> defaultLineTooltipItem(List<LineBarSpot> touchedSpots) {
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    return LineTooltipItem(touchedSpot.y.toString(), textStyle);
+    return LineTooltipItem(touchedSpot.y.toString(), textStyle: textStyle);
   }).toList();
 }
 
@@ -1152,11 +1192,6 @@ List<LineTooltipItem> defaultLineTooltipItem(List<LineBarSpot> touchedSpots) {
 typedef GetLineTooltipColor = Color Function(
   LineBarSpot touchedSpot,
 );
-
-/// Default implementation for [LineTouchTooltipData.getTooltipColor].
-Color defaultLineTooltipColor(LineBarSpot touchedSpot) {
-  return Colors.blueGrey.darken(15);
-}
 
 /// Represent a targeted spot inside a line bar.
 class LineBarSpot extends FlSpot with EquatableMixin {
@@ -1209,18 +1244,19 @@ class LineTooltipItem with EquatableMixin {
   /// Shows a [text] with [textStyle], [textDirection],
   /// and optional [children] as a row in the tooltip popup.
   const LineTooltipItem(
-    this.text,
-    this.textStyle, {
+    this.text, {
+    this.textStyle,
     this.textAlign = TextAlign.center,
     this.textDirection = TextDirection.ltr,
     this.children,
+    this.indicator,
   });
 
   /// Showing text.
   final String text;
 
   /// Style of showing text.
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   /// Align of showing text.
   final TextAlign textAlign;
@@ -1230,6 +1266,8 @@ class LineTooltipItem with EquatableMixin {
 
   /// List<TextSpan> add further style and format to the text of the tooltip
   final List<TextSpan>? children;
+
+  final FlTooltipIndicator? indicator;
 
   /// Used for equality check, see [EquatableMixin].
   @override
@@ -1316,4 +1354,51 @@ class LineChartDataTween extends Tween<LineChartData> {
   /// Lerps a [LineChartData] based on [t] value, check [Tween.lerp].
   @override
   LineChartData lerp(double t) => begin!.lerp(begin!, end!, t);
+}
+
+/// Holds data of showing each row indicator in the tooltip popup.
+class FlTooltipIndicator with EquatableMixin {
+  /// Shows a indicator as a row in the tooltip popup.
+  const FlTooltipIndicator({
+    this.color,
+    this.shape = BoxShape.circle,
+    this.style = PaintingStyle.fill,
+    this.gradient,
+    this.width = 8.0,
+    this.height = 8.0,
+    this.radius,
+  });
+
+  /// Color of showing indicator.
+  final Color? color;
+
+  /// Width of showing indicator.
+  final double width;
+
+  /// Height of showing indicator.
+  final double height;
+
+  /// Shape of showing indicator.
+  final BoxShape shape;
+
+  /// Style of showing indicator.
+  final PaintingStyle style;
+
+  /// Gradient of showing indicator.
+  final Gradient? gradient;
+
+  /// Radius of showing indicator.
+  final Radius? radius;
+
+  /// Used for equality check, see [EquatableMixin].
+  @override
+  List<Object?> get props => [
+        color,
+        width,
+        height,
+        shape,
+        style,
+        gradient,
+        radius,
+      ];
 }

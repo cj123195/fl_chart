@@ -1,6 +1,6 @@
 import 'dart:math' as math;
-import 'dart:ui';
 import 'dart:ui' as ui show Gradient;
+import 'dart:ui';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
@@ -2404,7 +2404,12 @@ void main() {
         fitInsideVertically: true,
         getTooltipItems: (List<LineBarSpot> touchedSpots) {
           return touchedSpots
-              .map((e) => LineTooltipItem(e.barIndex.toString(), textStyle1))
+              .map(
+                (e) => LineTooltipItem(
+                  e.barIndex.toString(),
+                  textStyle: textStyle1,
+                ),
+              )
               .toList();
         },
         tooltipBorder: const BorderSide(color: Color(0x11111111), width: 2),
@@ -2515,7 +2520,12 @@ void main() {
         fitInsideVertically: true,
         getTooltipItems: (List<LineBarSpot> touchedSpots) {
           return touchedSpots
-              .map((e) => LineTooltipItem(e.barIndex.toString(), textStyle1))
+              .map(
+                (e) => LineTooltipItem(
+                  e.barIndex.toString(),
+                  textStyle: textStyle1,
+                ),
+              )
               .toList();
         },
         tooltipBorder: const BorderSide(color: Color(0x11111111), width: 2),
@@ -2626,7 +2636,12 @@ void main() {
         fitInsideVertically: true,
         getTooltipItems: (List<LineBarSpot> touchedSpots) {
           return touchedSpots
-              .map((e) => LineTooltipItem(e.barIndex.toString(), textStyle1))
+              .map(
+                (e) => LineTooltipItem(
+                  e.barIndex.toString(),
+                  textStyle: textStyle1,
+                ),
+              )
               .toList();
         },
         tooltipBorder: const BorderSide(color: Color(0x11111111), width: 2),
@@ -3292,7 +3307,6 @@ void main() {
         maxX: 10,
         titlesData: const FlTitlesData(show: false),
         gridData: FlGridData(
-          drawVerticalLine: false,
           horizontalInterval: 2,
           checkToShowHorizontalLine: (value) => value != 2 && value != 8,
           getDrawingHorizontalLine: (value) {

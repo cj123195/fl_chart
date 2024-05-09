@@ -252,31 +252,31 @@ class MockData {
   static final pieChartSection0 = PieChartSectionData(
     value: 0,
     color: color0,
-    radius: 0,
+    radiusRatio: 0,
   );
 
   static final pieChartSection1 = PieChartSectionData(
     value: 1,
     color: color1,
-    radius: 1,
+    radiusRatio: 0.4,
   );
 
   static final pieChartSection2 = PieChartSectionData(
     value: 2,
     color: color2,
-    radius: 2,
+    radiusRatio: 0.6,
   );
 
   static final pieChartSection3 = PieChartSectionData(
     value: 3,
     color: color3,
-    radius: 3,
+    radiusRatio: 0.8,
   );
 
   static final pieChartSection4 = PieChartSectionData(
     value: 4,
     color: color4,
-    radius: 4,
+    radiusRatio: 1,
   );
 
   static final scatterSpot0 = ScatterSpot(
@@ -587,21 +587,18 @@ TextStyle getTextStyles(BuildContext context, double value) =>
 const FlGridData flGridData1 = FlGridData(
   verticalInterval: 12,
   horizontalInterval: 22,
-  drawVerticalLine: false,
   checkToShowVerticalLine: checkToShowLine,
   getDrawingHorizontalLine: getDrawingLine,
 );
 const FlGridData flGridData1Clone = FlGridData(
   verticalInterval: 12,
   horizontalInterval: 22,
-  drawVerticalLine: false,
   checkToShowVerticalLine: checkToShowLine,
   getDrawingHorizontalLine: getDrawingLine,
 );
 final FlGridData flGridData2 = FlGridData(
   verticalInterval: 12,
   horizontalInterval: 22,
-  drawVerticalLine: false,
   checkToShowVerticalLine: checkToShowLine,
   getDrawingHorizontalLine: getDrawingLine,
   getDrawingVerticalLine: (value) => flLine1,
@@ -609,14 +606,12 @@ final FlGridData flGridData2 = FlGridData(
 const FlGridData flGridData3 = FlGridData(
   verticalInterval: 12,
   horizontalInterval: 43,
-  drawVerticalLine: false,
   checkToShowVerticalLine: checkToShowLine,
   getDrawingHorizontalLine: getDrawingLine,
 );
 const FlGridData flGridData4 = FlGridData(
   verticalInterval: 12,
   horizontalInterval: 22,
-  drawVerticalLine: false,
   getDrawingHorizontalLine: getDrawingLine,
 );
 const FlGridData flGridData5 = FlGridData(
@@ -1175,16 +1170,16 @@ const TouchedSpotIndicatorData touchedSpotIndicatorData6 =
 );
 
 const LineTooltipItem lineTooltipItem1 =
-    LineTooltipItem('', TextStyle(color: Colors.green));
+    LineTooltipItem('', textStyle: TextStyle(color: Colors.green));
 const LineTooltipItem lineTooltipItem1Clone =
-    LineTooltipItem('', TextStyle(color: Colors.green));
+    LineTooltipItem('', textStyle: TextStyle(color: Colors.green));
 
 const LineTooltipItem lineTooltipItem2 =
-    LineTooltipItem('ss', TextStyle(color: Colors.green));
+    LineTooltipItem('ss', textStyle: TextStyle(color: Colors.green));
 const LineTooltipItem lineTooltipItem3 =
-    LineTooltipItem('', TextStyle(color: Colors.blue));
+    LineTooltipItem('', textStyle: TextStyle(color: Colors.blue));
 const LineTooltipItem lineTooltipItem4 =
-    LineTooltipItem('', TextStyle(fontSize: 33));
+    LineTooltipItem('', textStyle: TextStyle(fontSize: 33));
 
 List<LineTooltipItem?> lineChartGetTooltipItems(List<LineBarSpot> list) {
   return list.map((s) => lineTooltipItem1).toList();
@@ -2284,7 +2279,6 @@ final ScatterChartData scatterChartData1 = ScatterChartData(
     getDrawingVerticalLine: gridGetDrawingLine,
     checkToShowHorizontalLine: gridCheckToShowLine,
     checkToShowVerticalLine: gridCheckToShowLine,
-    drawVerticalLine: false,
     horizontalInterval: 33,
     verticalInterval: 1,
   ),
@@ -2733,27 +2727,27 @@ final BarTouchResponse barTouchResponse2 = BarTouchResponse(
 
 final BarTooltipItem barTooltipItem1 = BarTooltipItem(
   'pashmam 1',
-  const TextStyle(color: Colors.red),
+  textStyle: const TextStyle(color: Colors.red),
 );
 final BarTooltipItem barTooltipItem1Clone = BarTooltipItem(
   'pashmam 1',
-  const TextStyle(color: Colors.red),
+  textStyle: const TextStyle(color: Colors.red),
 );
 final BarTooltipItem barTooltipItem2 = BarTooltipItem(
   'pashmam 2',
-  const TextStyle(color: Colors.red),
+  textStyle: const TextStyle(color: Colors.red),
 );
 final BarTooltipItem barTooltipItem3 = BarTooltipItem(
   'pashmam 1',
-  const TextStyle(color: Colors.green),
+  textStyle: const TextStyle(color: Colors.green),
 );
 final BarTooltipItem barTooltipItem4 = BarTooltipItem(
   'null',
-  const TextStyle(color: Colors.red),
+  textStyle: const TextStyle(color: Colors.red),
 );
 final BarTooltipItem barTooltipItem5 = BarTooltipItem(
   'pashmam 1',
-  const TextStyle(fontSize: 85),
+  textStyle: const TextStyle(fontSize: 85),
 );
 
 BarTooltipItem getTooltipItem(
@@ -2767,7 +2761,7 @@ BarTooltipItem getTooltipItem(
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
-  return BarTooltipItem(rod.toY.toString(), textStyle);
+  return BarTooltipItem(rod.toY.toString(), textStyle: textStyle);
 }
 
 Color getTooltipGreenColor(

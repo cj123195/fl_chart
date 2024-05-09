@@ -43,7 +43,7 @@ class FlBorderData with EquatableMixin {
     bool? show,
     Border? border,
   })  : show = show ?? true,
-        border = border ?? Border.all();
+        border = border ?? Border.all(color: Colors.grey, width: 0.5);
   final bool show;
   Border border;
 

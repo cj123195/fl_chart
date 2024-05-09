@@ -1,5 +1,5 @@
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 
 class LineChartSample5 extends StatefulWidget {
@@ -187,7 +187,7 @@ class _LineChartSample5State extends State<LineChartSample5> {
                     return lineBarsSpot.map((lineBarSpot) {
                       return LineTooltipItem(
                         lineBarSpot.y.toString(),
-                        const TextStyle(
+                        textStyle: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

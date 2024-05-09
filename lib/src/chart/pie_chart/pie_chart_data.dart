@@ -1,4 +1,3 @@
-// coverage:ignore-file
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
@@ -17,7 +16,8 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// if you don't want it, set [centerSpaceRadius] to zero.
   ///
   /// It draws [sections] from zero degree (right side of the circle) clockwise,
-  /// you can change the starting point, by changing [startDegreeOffset] (in degrees).
+  /// you can change the starting point, by changing [startDegreeOffset]
+  /// (in degrees).
   ///
   /// You can define a gap between [sections] by setting [sectionsSpace].
   ///
@@ -30,10 +30,26 @@ class PieChartData extends BaseChartData with EquatableMixin {
     double? startDegreeOffset,
     PieTouchData? pieTouchData,
     FlBorderData? borderData,
+    this.centerSpaceBorder,
+    this.sectionsBorder,
     bool? titleSunbeamLayout,
-  })  : sections = sections?.where((element) => element.value != 0).toList() ??
+    bool showZeroValue = true,
+  })  : assert(
+          sectionsBorder == null ||
+              (sectionsSpace == 0 &&
+                  (sections == null ||
+                      sections.isEmpty ||
+                      sections.every(
+                        (s) => s.radiusRatio == sections[0].radiusRatio,
+                      ))),
+          'When the border is not null, sectionsSpace must be 0 and the radius '
+          'of all sections must be equal.',
+        ),
+        sections = (showZeroValue
+                ? sections
+                : sections?.where((section) => section.value != 0).toList()) ??
             const [],
-        centerSpaceRadius = centerSpaceRadius ?? double.infinity,
+        centerSpaceRadius = centerSpaceRadius ?? 0,
         centerSpaceColor = centerSpaceColor ?? Colors.transparent,
         sectionsSpace = sectionsSpace ?? 2,
         startDegreeOffset = startDegreeOffset ?? 0,
@@ -53,13 +69,20 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// Color of free space in center of the circle.
   final Color centerSpaceColor;
 
+  /// Border of free space in center of the circle.
+  final BorderSide? centerSpaceBorder;
+
+  /// Border of all [sections]
+  final BorderSide? sectionsBorder;
+
   /// Defines gap between sections.
   ///
   /// Does not work on html-renderer,
   /// https://github.com/imaNNeo/fl_chart/issues/955
   final double sectionsSpace;
 
-  /// [PieChart] draws [sections] from zero degree (right side of the circle) clockwise.
+  /// [PieChart] draws [sections] from zero degree (right side of the circle)
+  /// clockwise.
   final double startDegreeOffset;
 
   /// Handles touch behaviors and responses.
@@ -142,7 +165,7 @@ class PieChartSectionData {
   /// this is depends on sum of all sections, each section should
   /// occupy ([value] / sumValues) * 360 degrees.
   ///
-  /// It draws this section with filled [color], and [radius].
+  /// It draws this section with filled [color], and [radiusRatio].
   ///
   /// If [showTitle] is true, it draws a title at the middle of section,
   /// you can set the text using [title], and set the style using [titleStyle],
@@ -153,14 +176,14 @@ class PieChartSectionData {
   /// 1.0 means near the outside of the [PieChart].
   ///
   /// If [badgeWidget] is not null, it draws a widget at the middle of section,
-  /// by default it draws the widget at the middle of section, but you can change the
-  /// [badgePositionPercentageOffset] to have your desire design,
+  /// by default it draws the widget at the middle of section, but you can
+  /// change the [badgePositionPercentageOffset] to have your desire design,
   /// the value works the same way as [titlePositionPercentageOffset].
   PieChartSectionData({
     double? value,
-    Color? color,
+    this.color,
     this.gradient,
-    double? radius,
+    this.radiusRatio,
     bool? showTitle,
     this.titleStyle,
     String? title,
@@ -168,9 +191,9 @@ class PieChartSectionData {
     this.badgeWidget,
     double? titlePositionPercentageOffset,
     double? badgePositionPercentageOffset,
-  })  : value = value ?? 10,
-        color = color ?? Colors.cyan,
-        radius = radius ?? 40,
+    this.borderRadius,
+  })  : assert(radiusRatio == null || (radiusRatio >= 0 && radiusRatio <= 1)),
+        value = value ?? 0,
         showTitle = showTitle ?? true,
         title = title ?? (value == null ? '' : value.toString()),
         borderSide = borderSide ?? const BorderSide(width: 0),
@@ -186,13 +209,14 @@ class PieChartSectionData {
   final double value;
 
   /// Defines the color of section.
-  final Color color;
+  final Color? color;
 
-  /// Defines the gradient of section. If specified, overrides the color setting.
+  /// Defines the gradient of section. If specified, overrides the color
+  /// setting.
   final Gradient? gradient;
 
   /// Defines the radius of section.
-  final double radius;
+  final double? radiusRatio;
 
   /// Defines show or hide the title of section.
   final bool showTitle;
@@ -208,7 +232,8 @@ class PieChartSectionData {
 
   /// Defines a widget that represents the section.
   ///
-  /// This can be anything from a text, an image, an animation, and even a combination of widgets.
+  /// This can be anything from a text, an image, an animation, and even a
+  /// combination of widgets.
   /// Use AnimatedWidgets to animate this widget.
   final Widget? badgeWidget;
 
@@ -226,13 +251,16 @@ class PieChartSectionData {
   /// 1.0 means near the outside of the [PieChart].
   final double badgePositionPercentageOffset;
 
+  /// 两端圆角大小
+  final double? borderRadius;
+
   /// Copies current [PieChartSectionData] to a new [PieChartSectionData],
   /// and replaces provided values.
   PieChartSectionData copyWith({
     double? value,
     Color? color,
     Gradient? gradient,
-    double? radius,
+    double? radiusRatio,
     bool? showTitle,
     TextStyle? titleStyle,
     String? title,
@@ -240,12 +268,13 @@ class PieChartSectionData {
     Widget? badgeWidget,
     double? titlePositionPercentageOffset,
     double? badgePositionPercentageOffset,
+    double? borderRadius,
   }) {
     return PieChartSectionData(
       value: value ?? this.value,
       color: color ?? this.color,
       gradient: gradient ?? this.gradient,
-      radius: radius ?? this.radius,
+      radiusRatio: radiusRatio ?? this.radiusRatio,
       showTitle: showTitle ?? this.showTitle,
       titleStyle: titleStyle ?? this.titleStyle,
       title: title ?? this.title,
@@ -255,6 +284,7 @@ class PieChartSectionData {
           titlePositionPercentageOffset ?? this.titlePositionPercentageOffset,
       badgePositionPercentageOffset:
           badgePositionPercentageOffset ?? this.badgePositionPercentageOffset,
+      borderRadius: borderRadius ?? this.borderRadius,
     );
   }
 
@@ -268,12 +298,13 @@ class PieChartSectionData {
       value: lerpDouble(a.value, b.value, t),
       color: Color.lerp(a.color, b.color, t),
       gradient: Gradient.lerp(a.gradient, b.gradient, t),
-      radius: lerpDouble(a.radius, b.radius, t),
+      radiusRatio: lerpDouble(a.radiusRatio, b.radiusRatio, t),
       showTitle: b.showTitle,
       titleStyle: TextStyle.lerp(a.titleStyle, b.titleStyle, t),
       title: b.title,
       borderSide: BorderSide.lerp(a.borderSide, b.borderSide, t),
       badgeWidget: b.badgeWidget,
+      borderRadius: lerpDouble(a.borderRadius, b.borderRadius, t),
       titlePositionPercentageOffset: lerpDouble(
         a.titlePositionPercentageOffset,
         b.titlePositionPercentageOffset,
@@ -291,13 +322,15 @@ class PieChartSectionData {
 /// Holds data to handle touch events, and touch responses in the [PieChart].
 ///
 /// There is a touch flow, explained [here](https://github.com/imaNNeo/fl_chart/blob/main/repo_files/documentations/handle_touches.md)
-/// in a simple way, each chart's renderer captures the touch events, and passes the pointerEvent
-/// to the painter, and gets touched spot, and wraps it into a concrete [PieTouchResponse].
+/// in a simple way, each chart's renderer captures the touch events, and
+/// passes the pointerEvent to the painter, and gets touched spot, and wraps it
+/// into a concrete [PieTouchResponse].
 class PieTouchData extends FlTouchData<PieTouchResponse> with EquatableMixin {
   /// You can disable or enable the touch system using [enabled] flag,
   ///
   /// [touchCallback] notifies you about the happened touch/pointer events.
-  /// It gives you a [FlTouchEvent] which is the happened event such as [FlPointerHoverEvent], [FlTapUpEvent], ...
+  /// It gives you a [FlTouchEvent] which is the happened event such as
+  /// [FlPointerHoverEvent], [FlTapUpEvent], ...
   /// It also gives you a [PieTouchResponse] which contains information
   /// about the elements that has touched.
   ///
@@ -364,7 +397,8 @@ class PieTouchedSection with EquatableMixin {
 /// You can override [PieTouchData.touchCallback] to handle touch events,
 /// it gives you a [PieTouchResponse] and you can do whatever you want.
 class PieTouchResponse extends BaseTouchResponse {
-  /// If touch happens, [PieChart] processes it internally and passes out a [PieTouchResponse]
+  /// If touch happens, [PieChart] processes it internally and passes out a
+  /// [PieTouchResponse]
   PieTouchResponse(this.touchedSection) : super();
 
   /// Contains information about touched section, like index, angle, radius, ...
@@ -381,7 +415,8 @@ class PieTouchResponse extends BaseTouchResponse {
   }
 }
 
-/// It lerps a [PieChartData] to another [PieChartData] (handles animation for updating values)
+/// It lerps a [PieChartData] to another [PieChartData] (handles animation for
+/// updating values)
 class PieChartDataTween extends Tween<PieChartData> {
   PieChartDataTween({required PieChartData begin, required PieChartData end})
       : super(begin: begin, end: end);

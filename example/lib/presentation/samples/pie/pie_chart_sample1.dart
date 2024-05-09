@@ -1,6 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart_app/presentation/widgets/indicator.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class PieChartSample1 extends StatefulWidget {
@@ -117,7 +117,7 @@ class PieChartSample1State extends State {
               color: color0,
               value: 25,
               title: '',
-              radius: 80,
+              radiusRatio: 0.8,
               titlePositionPercentageOffset: 0.55,
               borderSide: isTouched
                   ? const BorderSide(
@@ -130,7 +130,7 @@ class PieChartSample1State extends State {
               color: color1,
               value: 25,
               title: '',
-              radius: 65,
+              radiusRatio: 0.65,
               titlePositionPercentageOffset: 0.55,
               borderSide: isTouched
                   ? const BorderSide(
@@ -143,7 +143,7 @@ class PieChartSample1State extends State {
               color: color2,
               value: 25,
               title: '',
-              radius: 60,
+              radiusRatio: 0.6,
               titlePositionPercentageOffset: 0.6,
               borderSide: isTouched
                   ? const BorderSide(
@@ -156,7 +156,7 @@ class PieChartSample1State extends State {
               color: color3,
               value: 25,
               title: '',
-              radius: 70,
+              radiusRatio: 0.7,
               titlePositionPercentageOffset: 0.55,
               borderSide: isTouched
                   ? const BorderSide(

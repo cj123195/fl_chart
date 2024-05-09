@@ -13,9 +13,9 @@ import 'package:flutter/services.dart';
 /// Low level PieChart Widget.
 class PieChartLeaf extends MultiChildRenderObjectWidget {
   PieChartLeaf({
-    super.key,
     required this.data,
     required this.targetData,
+    super.key,
   }) : super(children: targetData.sections.toWidgets());
 
   final PieChartData data;

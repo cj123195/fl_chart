@@ -396,8 +396,14 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       getPixelY(showOnRodData.fromY, viewSize, holder),
     );
 
-    final tooltipWidth = textWidth + tooltipData.tooltipPadding.horizontal;
-    final tooltipHeight = textHeight + tooltipData.tooltipPadding.vertical;
+    var innerWidth = textWidth;
+    var innerHeight = textHeight;
+    if (tooltipItem.indicator != null) {
+      innerWidth += tooltipItem.indicator!.width + 8.0;
+      innerHeight = max(innerHeight, tooltipItem.indicator!.height);
+    }
+    final tooltipWidth = innerWidth + tooltipData.tooltipPadding.horizontal;
+    final tooltipHeight = innerHeight + tooltipData.tooltipPadding.vertical;
 
     final barTopY = min(barToYPixel.dy, barFromYPixel.dy);
     final barBottomY = max(barToYPixel.dy, barFromYPixel.dy);
@@ -481,8 +487,10 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     _bgTouchTooltipPaint.color = tooltipData.getTooltipColor(showOnBarGroup);
 
     final rotateAngle = tooltipData.rotateAngle;
-    final rectRotationOffset =
-        Offset(0, Utils().calculateRotationOffset(rect.size, rotateAngle).dy);
+    final rectRotationOffset = Offset(
+      0,
+      Utils().calculateRotationOffset(rect.size, rotateAngle).dy,
+    );
     final rectDrawOffset = Offset(roundedRect.left, roundedRect.top);
 
     final textRotationOffset =
@@ -491,7 +499,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     /// draw the texts one by one in below of each other
     final top = tooltipData.tooltipPadding.top;
     final drawOffset = Offset(
-      rect.center.dx - (tp.width / 2),
+      rect.center.dx - (innerWidth / 2),
       rect.topCenter.dy + top - textRotationOffset.dy + rectRotationOffset.dy,
     );
 
@@ -508,11 +516,61 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       angle: rotateAngle,
       drawCallback: () {
         canvasWrapper
+          ..drawShadow(
+            Path()..addRRect(roundedRect),
+            Theme.of(context).colorScheme.shadow.withOpacity(0.3),
+            10,
+          )
           ..drawRRect(roundedRect, _bgTouchTooltipPaint)
-          ..drawRRect(roundedRect, _borderTouchTooltipPaint)
-          ..drawText(tp, drawOffset);
+          ..drawRRect(roundedRect, _borderTouchTooltipPaint);
+        final indicator = tooltipItem.indicator;
+        var textOffset = drawOffset;
+        // canvasWrapper.drawText(tp, drawOffset);
+        if (indicator != null) {
+          drawTooltipIndicator(
+            canvasWrapper,
+            Offset(
+              drawOffset.dx,
+              drawOffset.dy + (innerHeight - indicator.height) / 2,
+            ),
+            indicator,
+          );
+          textOffset = textOffset.translate(
+            indicator.width + 8.0,
+            (innerHeight - tp.height) / 2,
+          );
+          canvasWrapper.drawText(tp, textOffset);
+        } else {
+          canvasWrapper.drawText(tp, drawOffset);
+        }
       },
     );
+  }
+
+  void drawTooltipIndicator(
+    CanvasWrapper canvasWrapper,
+    Offset offset,
+    FlTooltipIndicator indicator,
+  ) {
+    final width = indicator.width;
+    final height = indicator.height;
+    final radius = max(width, height) / 2;
+    final rect = Rect.fromLTWH(offset.dx, offset.dy, width, height);
+    final paint = Paint()
+      ..setColorOrGradient(indicator.color, indicator.gradient, rect)
+      ..style = indicator.style;
+    if (indicator.shape == BoxShape.rectangle) {
+      canvasWrapper.drawRRect(
+        RRect.fromRectAndRadius(rect, indicator.radius ?? Radius.zero),
+        paint,
+      );
+    } else {
+      canvasWrapper.drawCircle(
+        Offset(offset.dx + width / 2, offset.dy + height / 2),
+        radius,
+        paint,
+      );
+    }
   }
 
   @visibleForTesting

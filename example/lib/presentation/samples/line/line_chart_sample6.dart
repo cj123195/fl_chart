@@ -1,6 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart_app/util/extensions/color_extensions.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -131,7 +131,7 @@ class LineChartSample6 extends StatelessWidget {
                   return touchedSpots.map((LineBarSpot touchedSpot) {
                     return LineTooltipItem(
                       touchedSpot.y.toString(),
-                      TextStyle(
+                      textStyle: TextStyle(
                         color: touchedSpot.bar.gradient!.colors.first,
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
