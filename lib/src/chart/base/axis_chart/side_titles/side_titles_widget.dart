@@ -24,23 +24,23 @@ class SideTitlesWidget extends StatelessWidget {
 
   bool get isVertical => !isHorizontal;
 
-  double get minX => axisChartData.minX;
+  num get minX => axisChartData.minX;
 
-  double get maxX => axisChartData.maxX;
+  num get maxX => axisChartData.maxX;
 
-  double get baselineX => axisChartData.baselineX;
+  num get baselineX => axisChartData.baselineX;
 
-  double get minY => axisChartData.minY;
+  num get minY => axisChartData.minY;
 
-  double get maxY => axisChartData.maxY;
+  num get maxY => axisChartData.maxY;
 
-  double get baselineY => axisChartData.baselineY;
+  num get baselineY => axisChartData.baselineY;
 
-  double get axisMin => isHorizontal ? minX : minY;
+  num get axisMin => isHorizontal ? minX : minY;
 
-  double get axisMax => isHorizontal ? maxX : maxY;
+  num get axisMax => isHorizontal ? maxX : maxY;
 
-  double get axisBaseLine => isHorizontal ? baselineX : baselineY;
+  num get axisBaseLine => isHorizontal ? baselineX : baselineY;
 
   FlTitlesData get titlesData => axisChartData.titlesData;
 
@@ -108,8 +108,8 @@ class SideTitlesWidget extends StatelessWidget {
 
   List<AxisSideTitleWidgetHolder> makeWidgets(
     double axisViewSize,
-    double axisMin,
-    double axisMax,
+    num axisMin,
+    num axisMax,
     AxisSide side,
   ) {
     List<AxisSideTitleMetaData> axisPositions;
@@ -136,6 +136,7 @@ class SideTitlesWidget extends StatelessWidget {
         max: axisMax,
         baseLine: axisBaseLine,
         interval: interval,
+        maxIncluded: axisTitles.sideTitles.showMaxTitle != false,
       );
       axisPositions = axisValues.map((axisValue) {
         final axisDiff = axisMax - axisMin;

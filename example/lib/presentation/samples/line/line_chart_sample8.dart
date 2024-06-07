@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:ui' as ui;
 
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_svg/flutter_svg.dart';
@@ -71,7 +71,7 @@ class _LineChartSample8State extends State<LineChartSample8> {
     );
   }
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+  Widget bottomTitleWidgets(num value, TitleMeta meta) {
     const style = TextStyle(
       fontSize: 10,
       color: AppColors.mainTextColor1,
@@ -82,7 +82,7 @@ class _LineChartSample8State extends State<LineChartSample8> {
     );
   }
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
+  Widget leftTitleWidgets(num value, TitleMeta meta) {
     IconData icon;
     Color color;
     switch (value.toInt()) {

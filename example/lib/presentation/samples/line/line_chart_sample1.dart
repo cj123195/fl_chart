@@ -1,5 +1,5 @@
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 
 class _LineChart extends StatelessWidget {
@@ -92,7 +92,7 @@ class _LineChart extends StatelessWidget {
         lineChartBarData2_3,
       ];
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
+  Widget leftTitleWidgets(num value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 14,
@@ -128,7 +128,7 @@ class _LineChart extends StatelessWidget {
         reservedSize: 40,
       );
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+  Widget bottomTitleWidgets(num value, TitleMeta meta) {
     const style = TextStyle(
       fontWeight: FontWeight.bold,
       fontSize: 16,

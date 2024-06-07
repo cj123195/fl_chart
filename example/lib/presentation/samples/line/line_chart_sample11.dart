@@ -113,7 +113,7 @@ class _Chart extends StatelessWidget {
     );
   }
 
-  FlLine getHorizontalVerticalLine(double value) {
+  FlLine getHorizontalVerticalLine(num value) {
     if ((value - baselineY).abs() <= 0.1) {
       return const FlLine(
         color: Colors.white70,
@@ -129,7 +129,7 @@ class _Chart extends StatelessWidget {
     }
   }
 
-  FlLine getVerticalVerticalLine(double value) {
+  FlLine getVerticalVerticalLine(num value) {
     if ((value - baselineX).abs() <= 0.1) {
       return const FlLine(
         color: Colors.white70,

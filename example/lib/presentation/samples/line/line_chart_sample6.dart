@@ -58,12 +58,12 @@ class LineChartSample6 extends StatelessWidget {
     FlSpot(6, 1),
   ];
 
-  late double minSpotX;
-  late double maxSpotX;
-  late double minSpotY;
-  late double maxSpotY;
+  late num minSpotX;
+  late num maxSpotX;
+  late num minSpotY;
+  late num maxSpotY;
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
+  Widget leftTitleWidgets(num value, TitleMeta meta) {
     final style = TextStyle(
       color: line1Color1,
       fontWeight: FontWeight.bold,
@@ -86,7 +86,7 @@ class LineChartSample6 extends StatelessWidget {
     );
   }
 
-  Widget rightTitleWidgets(double value, TitleMeta meta) {
+  Widget rightTitleWidgets(num value, TitleMeta meta) {
     final style = TextStyle(
       color: line2Color2,
       fontWeight: FontWeight.bold,
@@ -101,7 +101,7 @@ class LineChartSample6 extends StatelessWidget {
     return Text(intValue.toString(), style: style, textAlign: TextAlign.right);
   }
 
-  Widget topTitleWidgets(double value, TitleMeta meta) {
+  Widget topTitleWidgets(num value, TitleMeta meta) {
     if (value % 1 != 0) {
       return Container();
     }
@@ -274,11 +274,11 @@ class LineChartSample6 extends StatelessWidget {
     );
   }
 
-  double reverseY(double y, double minX, double maxX) {
+  num reverseY(num y, num minX, num maxX) {
     return (maxX + minX) - y;
   }
 
-  List<FlSpot> reverseSpots(List<FlSpot> inputSpots, double minY, double maxY) {
+  List<FlSpot> reverseSpots(List<FlSpot> inputSpots, num minY, num maxY) {
     return inputSpots.map((spot) {
       return spot.copyWith(y: (maxY + minY) - spot.y);
     }).toList();

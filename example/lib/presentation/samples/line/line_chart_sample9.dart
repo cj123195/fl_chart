@@ -12,7 +12,7 @@ class LineChartSample9 extends StatelessWidget {
       .map((x) => FlSpot(x, cos(x)))
       .toList();
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
+  Widget bottomTitleWidgets(num value, TitleMeta meta, double chartWidth) {
     if (value % 1 != 0) {
       return Container();
     }
@@ -28,7 +28,7 @@ class LineChartSample9 extends StatelessWidget {
     );
   }
 
-  Widget leftTitleWidgets(double value, TitleMeta meta, double chartWidth) {
+  Widget leftTitleWidgets(num value, TitleMeta meta, double chartWidth) {
     final style = TextStyle(
       color: AppColors.contentColorYellow,
       fontWeight: FontWeight.bold,

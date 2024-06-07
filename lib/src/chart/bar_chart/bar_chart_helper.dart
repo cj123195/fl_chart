@@ -68,8 +68,8 @@ class BarChartHelper {
 class BarChartMinMaxAxisValues with EquatableMixin {
   BarChartMinMaxAxisValues(this.minY, this.maxY, {this.readFromCache = false});
 
-  final double minY;
-  final double maxY;
+  final num minY;
+  final num maxY;
   final bool readFromCache;
 
   @override

@@ -36,7 +36,7 @@ class _LineChartSample5State extends State<LineChartSample5> {
         FlSpot(6, 8),
       ];
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta, double chartWidth) {
+  Widget bottomTitleWidgets(num value, TitleMeta meta, double chartWidth) {
     final style = TextStyle(
       fontWeight: FontWeight.bold,
       color: AppColors.contentColorPink,

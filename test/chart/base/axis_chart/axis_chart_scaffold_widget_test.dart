@@ -39,7 +39,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 10,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,
@@ -51,7 +51,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 20,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('T-${value.toInt()}');
           },
           interval: 1,
@@ -63,7 +63,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 30,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('R-${value.toInt()}');
           },
           interval: 1,
@@ -75,7 +75,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 40,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('B-${value.toInt()}');
           },
           interval: 1,
@@ -101,7 +101,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 10,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,
@@ -122,7 +122,7 @@ void main() {
         sideTitles: SideTitles(
           showTitles: true,
           reservedSize: 10,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,
@@ -143,7 +143,7 @@ void main() {
         axisNameWidget: const Icon(Icons.arrow_left),
         sideTitles: SideTitles(
           reservedSize: 10,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,

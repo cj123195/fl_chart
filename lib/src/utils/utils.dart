@@ -132,7 +132,7 @@ class Utils {
   /// 1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 5000, 10000,...
   double getEfficientInterval(
     double axisViewSize,
-    double diffInAxis, {
+    num diffInAxis, {
     double pixelPerInterval = 40,
   }) {
     final allowedCount = math.max(axisViewSize ~/ pixelPerInterval, 1);
@@ -213,7 +213,7 @@ class Utils {
   static const double kilo = 1000;
 
   /// Returns count of fraction digits of a value
-  int getFractionDigits(double value) {
+  int getFractionDigits(num value) {
     if (value >= 1) {
       return 1;
     } else if (value >= 0.1) {
@@ -245,7 +245,7 @@ class Utils {
   /// if number is larger than [kilo], it returns a short number like 4K,
   /// otherwise it returns number itself.
   /// also it removes .0, at the end of number for simplicity.
-  String formatNumber(double axisMin, double axisMax, double axisValue) {
+  String formatNumber(num axisMin, num axisMax, num axisValue) {
     final isNegative = axisValue < 0;
 
     if (isNegative) {
@@ -314,11 +314,11 @@ class Utils {
   /// If there is a zero point in the axis, we want to have a value that passes through it.
   /// For example if we have -3 to +3, with interval 2. if we start from -3, we get something like this: -3, -1, +1, +3
   /// But the most important point is zero in most cases. with this logic we get this: -2, 0, 2
-  double getBestInitialIntervalValue(
-    double min,
-    double max,
-    double interval, {
-    double baseline = 0.0,
+  num getBestInitialIntervalValue(
+    num min,
+    num max,
+    num interval, {
+    num baseline = 0.0,
   }) {
     final diff = baseline - min;
     final mod = diff % interval;

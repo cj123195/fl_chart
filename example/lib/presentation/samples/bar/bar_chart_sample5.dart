@@ -1,6 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart_app/util/app_utils.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class BarChartSample5 extends StatefulWidget {
@@ -29,7 +29,7 @@ class BarChartSample5State extends State<BarChartSample5> {
     super.initState();
   }
 
-  Widget bottomTitles(double value, TitleMeta meta) {
+  Widget bottomTitles(num value, TitleMeta meta) {
     const style = TextStyle(color: Colors.white, fontSize: 10);
     String text;
     switch (value.toInt()) {
@@ -64,7 +64,7 @@ class BarChartSample5State extends State<BarChartSample5> {
     );
   }
 
-  Widget topTitles(double value, TitleMeta meta) {
+  Widget topTitles(num value, TitleMeta meta) {
     const style = TextStyle(color: Colors.white, fontSize: 10);
     String text;
     switch (value.toInt()) {
@@ -98,7 +98,7 @@ class BarChartSample5State extends State<BarChartSample5> {
     );
   }
 
-  Widget leftTitles(double value, TitleMeta meta) {
+  Widget leftTitles(num value, TitleMeta meta) {
     const style = TextStyle(color: Colors.white, fontSize: 10);
     String text;
     if (value == 0) {
@@ -118,7 +118,7 @@ class BarChartSample5State extends State<BarChartSample5> {
     );
   }
 
-  Widget rightTitles(double value, TitleMeta meta) {
+  Widget rightTitles(num value, TitleMeta meta) {
     const style = TextStyle(color: Colors.white, fontSize: 10);
     String text;
     if (value == 0) {

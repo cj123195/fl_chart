@@ -272,16 +272,16 @@ class _LayoutSizes {
 
 class AxisSideMetaData {
   AxisSideMetaData(this.minValue, this.maxValue, this.axisViewSize);
-  final double minValue;
-  final double maxValue;
+  final num minValue;
+  final num maxValue;
   final double axisViewSize;
 
-  double get diff => maxValue - minValue;
+  num get diff => maxValue - minValue;
 }
 
 class AxisSideTitleMetaData with EquatableMixin {
   AxisSideTitleMetaData(this.axisValue, this.axisPixelLocation);
-  final double axisValue;
+  final num axisValue;
   final double axisPixelLocation;
 
   @override

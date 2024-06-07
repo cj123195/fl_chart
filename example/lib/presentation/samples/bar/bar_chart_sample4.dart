@@ -1,6 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart_app/util/extensions/color_extensions.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class BarChartSample4 extends StatefulWidget {
@@ -15,7 +15,7 @@ class BarChartSample4 extends StatefulWidget {
 }
 
 class BarChartSample4State extends State<BarChartSample4> {
-  Widget bottomTitles(double value, TitleMeta meta) {
+  Widget bottomTitles(num value, TitleMeta meta) {
     const style = TextStyle(fontSize: 10);
     String text;
     switch (value.toInt()) {
@@ -44,7 +44,7 @@ class BarChartSample4State extends State<BarChartSample4> {
     );
   }
 
-  Widget leftTitles(double value, TitleMeta meta) {
+  Widget leftTitles(num value, TitleMeta meta) {
     if (value == meta.max) {
       return Container();
     }

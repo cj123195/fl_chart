@@ -30,7 +30,7 @@ void main() {
         axisNameWidget: const Text('Left Titles'),
         sideTitles: SideTitles(
           showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,
@@ -40,7 +40,7 @@ void main() {
         axisNameWidget: const Text('Top Titles'),
         sideTitles: SideTitles(
           showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('T-${value.toInt()}');
           },
           interval: 1,
@@ -50,7 +50,7 @@ void main() {
         axisNameWidget: const Text('Right Titles'),
         sideTitles: SideTitles(
           showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('R-${value.toInt()}');
           },
           interval: 1,
@@ -60,7 +60,7 @@ void main() {
         axisNameWidget: const Text('Bottom Titles'),
         sideTitles: SideTitles(
           showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('B-${value.toInt()}');
           },
           interval: 1,
@@ -75,7 +75,7 @@ void main() {
         axisNameWidget: const Text('Left Titles'),
         sideTitles: SideTitles(
           showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,
@@ -93,7 +93,7 @@ void main() {
       leftTitles: AxisTitles(
         sideTitles: SideTitles(
           showTitles: true,
-          getTitlesWidget: (double value, TitleMeta meta) {
+          getTitlesWidget: (num value, TitleMeta meta) {
             return Text('L-${value.toInt()}');
           },
           interval: 1,

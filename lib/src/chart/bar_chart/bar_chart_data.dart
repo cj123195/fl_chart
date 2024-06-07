@@ -39,8 +39,8 @@ class BarChartData extends AxisChartData with EquatableMixin {
     BarChartAlignment? alignment,
     FlTitlesData? titlesData,
     BarTouchData? barTouchData,
-    double? maxY,
-    double? minY,
+    num? maxY,
+    num? minY,
     super.baselineY,
     FlGridData? gridData,
     super.borderData,
@@ -89,9 +89,9 @@ class BarChartData extends AxisChartData with EquatableMixin {
     BarTouchData? barTouchData,
     FlGridData? gridData,
     FlBorderData? borderData,
-    double? maxY,
-    double? minY,
-    double? baselineY,
+    num? maxY,
+    num? minY,
+    num? baselineY,
     Color? backgroundColor,
     ExtraLinesData? extraLinesData,
   }) {
@@ -314,7 +314,7 @@ class BarChartRodData with EquatableMixin {
   /// )
   /// ```
   BarChartRodData({
-    double? fromY,
+    num? fromY,
     required this.toY,
     Color? color,
     this.gradient,
@@ -334,10 +334,10 @@ class BarChartRodData with EquatableMixin {
         rodStackItems = rodStackItems ?? const [];
 
   /// [BarChart] renders rods vertically from [fromY].
-  final double fromY;
+  final num fromY;
 
   /// [BarChart] renders rods vertically from [fromY] to [toY].
-  final double toY;
+  final num toY;
 
   /// If provided, this [BarChartRodData] draws with this [color]
   /// Otherwise we use  [gradient] to draw the background.
@@ -376,8 +376,8 @@ class BarChartRodData with EquatableMixin {
   /// Copies current [BarChartRodData] to a new [BarChartRodData],
   /// and replaces provided values.
   BarChartRodData copyWith({
-    double? fromY,
-    double? toY,
+    num? fromY,
+    num? toY,
     Color? color,
     Gradient? gradient,
     double? width,

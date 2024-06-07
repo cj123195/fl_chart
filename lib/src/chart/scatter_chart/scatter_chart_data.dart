@@ -40,11 +40,11 @@ class ScatterChartData extends AxisChartData with EquatableMixin {
     List<int>? showingTooltipIndicators,
     FlGridData? gridData,
     super.borderData,
-    double? minX,
-    double? maxX,
+    num? minX,
+    num? maxX,
     super.baselineX,
-    double? minY,
-    double? maxY,
+    num? minY,
+    num? maxY,
     super.baselineY,
     FlClipData? clipData,
     super.backgroundColor,
@@ -221,8 +221,8 @@ class ScatterSpot extends FlSpot with EquatableMixin {
 
   @override
   ScatterSpot copyWith({
-    double? x,
-    double? y,
+    num? x,
+    num? y,
     bool? show,
     FlDotPainter? dotPainter,
   }) {

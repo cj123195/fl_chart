@@ -447,7 +447,7 @@ abstract class AxisChartPainter<D extends AxisChartData>
   /// With this function we can convert our [FlSpot] x
   /// to the view base axis x .
   /// the view 0, 0 is on the top/left, but the spots is bottom/left
-  double getPixelX(double spotX, Size viewSize, PaintHolder<D> holder) {
+  double getPixelX(num spotX, Size viewSize, PaintHolder<D> holder) {
     final data = holder.data;
     final deltaX = data.maxX - data.minX;
     if (deltaX == 0.0) {
@@ -458,7 +458,7 @@ abstract class AxisChartPainter<D extends AxisChartData>
 
   /// With this function we can convert our [FlSpot] y
   /// to the view base axis y.
-  double getPixelY(double spotY, Size viewSize, PaintHolder<D> holder) {
+  double getPixelY(num spotY, Size viewSize, PaintHolder<D> holder) {
     final data = holder.data;
     final deltaY = data.maxY - data.minY;
     if (deltaY == 0.0) {

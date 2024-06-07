@@ -50,11 +50,11 @@ class LineChartData extends AxisChartData with EquatableMixin {
     super.gridData = const FlGridData(),
     super.borderData,
     super.rangeAnnotations = const RangeAnnotations(),
-    double? minX,
-    double? maxX,
+    num? minX,
+    num? maxX,
     super.baselineX,
-    double? minY,
-    double? maxY,
+    num? minY,
+    num? maxY,
     super.baselineY,
     super.clipData = const FlClipData.none(),
     super.backgroundColor,
@@ -127,11 +127,11 @@ class LineChartData extends AxisChartData with EquatableMixin {
     List<ShowingTooltipIndicators>? showingTooltipIndicators,
     FlGridData? gridData,
     FlBorderData? borderData,
-    double? minX,
-    double? maxX,
+    num? minX,
+    num? maxX,
     double? baselineX,
-    double? minY,
-    double? maxY,
+    num? minY,
+    num? maxY,
     double? baselineY,
     FlClipData? clipData,
     Color? backgroundColor,
@@ -974,7 +974,7 @@ typedef GetTouchedSpotIndicator = List<TouchedSpotIndicatorData?> Function(
 );
 
 /// Used for determine the touch indicator line's starting/end point.
-typedef GetTouchLineY = double Function(
+typedef GetTouchLineY = num Function(
   LineChartBarData barData,
   int spotIndex,
 );
@@ -1023,7 +1023,7 @@ double defaultGetTouchLineStart(LineChartBarData barData, int spotIndex) {
 }
 
 /// By default line ends at the touched point.
-double defaultGetTouchLineEnd(LineChartBarData barData, int spotIndex) {
+num defaultGetTouchLineEnd(LineChartBarData barData, int spotIndex) {
   return barData.spots[spotIndex].y;
 }
 

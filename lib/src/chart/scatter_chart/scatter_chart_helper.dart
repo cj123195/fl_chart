@@ -63,10 +63,10 @@ class ScatterChartMinMaxAxisValues with EquatableMixin {
     this.maxY, {
     this.readFromCache = false,
   });
-  final double minX;
-  final double maxX;
-  final double minY;
-  final double maxY;
+  final num minX;
+  final num maxX;
+  final num minY;
+  final num maxY;
   final bool readFromCache;
 
   @override

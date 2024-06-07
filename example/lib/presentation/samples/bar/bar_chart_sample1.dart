@@ -253,7 +253,7 @@ class BarChartSample1State extends State<BarChartSample1> {
     );
   }
 
-  Widget getTitles(double value, TitleMeta meta) {
+  Widget getTitles(num value, TitleMeta meta) {
     const style = TextStyle(
       color: Colors.white,
       fontWeight: FontWeight.bold,

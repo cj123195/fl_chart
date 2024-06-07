@@ -83,20 +83,20 @@ class LineChartMinMaxAxisValues with EquatableMixin {
     this.maxY, {
     this.readFromCache = false,
   });
-  final double minX;
-  final double maxX;
-  final double minY;
-  final double maxY;
+  final num minX;
+  final num maxX;
+  final num minY;
+  final num maxY;
   final bool readFromCache;
 
   @override
   List<Object?> get props => [minX, maxX, minY, maxY, readFromCache];
 
   LineChartMinMaxAxisValues copyWith({
-    double? minX,
-    double? maxX,
-    double? minY,
-    double? maxY,
+    num? minX,
+    num? maxX,
+    num? minY,
+    num? maxY,
     bool? readFromCache,
   }) {
     return LineChartMinMaxAxisValues(

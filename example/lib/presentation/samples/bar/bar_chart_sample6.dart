@@ -1,6 +1,6 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart_app/presentation/widgets/legend_widget.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class BarChartSample6 extends StatelessWidget {
@@ -43,7 +43,7 @@ class BarChartSample6 extends StatelessWidget {
     );
   }
 
-  Widget bottomTitles(double value, TitleMeta meta) {
+  Widget bottomTitles(num value, TitleMeta meta) {
     const style = TextStyle(fontSize: 10);
     String text;
     switch (value.toInt()) {

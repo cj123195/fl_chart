@@ -54,7 +54,7 @@ class LineChartSample3 extends StatefulWidget {
 }
 
 class _LineChartSample3State extends State<LineChartSample3> {
-  late double touchedValue;
+  late num touchedValue;
 
   bool fitInsideBottomTitle = true;
   bool fitInsideLeftTitle = false;
@@ -65,7 +65,7 @@ class _LineChartSample3State extends State<LineChartSample3> {
     super.initState();
   }
 
-  Widget leftTitleWidgets(double value, TitleMeta meta) {
+  Widget leftTitleWidgets(num value, TitleMeta meta) {
     if (value % 1 != 0) {
       return Container();
     }
@@ -101,7 +101,7 @@ class _LineChartSample3State extends State<LineChartSample3> {
     );
   }
 
-  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+  Widget bottomTitleWidgets(num value, TitleMeta meta) {
     final isTouched = value == touchedValue;
     final style = TextStyle(
       color: isTouched ? widget.bottomTouchedTextColor : widget.bottomTextColor,

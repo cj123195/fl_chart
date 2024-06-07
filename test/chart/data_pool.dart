@@ -565,9 +565,9 @@ const FlLine flLine1 =
 const FlLine flLine1Clone =
     FlLine(color: Colors.green, strokeWidth: 1, dashArray: [1, 2, 3]);
 
-bool checkToShowLine(double value) => true;
+bool checkToShowLine(num value) => true;
 
-FlLine getDrawingLine(double value) => const FlLine();
+FlLine getDrawingLine(num value) => const FlLine();
 
 const FlSpot flSpot1 = FlSpot(1, 1);
 final FlSpot flSpot1Clone = flSpot1.copyWith();
@@ -579,7 +579,7 @@ const nullSpot1 = FlSpot.nullSpot;
 final nullSpot2 = nullSpot1.copyWith();
 const nullSpot3 = FlSpot.nullSpot;
 
-Widget getTitles(double value, TitleMeta meta) => const Text('sallam');
+Widget getTitles(num value, TitleMeta meta) => const Text('sallam');
 
 TextStyle getTextStyles(BuildContext context, double value) =>
     const TextStyle(color: Colors.green);
@@ -2236,9 +2236,9 @@ final PieChartData pieChartData1 = PieChartData(
 );
 final PieChartData pieChartData1Clone = pieChartData1.copyWith();
 
-bool gridCheckToShowLine(double value) => true;
+bool gridCheckToShowLine(num value) => true;
 
-FlLine gridGetDrawingLine(double value) => const FlLine();
+FlLine gridGetDrawingLine(num value) => const FlLine();
 
 ScatterTooltipItem? scatterChartGetTooltipItems(ScatterSpot spots) {
   return ScatterTooltipItem(

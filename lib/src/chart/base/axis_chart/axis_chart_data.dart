@@ -20,10 +20,10 @@ abstract class AxisChartData extends BaseChartData with EquatableMixin {
     RangeAnnotations? rangeAnnotations,
     required this.minX,
     required this.maxX,
-    double? baselineX,
+    num? baselineX,
     required this.minY,
     required this.maxY,
-    double? baselineY,
+    num? baselineY,
     FlClipData? clipData,
     Color? backgroundColor,
     super.borderData,
@@ -40,12 +40,12 @@ abstract class AxisChartData extends BaseChartData with EquatableMixin {
   final FlTitlesData titlesData;
   final RangeAnnotations rangeAnnotations;
 
-  double minX;
-  double maxX;
-  double baselineX;
-  double minY;
-  double maxY;
-  double baselineY;
+  num minX;
+  num maxX;
+  num baselineX;
+  num minY;
+  num maxY;
+  num baselineY;
 
   /// clip the chart to the border (prevent draw outside the border)
   FlClipData clipData;
@@ -54,10 +54,10 @@ abstract class AxisChartData extends BaseChartData with EquatableMixin {
   Color backgroundColor;
 
   /// Difference of [maxY] and [minY]
-  double get verticalDiff => maxY - minY;
+  num get verticalDiff => maxY - minY;
 
   /// Difference of [maxX] and [minX]
-  double get horizontalDiff => maxX - minX;
+  num get horizontalDiff => maxX - minX;
 
   /// Extra horizontal or vertical lines to draw on the chart.
   final ExtraLinesData extraLinesData;
@@ -99,10 +99,10 @@ class TitleMeta {
   });
 
   /// min axis value
-  final double min;
+  final num min;
 
   /// max axis value
-  final double max;
+  final num max;
 
   /// parent axis max width/height
   final double parentAxisSize;
@@ -112,7 +112,7 @@ class TitleMeta {
   final double axisPosition;
 
   /// The interval that applied to this drawing title
-  final double appliedInterval;
+  final num appliedInterval;
 
   /// Reference of [SideTitles] object.
   final SideTitles sideTitles;
@@ -125,12 +125,12 @@ class TitleMeta {
 }
 
 /// It gives you the axis value and gets a String value based on it.
-typedef GetTitleWidgetFunction = Widget Function(double value, TitleMeta meta);
+typedef GetTitleWidgetFunction = Widget Function(num value, TitleMeta meta);
 
 /// The default [SideTitles.getTitlesWidget] function.
 ///
 /// formats the axis number to a shorter string using [formatNumber].
-Widget defaultGetTitle(double value, TitleMeta meta) {
+Widget defaultGetTitle(num value, TitleMeta meta) {
   return SideTitleWidget(
     axisSide: meta.axisSide,
     child: Text(
@@ -161,6 +161,7 @@ class SideTitles with EquatableMixin {
     this.getTitlesWidget = defaultGetTitle,
     this.reservedSize = 22,
     this.interval,
+    this.showMaxTitle,
   }) : assert(interval != 0, "SideTitles.interval couldn't be zero");
 
   /// Determines showing or hiding this side titles
@@ -176,7 +177,12 @@ class SideTitles with EquatableMixin {
 
   /// Texts are showing with provided [interval]. If you don't provide anything,
   /// we try to find a suitable value to set as [interval] under the hood.
-  final double? interval;
+  final num? interval;
+
+  /// It determines whether the title of the maximum value is displayed.
+  ///
+  /// Default to false.
+  final bool? showMaxTitle;
 
   /// Lerps a [SideTitles] based on [t] value, check [Tween.lerp].
   static SideTitles lerp(SideTitles a, SideTitles b, double t) {
@@ -375,13 +381,13 @@ class FlTitlesData with EquatableMixin {
     this.topTitles = const AxisTitles(
       sideTitles: SideTitles(
         reservedSize: 30,
-        showTitles: true,
+        showTitles: false,
       ),
     ),
     this.rightTitles = const AxisTitles(
       sideTitles: SideTitles(
         reservedSize: 44,
-        showTitles: true,
+        showTitles: false,
       ),
     ),
     this.bottomTitles = const AxisTitles(
@@ -447,14 +453,14 @@ class FlSpot {
   /// [y] determines cartesian (axis based) vertically position
   /// 0 means most bottom point of the chart
   const FlSpot(this.x, this.y);
-  final double x;
-  final double y;
+  final num x;
+  final num y;
 
   /// Copies current [FlSpot] to a new [FlSpot],
   /// and replaces provided values.
   FlSpot copyWith({
-    double? x,
-    double? y,
+    num? x,
+    num? y,
   }) {
     return FlSpot(
       x ?? this.x,
@@ -489,8 +495,8 @@ class FlSpot {
     }
 
     return FlSpot(
-      lerpDouble(a.x, b.x, t)!,
-      lerpDouble(a.y, b.y, t)!,
+      lerpNum(a.x, b.x, t)!,
+      lerpNum(a.y, b.y, t)!,
     );
   }
 
@@ -512,6 +518,18 @@ class FlSpot {
   /// Override hashCode
   @override
   int get hashCode => x.hashCode ^ y.hashCode;
+}
+
+num? lerpNum(num? a, num? b, double t) {
+  if (a == b || (a?.isNaN ?? false) && (b?.isNaN ?? false)) {
+    return a;
+  }
+  a ??= 0.0;
+  b ??= 0.0;
+  assert(a.isFinite, 'Cannot interpolate between finite and non-finite values');
+  assert(b.isFinite, 'Cannot interpolate between finite and non-finite values');
+  assert(t.isFinite, 't must be finite when interpolating between values');
+  return a * (1.0 - t) + b * t;
 }
 
 /// Responsible to hold grid data,
@@ -646,10 +664,10 @@ class FlGridData with EquatableMixin {
 }
 
 /// Determines showing or hiding specified line.
-typedef CheckToShowGrid = bool Function(double value);
+typedef CheckToShowGrid = bool Function(num value);
 
 /// Shows all lines.
-bool showAllGrids(double value) {
+bool showAllGrids(num value) {
   return true;
 }
 
@@ -657,10 +675,10 @@ bool showAllGrids(double value) {
 ///
 /// It gives you an axis [value] (horizontal or vertical),
 /// you should pass a [FlLine] that represents style of specified line.
-typedef GetDrawingGridLine = FlLine Function(double value);
+typedef GetDrawingGridLine = FlLine Function(num value);
 
 /// Returns a grey line for all values.
-FlLine defaultGridLine(double value) {
+FlLine defaultGridLine(num value) {
   return const FlLine(
     color: Colors.grey,
     strokeWidth: 0.4,

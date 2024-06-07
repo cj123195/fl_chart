@@ -6,7 +6,7 @@ void main() {
   const tolerance = 0.0001;
   group('iterateThroughAxis()', () {
     test('test 1', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 0,
         max: 0.1,
@@ -20,7 +20,7 @@ void main() {
     });
 
     test('test 2', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 0,
         minIncluded: false,
@@ -38,7 +38,7 @@ void main() {
     });
 
     test('test 3', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 0,
         max: 1000,
@@ -58,7 +58,7 @@ void main() {
     });
 
     test('test 4', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 0,
         max: 10,
@@ -77,7 +77,7 @@ void main() {
     });
 
     test('test 5', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 0,
         minIncluded: false,
@@ -96,7 +96,7 @@ void main() {
     });
 
     test('test 6', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 35,
         max: 130,
@@ -114,7 +114,7 @@ void main() {
     });
 
     test('test 7', () {
-      final results = <double>[];
+      final results = <num>[];
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: 5,
         max: 35,
