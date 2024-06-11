@@ -316,7 +316,7 @@ class BarChartRodData with EquatableMixin {
   BarChartRodData({
     num? fromY,
     required this.toY,
-    Color? color,
+    this.color,
     this.gradient,
     double? width,
     BorderRadius? borderRadius,
@@ -325,8 +325,6 @@ class BarChartRodData with EquatableMixin {
     BackgroundBarChartRodData? backDrawRodData,
     List<BarChartRodStackItem>? rodStackItems,
   })  : fromY = fromY ?? 0,
-        color =
-            color ?? ((color == null && gradient == null) ? Colors.cyan : null),
         width = width ?? 8,
         borderRadius = Utils().normalizeBorderRadius(borderRadius, width ?? 8),
         borderSide = Utils().normalizeBorderSide(borderSide, width ?? 8),

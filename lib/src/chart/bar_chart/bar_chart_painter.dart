@@ -35,6 +35,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       ..color = Colors.transparent
       ..strokeWidth = 1.0;
   }
+
   late Paint _barPaint;
   late Paint _barStrokePaint;
   late Paint _bgTouchTooltipPaint;
@@ -73,7 +74,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       );
     }
 
-    drawBars(canvasWrapper, _groupBarsPosition!, holder);
+    drawBars(context, canvasWrapper, _groupBarsPosition!, holder);
 
     if (data.extraLinesData.extraLinesOnTop) {
       super.drawHorizontalLines(
@@ -146,6 +147,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
 
   @visibleForTesting
   void drawBars(
+    BuildContext context,
     CanvasWrapper canvasWrapper,
     List<GroupBarsPosition> groupBarsPosition,
     PaintHolder<BarChartData> holder,
@@ -272,7 +274,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
             );
           }
           _barPaint.setColorOrGradient(
-            barRod.color,
+            barRod.color ?? Theme.of(context).colorScheme.primary,
             barRod.gradient,
             barRRect.getRect(),
           );
@@ -777,6 +779,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
 @visibleForTesting
 class GroupBarsPosition {
   GroupBarsPosition(this.groupX, this.barsX);
+
   final double groupX;
   final List<double> barsX;
 }

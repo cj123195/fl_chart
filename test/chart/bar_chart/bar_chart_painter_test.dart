@@ -393,7 +393,13 @@ void main() {
         });
       });
 
-      barChartPainter.drawBars(mockCanvasWrapper, barGroupsPosition, holder);
+      final mockBuildContext = MockBuildContext();
+      barChartPainter.drawBars(
+        mockBuildContext,
+        mockCanvasWrapper,
+        barGroupsPosition,
+        holder,
+      );
       expect(results.length, 11);
 
       expect(
@@ -658,7 +664,13 @@ void main() {
         });
       });
 
-      barChartPainter.drawBars(mockCanvasWrapper, barGroupsPosition, holder);
+      final mockBuildContext = MockBuildContext();
+      barChartPainter.drawBars(
+        mockBuildContext,
+        mockCanvasWrapper,
+        barGroupsPosition,
+        holder,
+      );
       expect(results.length, 6);
 
       expect(
@@ -796,7 +808,13 @@ void main() {
         });
       });
 
-      barChartPainter.drawBars(mockCanvasWrapper, barGroupsPosition, holder);
+      final mockBuildContext = MockBuildContext();
+      barChartPainter.drawBars(
+        mockBuildContext,
+        mockCanvasWrapper,
+        barGroupsPosition,
+        holder,
+      );
       expect(results.length, 5);
       expect(results[1]['paint_color'], const Color(0x11111111));
       expect(results[2]['paint_color'], const Color(0x22222222));
@@ -894,7 +912,13 @@ void main() {
         });
       });
 
-      barChartPainter.drawBars(mockCanvasWrapper, barGroupsPosition, holder);
+      final mockBuildContext = MockBuildContext();
+      barChartPainter.drawBars(
+        mockBuildContext,
+        mockCanvasWrapper,
+        barGroupsPosition,
+        holder,
+      );
       expect(rodDataResults.length, 3);
       expect(rodDataResults[0]['paint_color'], Colors.white);
       expect(rodDataResults[1]['paint_color'], Colors.white);
@@ -999,7 +1023,13 @@ void main() {
         });
       });
 
-      barChartPainter.drawBars(mockCanvasWrapper, barGroupsPosition, holder);
+      final mockBuildContext = MockBuildContext();
+      barChartPainter.drawBars(
+        mockBuildContext,
+        mockCanvasWrapper,
+        barGroupsPosition,
+        holder,
+      );
       expect(rodDataResults.length, 3);
       expect(rodDataResults[0]['paint_color'], Colors.white);
       expect(rodDataResults[1]['paint_color'], Colors.white);
