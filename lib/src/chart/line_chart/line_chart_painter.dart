@@ -103,8 +103,8 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
         continue;
       }
 
-      drawBarLine(canvasWrapper, barData, holder);
-      drawDots(canvasWrapper, barData, holder);
+      drawBarLine(context, canvasWrapper, barData, holder);
+      drawDots(context, canvasWrapper, barData, holder);
 
       if (data.extraLinesData.extraLinesOnTop) {
         super.drawExtraLines(context, canvasWrapper, holder);
@@ -136,7 +136,12 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
       }
     }
 
-    drawTouchedSpotsIndicator(canvasWrapper, lineIndexDrawingInfo, holder);
+    drawTouchedSpotsIndicator(
+      context,
+      canvasWrapper,
+      lineIndexDrawingInfo,
+      holder,
+    );
 
     if (data.clipData.any) {
       canvasWrapper.restore();
@@ -207,6 +212,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
 
   @visibleForTesting
   void drawBarLine(
+    BuildContext context,
     CanvasWrapper canvasWrapper,
     LineChartBarData barData,
     PaintHolder<LineChartData> holder,
@@ -257,7 +263,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
         barData,
       );
       drawBarShadow(canvasWrapper, barPath, barData);
-      drawBar(canvasWrapper, barPath, barData, holder);
+      drawBar(context, canvasWrapper, barPath, barData, holder);
     }
   }
 
@@ -324,6 +330,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
 
   @visibleForTesting
   void drawDots(
+    BuildContext context,
     CanvasWrapper canvasWrapper,
     LineChartBarData barData,
     PaintHolder<LineChartData> holder,
@@ -344,13 +351,14 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
         final painter =
             barData.dotData.getDotPainter(spot, xPercentInLine, barData, i);
 
-        canvasWrapper.drawDot(painter, spot, Offset(x, y));
+        canvasWrapper.drawDot(context, painter, spot, Offset(x, y));
       }
     }
   }
 
   @visibleForTesting
   void drawTouchedSpotsIndicator(
+    BuildContext context,
     CanvasWrapper canvasWrapper,
     List<LineIndexDrawingInfo> lineIndexDrawingInfo,
     PaintHolder<LineChartData> holder,
@@ -434,7 +442,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
 
       /// Draw the indicator dot
       if (showingDots) {
-        canvasWrapper.drawDot(dotPainter, spot, touchedSpot);
+        canvasWrapper.drawDot(context, dotPainter, spot, touchedSpot);
       }
     }
   }
@@ -945,6 +953,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
   /// draw the main bar line by the [barPath]
   @visibleForTesting
   void drawBar(
+    BuildContext context,
     CanvasWrapper canvasWrapper,
     Path barPath,
     LineChartBarData barData,
@@ -968,7 +977,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
     );
     _barPaint
       ..setColorOrGradient(
-        barData.color,
+        barData.color ?? Theme.of(context).colorScheme.primary,
         barData.gradient,
         rectAroundTheLine,
       )
@@ -998,7 +1007,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
     final drawingTextPainters = <TextPainter>[];
 
     final tooltipItems =
-        tooltipData.getTooltipItems(showingTooltipSpots.showingSpots);
+        tooltipData.getTooltipItems(context, showingTooltipSpots.showingSpots);
     if (tooltipItems.length != showingTooltipSpots.showingSpots.length) {
       throw Exception('tooltipItems and touchedSpots size should be same');
     }

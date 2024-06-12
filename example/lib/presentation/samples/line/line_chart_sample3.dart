@@ -207,7 +207,8 @@ class _LineChartSample3State extends State<LineChartSample3> {
                   },
                   touchTooltipData: LineTouchTooltipData(
                     getTooltipColor: (touchedSpot) => widget.tooltipBgColor,
-                    getTooltipItems: (List<LineBarSpot> touchedBarSpots) {
+                    getTooltipItems:
+                        (context, List<LineBarSpot> touchedBarSpots) {
                       return touchedBarSpots.map((barSpot) {
                         final flSpot = barSpot;
                         if (flSpot.x == 0 || flSpot.x == 6) {

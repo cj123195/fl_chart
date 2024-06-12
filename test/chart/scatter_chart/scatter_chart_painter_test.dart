@@ -338,7 +338,7 @@ void main() {
         showingTooltipIndicators: [0, 2, 3],
         scatterTouchData: ScatterTouchData(
           touchTooltipData: ScatterTouchTooltipData(
-            getTooltipItems: (spot) => null,
+            getTooltipItems: (context, spot) => null,
           ),
         ),
         titlesData: const FlTitlesData(show: false),
@@ -397,10 +397,10 @@ void main() {
         scatterTouchData: ScatterTouchData(
           touchTooltipData: ScatterTouchTooltipData(
             rotateAngle: 18,
-            getTooltipColor: (touchedSpot) => const Color(0xFF00FF00),
+            getTooltipColor: (context, touchedSpot) => const Color(0xFF00FF00),
             tooltipRoundedRadius: 85,
             tooltipPadding: const EdgeInsets.all(12),
-            getTooltipItems: (_) {
+            getTooltipItems: (context, _) {
               return ScatterTooltipItem(
                 'faketext',
                 textStyle: textStyle1,
@@ -499,13 +499,13 @@ void main() {
         scatterTouchData: ScatterTouchData(
           touchTooltipData: ScatterTouchTooltipData(
             rotateAngle: 18,
-            getTooltipColor: (touchedSpot) => const Color(0xFFFFFF00),
+            getTooltipColor: (context, touchedSpot) => const Color(0xFFFFFF00),
             tooltipRoundedRadius: 22,
             fitInsideHorizontally: false,
             fitInsideVertically: true,
             tooltipPadding: const EdgeInsets.all(12),
             tooltipHorizontalAlignment: FLHorizontalAlignment.left,
-            getTooltipItems: (_) {
+            getTooltipItems: (context, _) {
               return ScatterTooltipItem(
                 'faketext',
                 textStyle: textStyle2,
@@ -606,13 +606,13 @@ void main() {
         scatterTouchData: ScatterTouchData(
           touchTooltipData: ScatterTouchTooltipData(
             rotateAngle: 18,
-            getTooltipColor: (touchedSpot) => const Color(0xFFFFFF00),
+            getTooltipColor: (context, touchedSpot) => const Color(0xFFFFFF00),
             tooltipRoundedRadius: 22,
             fitInsideHorizontally: false,
             fitInsideVertically: true,
             tooltipPadding: const EdgeInsets.all(12),
             tooltipHorizontalAlignment: FLHorizontalAlignment.right,
-            getTooltipItems: (_) {
+            getTooltipItems: (context, _) {
               return ScatterTooltipItem(
                 'faketext',
                 textStyle: textStyle2,

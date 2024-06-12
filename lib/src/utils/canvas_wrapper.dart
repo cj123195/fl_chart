@@ -128,8 +128,13 @@ class CanvasWrapper {
   ///
   /// Paints a customized dot using [FlDotPainter] at the [spot]'s position,
   /// with the [offset]
-  void drawDot(FlDotPainter painter, FlSpot spot, Offset offset) {
-    painter.draw(canvas, spot, offset);
+  void drawDot(
+    BuildContext context,
+    FlDotPainter painter,
+    FlSpot spot,
+    Offset offset,
+  ) {
+    painter.draw(context, canvas, spot, offset);
   }
 
   /// Handles performing multiple draw actions rotated.

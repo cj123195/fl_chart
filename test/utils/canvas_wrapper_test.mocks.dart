@@ -1032,3 +1032,153 @@ class MockUtils extends _i1.Mock implements _i6.Utils {
         returnValue: 0.0,
       ) as double);
 }
+
+/// A class which mocks [BuildContext].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockBuildContext extends _i1.Mock implements _i4.BuildContext {
+  MockBuildContext() {
+    _i1.throwOnMissingStub(this);
+  }
+
+  @override
+  _i3.Widget get widget => (super.noSuchMethod(
+        Invocation.getter(#widget),
+        returnValue: _FakeWidget_3(
+          this,
+          Invocation.getter(#widget),
+        ),
+      ) as _i3.Widget);
+
+  @override
+  bool get mounted => (super.noSuchMethod(
+        Invocation.getter(#mounted),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  bool get debugDoingBuild => (super.noSuchMethod(
+        Invocation.getter(#debugDoingBuild),
+        returnValue: false,
+      ) as bool);
+
+  @override
+  _i3.InheritedWidget dependOnInheritedElement(
+    _i3.InheritedElement? ancestor, {
+    Object? aspect,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #dependOnInheritedElement,
+          [ancestor],
+          {#aspect: aspect},
+        ),
+        returnValue: _FakeInheritedWidget_4(
+          this,
+          Invocation.method(
+            #dependOnInheritedElement,
+            [ancestor],
+            {#aspect: aspect},
+          ),
+        ),
+      ) as _i3.InheritedWidget);
+
+  @override
+  void visitAncestorElements(_i3.ConditionalElementVisitor? visitor) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #visitAncestorElements,
+          [visitor],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void visitChildElements(_i3.ElementVisitor? visitor) => super.noSuchMethod(
+        Invocation.method(
+          #visitChildElements,
+          [visitor],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void dispatchNotification(_i3.Notification? notification) =>
+      super.noSuchMethod(
+        Invocation.method(
+          #dispatchNotification,
+          [notification],
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  _i3.DiagnosticsNode describeElement(
+    String? name, {
+    _i4.DiagnosticsTreeStyle? style = _i4.DiagnosticsTreeStyle.errorProperty,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #describeElement,
+          [name],
+          {#style: style},
+        ),
+        returnValue: _FakeDiagnosticsNode_5(
+          this,
+          Invocation.method(
+            #describeElement,
+            [name],
+            {#style: style},
+          ),
+        ),
+      ) as _i3.DiagnosticsNode);
+
+  @override
+  _i3.DiagnosticsNode describeWidget(
+    String? name, {
+    _i4.DiagnosticsTreeStyle? style = _i4.DiagnosticsTreeStyle.errorProperty,
+  }) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #describeWidget,
+          [name],
+          {#style: style},
+        ),
+        returnValue: _FakeDiagnosticsNode_5(
+          this,
+          Invocation.method(
+            #describeWidget,
+            [name],
+            {#style: style},
+          ),
+        ),
+      ) as _i3.DiagnosticsNode);
+
+  @override
+  List<_i3.DiagnosticsNode> describeMissingAncestor(
+          {required Type? expectedAncestorType}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #describeMissingAncestor,
+          [],
+          {#expectedAncestorType: expectedAncestorType},
+        ),
+        returnValue: <_i3.DiagnosticsNode>[],
+      ) as List<_i3.DiagnosticsNode>);
+
+  @override
+  _i3.DiagnosticsNode describeOwnershipChain(String? name) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #describeOwnershipChain,
+          [name],
+        ),
+        returnValue: _FakeDiagnosticsNode_5(
+          this,
+          Invocation.method(
+            #describeOwnershipChain,
+            [name],
+          ),
+        ),
+      ) as _i3.DiagnosticsNode);
+}

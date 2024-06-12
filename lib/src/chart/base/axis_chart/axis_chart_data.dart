@@ -453,6 +453,7 @@ class FlSpot {
   /// [y] determines cartesian (axis based) vertically position
   /// 0 means most bottom point of the chart
   const FlSpot(this.x, this.y);
+
   final num x;
   final num y;
 
@@ -1339,13 +1340,18 @@ abstract class FlDotPainter with EquatableMixin {
   const FlDotPainter();
 
   /// This method should be overridden to draw the dot shape.
-  void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas);
+  void draw(
+    BuildContext context,
+    Canvas canvas,
+    FlSpot spot,
+    Offset offsetInCanvas,
+  );
 
   /// This method should be overridden to return the size of the shape.
   Size getSize(FlSpot spot);
 
   /// Used to show default UIs, for example [defaultScatterTooltipItem]
-  Color get mainColor;
+  Color mainColor(BuildContext context);
 
   FlDotPainter lerp(FlDotPainter a, FlDotPainter b, double t);
 
@@ -1378,33 +1384,38 @@ class FlDotCirclePainter extends FlDotPainter {
   /// by setting the thickness with [strokeWidth],
   /// and you can change the color of of the stroke with [strokeColor].
   FlDotCirclePainter({
-    this.color = Colors.green,
+    this.color,
     double? radius,
-    this.strokeColor = const Color.fromRGBO(76, 175, 80, 1),
+    this.strokeColor,
     this.strokeWidth = 0.0,
-  }) : radius = radius ?? 4.0;
+  }) : radius = radius ?? 3.0;
 
   /// The fill color to use for the circle
-  Color color;
+  Color? color;
 
   /// Customizes the radius of the circle
   double radius;
 
   /// The stroke color to use for the circle
-  Color strokeColor;
+  Color? strokeColor;
 
   /// The stroke width to use for the circle
   double strokeWidth;
 
   /// Implementation of the parent class to draw the circle
   @override
-  void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas) {
-    if (strokeWidth != 0.0 && strokeColor.opacity != 0.0) {
+  void draw(
+    BuildContext context,
+    Canvas canvas,
+    FlSpot spot,
+    Offset offsetInCanvas,
+  ) {
+    if (strokeWidth != 0.0 && strokeColor?.opacity != 0.0) {
       canvas.drawCircle(
         offsetInCanvas,
         radius + (strokeWidth / 2),
         Paint()
-          ..color = strokeColor
+          ..color = strokeColor ?? Theme.of(context).colorScheme.primary
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.stroke,
       );
@@ -1413,7 +1424,7 @@ class FlDotCirclePainter extends FlDotPainter {
       offsetInCanvas,
       radius,
       Paint()
-        ..color = color
+        ..color = color ?? Theme.of(context).colorScheme.primary
         ..style = PaintingStyle.fill,
     );
   }
@@ -1425,7 +1436,8 @@ class FlDotCirclePainter extends FlDotPainter {
   }
 
   @override
-  Color get mainColor => color;
+  Color mainColor(BuildContext context) =>
+      color ?? Theme.of(context).colorScheme.primary;
 
   FlDotCirclePainter _lerp(
     FlDotCirclePainter a,
@@ -1478,35 +1490,40 @@ class FlDotSquarePainter extends FlDotPainter {
   /// by setting the thickness with [strokeWidth],
   /// and you can change the color of of the stroke with [strokeColor].
   FlDotSquarePainter({
-    this.color = Colors.green,
-    this.size = 4.0,
-    this.strokeColor = const Color.fromRGBO(76, 175, 80, 1),
+    this.color,
+    this.size = 3.0,
+    this.strokeColor,
     this.strokeWidth = 1.0,
   });
 
   /// The fill color to use for the square
-  Color color;
+  Color? color;
 
   /// Customizes the size of the square
   double size;
 
   /// The stroke color to use for the square
-  Color strokeColor;
+  Color? strokeColor;
 
   /// The stroke width to use for the square
   double strokeWidth;
 
   /// Implementation of the parent class to draw the square
   @override
-  void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas) {
-    if (strokeWidth != 0.0 && strokeColor.opacity != 0.0) {
+  void draw(
+    BuildContext context,
+    Canvas canvas,
+    FlSpot spot,
+    Offset offsetInCanvas,
+  ) {
+    if (strokeWidth != 0.0 && strokeColor?.opacity != 0.0) {
       canvas.drawRect(
         Rect.fromCircle(
           center: offsetInCanvas,
           radius: (size / 2) + (strokeWidth / 2),
         ),
         Paint()
-          ..color = strokeColor
+          ..color = strokeColor ?? Theme.of(context).colorScheme.primary
           ..strokeWidth = strokeWidth
           ..style = PaintingStyle.stroke,
       );
@@ -1517,7 +1534,7 @@ class FlDotSquarePainter extends FlDotPainter {
         radius: size / 2,
       ),
       Paint()
-        ..color = color
+        ..color = color ?? Theme.of(context).colorScheme.primary
         ..style = PaintingStyle.fill,
     );
   }
@@ -1529,7 +1546,8 @@ class FlDotSquarePainter extends FlDotPainter {
   }
 
   @override
-  Color get mainColor => color;
+  Color mainColor(BuildContext context) =>
+      color ?? Theme.of(context).colorScheme.primary;
 
   /// Used for equality check, see [EquatableMixin].
   @override
@@ -1568,13 +1586,13 @@ class FlDotCrossPainter extends FlDotPainter {
   /// The [color] and [width] properties determines the color and thickness of the cross shape,
   /// [size] determines the width and height of the shape.
   FlDotCrossPainter({
-    this.color = Colors.green,
+    this.color,
     this.size = 8.0,
     this.width = 2.0,
   });
 
   /// The fill color to use for the X mark
-  Color color;
+  Color? color;
 
   /// Determines size (width and height) of shape.
   double size;
@@ -1584,7 +1602,12 @@ class FlDotCrossPainter extends FlDotPainter {
 
   /// Implementation of the parent class to draw the cross
   @override
-  void draw(Canvas canvas, FlSpot spot, Offset offsetInCanvas) {
+  void draw(
+    BuildContext context,
+    Canvas canvas,
+    FlSpot spot,
+    Offset offsetInCanvas,
+  ) {
     final path = Path()
       ..moveTo(offsetInCanvas.dx, offsetInCanvas.dy)
       ..relativeMoveTo(-size / 2, -size / 2)
@@ -1596,7 +1619,7 @@ class FlDotCrossPainter extends FlDotPainter {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = width
-      ..color = color;
+      ..color = color ?? Theme.of(context).colorScheme.primary;
 
     canvas.drawPath(path, paint);
   }
@@ -1608,7 +1631,8 @@ class FlDotCrossPainter extends FlDotPainter {
   }
 
   @override
-  Color get mainColor => color;
+  Color mainColor(BuildContext context) =>
+      color ?? Theme.of(context).colorScheme.primary;
 
   FlDotCrossPainter _lerp(
     FlDotCrossPainter a,

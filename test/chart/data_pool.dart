@@ -1181,7 +1181,10 @@ const LineTooltipItem lineTooltipItem3 =
 const LineTooltipItem lineTooltipItem4 =
     LineTooltipItem('', textStyle: TextStyle(fontSize: 33));
 
-List<LineTooltipItem?> lineChartGetTooltipItems(List<LineBarSpot> list) {
+List<LineTooltipItem?> lineChartGetTooltipItems(
+  BuildContext context,
+  List<LineBarSpot> list,
+) {
   return list.map((s) => lineTooltipItem1).toList();
 }
 
@@ -2240,7 +2243,10 @@ bool gridCheckToShowLine(num value) => true;
 
 FlLine gridGetDrawingLine(num value) => const FlLine();
 
-ScatterTooltipItem? scatterChartGetTooltipItems(ScatterSpot spots) {
+ScatterTooltipItem? scatterChartGetTooltipItems(
+  BuildContext context,
+  ScatterSpot spots,
+) {
   return ScatterTooltipItem(
     'check',
     textStyle: const TextStyle(color: Colors.blue),
@@ -2248,11 +2254,12 @@ ScatterTooltipItem? scatterChartGetTooltipItems(ScatterSpot spots) {
   );
 }
 
-Color scatterChartGetTooltipGreenColor(ScatterSpot spots) {
+Color scatterChartGetTooltipGreenColor(
+    BuildContext context, ScatterSpot spots) {
   return Colors.green; //Color
 }
 
-Color scatterChartGetTooltipRedColor(ScatterSpot spots) {
+Color scatterChartGetTooltipRedColor(BuildContext context, ScatterSpot spots) {
   return Colors.red; //Color
 }
 
@@ -2317,7 +2324,7 @@ final ScatterChartData scatterChartData1 = ScatterChartData(
       fitInsideHorizontally: true,
       fitInsideVertically: false,
       maxContentWidth: 33,
-      getTooltipColor: (touchedSpot) => Colors.white,
+      getTooltipColor: (context, touchedSpot) => Colors.white,
       tooltipPadding: const EdgeInsets.all(23),
       tooltipRoundedRadius: 534,
     ),

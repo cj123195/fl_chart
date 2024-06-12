@@ -1,16 +1,15 @@
-import 'dart:ui';
-
 import 'package:fl_chart/src/chart/base/axis_chart/axis_chart_data.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
 import 'package:fl_chart/src/utils/utils.dart';
-import 'package:flutter/painting.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
+
 import '../chart/data_pool.dart';
 import 'canvas_wrapper_test.mocks.dart';
 
-@GenerateMocks([Canvas, FlDotPainter, Utils])
+@GenerateMocks([Canvas, BuildContext, FlDotPainter, Utils])
 void main() {
   final mockCanvas = MockCanvas();
   final canvasWrapper = CanvasWrapper(mockCanvas, MockData.size1);
@@ -95,7 +94,9 @@ void main() {
 
   test('test drawDot', () {
     final painter = MockFlDotPainter();
-    canvasWrapper.drawDot(painter, MockData.lineBarSpot1, MockData.offset1);
+    final mockBuildContext = MockBuildContext();
+    canvasWrapper.drawDot(
+        mockBuildContext, painter, MockData.lineBarSpot1, MockData.offset1);
     verify(painter.draw(mockCanvas, MockData.lineBarSpot1, MockData.offset1))
         .called(1);
   });

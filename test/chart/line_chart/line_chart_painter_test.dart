@@ -374,7 +374,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawBarLine(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -405,7 +407,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawBarLine(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -437,7 +441,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawBarLine(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -537,7 +543,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawDots(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -567,7 +575,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawDots(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -603,7 +613,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawDots(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -644,7 +656,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawDots(
+        mockBuildContext,
         mockCanvasWrapper,
         barData,
         holder,
@@ -734,7 +748,9 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawTouchedSpotsIndicator(
+        mockBuildContext,
         mockCanvasWrapper,
         getDrawingInfo(data),
         holder,
@@ -798,7 +814,9 @@ void main() {
         });
       });
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawTouchedSpotsIndicator(
+        mockBuildContext,
         mockCanvasWrapper,
         getDrawingInfo(data),
         holder,
@@ -868,7 +886,9 @@ void main() {
         });
       });
 
+      final mockBuildContext = MockBuildContext();
       lineChartPainter.drawTouchedSpotsIndicator(
+        mockBuildContext,
         mockCanvasWrapper,
         getDrawingInfo(data),
         holder,
@@ -1799,6 +1819,8 @@ void main() {
 
   group('drawBar()', () {
     test('test 1', () {
+      final mockBuildContext = MockBuildContext();
+
       const viewSize = Size(100, 100);
 
       const barSpots1 = [
@@ -1841,6 +1863,7 @@ void main() {
         ..lineTo(80, 10);
 
       lineChartPainter.drawBar(
+        mockBuildContext,
         mockCanvasWrapper,
         barPath,
         lineChartBarData1,
@@ -1850,6 +1873,8 @@ void main() {
     });
 
     test('test 2', () {
+      final mockBuildContext = MockBuildContext();
+
       const viewSize = Size(100, 100);
 
       const barSpots1 = [
@@ -1892,6 +1917,7 @@ void main() {
         ..lineTo(80, 10);
 
       lineChartPainter.drawBar(
+        mockBuildContext,
         mockCanvasWrapper,
         barPath,
         lineChartBarData1,
@@ -1910,6 +1936,8 @@ void main() {
     });
 
     test('test 3', () {
+      final mockBuildContext = MockBuildContext();
+
       const viewSize = Size(100, 100);
 
       const barSpots1 = [
@@ -1950,6 +1978,7 @@ void main() {
         ..lineTo(80, 10);
 
       lineChartPainter.drawBar(
+        mockBuildContext,
         mockCanvasWrapper,
         barPath,
         lineChartBarData1,
@@ -2380,6 +2409,8 @@ void main() {
 
   group('drawTouchTooltip()', () {
     test('test 1', () {
+      final mockBuildContext = MockBuildContext();
+
       const viewSize = Size(100, 100);
 
       final barData = LineChartBarData(
@@ -2402,7 +2433,7 @@ void main() {
         tooltipPadding: const EdgeInsets.all(12),
         fitInsideHorizontally: true,
         fitInsideVertically: true,
-        getTooltipItems: (List<LineBarSpot> touchedSpots) {
+        getTooltipItems: (context, List<LineBarSpot> touchedSpots) {
           return touchedSpots
               .map(
                 (e) => LineTooltipItem(
@@ -2432,7 +2463,6 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
 
-      final mockBuildContext = MockBuildContext();
       final mockUtils = MockUtils();
       Utils.changeInstance(mockUtils);
       when(mockUtils.getThemeAwareTextStyle(any, any))
@@ -2518,7 +2548,7 @@ void main() {
         tooltipHorizontalAlignment: FLHorizontalAlignment.left,
         tooltipPadding: const EdgeInsets.all(12),
         fitInsideVertically: true,
-        getTooltipItems: (List<LineBarSpot> touchedSpots) {
+        getTooltipItems: (context, List<LineBarSpot> touchedSpots) {
           return touchedSpots
               .map(
                 (e) => LineTooltipItem(
@@ -2634,7 +2664,7 @@ void main() {
         tooltipHorizontalAlignment: FLHorizontalAlignment.right,
         tooltipPadding: const EdgeInsets.all(12),
         fitInsideVertically: true,
-        getTooltipItems: (List<LineBarSpot> touchedSpots) {
+        getTooltipItems: (context, List<LineBarSpot> touchedSpots) {
           return touchedSpots
               .map(
                 (e) => LineTooltipItem(

@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:fl_chart_app/presentation/resources/app_resources.dart';
 import 'package:flutter/material.dart';
 
 class ScatterChartSample2 extends StatefulWidget {
@@ -126,10 +126,16 @@ class _ScatterChartSample2State extends State {
                       : SystemMouseCursors.click;
                 },
                 touchTooltipData: ScatterTouchTooltipData(
-                  getTooltipColor: (ScatterSpot touchedBarSpot) {
-                    return touchedBarSpot.dotPainter.mainColor;
+                  getTooltipColor: (
+                    BuildContext context,
+                    ScatterSpot touchedBarSpot,
+                  ) {
+                    return touchedBarSpot.dotPainter.mainColor(context);
                   },
-                  getTooltipItems: (ScatterSpot touchedBarSpot) {
+                  getTooltipItems: (
+                    BuildContext context,
+                    ScatterSpot touchedBarSpot,
+                  ) {
                     final bool isBgDark =
                         switch ((touchedBarSpot.x, touchedBarSpot.y)) {
                       (4.0, 4.0) => false,

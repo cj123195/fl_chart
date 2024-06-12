@@ -96,6 +96,7 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
       final pixelY = getPixelY(scatterSpot.y, viewSize, holder);
 
       canvasWrapper.drawDot(
+        context,
         scatterSpot.dotPainter,
         scatterSpot,
         Offset(pixelX, pixelY),
@@ -208,7 +209,7 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
   ) {
     final viewSize = canvasWrapper.size;
 
-    final tooltipItem = tooltipData.getTooltipItems(showOnSpot);
+    final tooltipItem = tooltipData.getTooltipItems(context, showOnSpot);
 
     if (tooltipItem == null) {
       return;
@@ -312,7 +313,8 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
       bottomRight: radius,
     );
 
-    _bgTouchTooltipPaint.color = tooltipData.getTooltipColor(showOnSpot);
+    _bgTouchTooltipPaint.color =
+        tooltipData.getTooltipColor(context, showOnSpot);
 
     final rotateAngle = tooltipData.rotateAngle;
     final rectRotationOffset =

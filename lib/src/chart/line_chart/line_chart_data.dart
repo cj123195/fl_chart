@@ -3,8 +3,6 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/extensions/color_extension.dart';
-import 'package:fl_chart/src/extensions/gradient_extension.dart';
 import 'package:fl_chart/src/utils/lerp.dart';
 import 'package:flutter/material.dart' hide Image;
 
@@ -227,7 +225,7 @@ class LineChartBarData with EquatableMixin {
   LineChartBarData({
     this.spots = const [],
     this.show = true,
-    Color? color,
+    this.color,
     this.gradient,
     this.barWidth = 2.0,
     this.isCurved = false,
@@ -244,9 +242,7 @@ class LineChartBarData with EquatableMixin {
     this.shadow = const Shadow(color: Colors.transparent),
     this.isStepLineChart = false,
     this.lineChartStepData = const LineChartStepData(),
-  })  : color =
-            color ?? ((color == null && gradient == null) ? Colors.cyan : null),
-        belowBarData = belowBarData ?? BarAreaData(),
+  })  : belowBarData = belowBarData ?? BarAreaData(),
         aboveBarData = aboveBarData ?? BarAreaData() {
     FlSpot? mostLeft;
     FlSpot? mostTop;
@@ -695,39 +691,6 @@ bool showAllSpotsBelowLine(FlSpot spot) {
 /// It should return a [Color] that needs to be used for drawing target.
 typedef GetDotColorCallback = Color Function(FlSpot, double, LineChartBarData);
 
-/// If there is one color in [LineChartBarData.mainColors], it returns that color,
-/// otherwise it returns the color along the gradient colors based on the [xPercentage].
-Color _defaultGetDotColor(FlSpot _, double xPercentage, LineChartBarData bar) {
-  if (bar.gradient != null && bar.gradient is LinearGradient) {
-    return lerpGradient(
-      bar.gradient!.colors,
-      bar.gradient!.getSafeColorStops(),
-      xPercentage / 100,
-    );
-  }
-  return bar.gradient?.colors.first ?? bar.color ?? Colors.blueGrey;
-}
-
-/// If there is one color in [LineChartBarData.mainColors], it returns that color in a darker mode,
-/// otherwise it returns the color along the gradient colors based on the [xPercentage] in a darker mode.
-Color _defaultGetDotStrokeColor(
-  FlSpot spot,
-  double xPercentage,
-  LineChartBarData bar,
-) {
-  Color color;
-  if (bar.gradient != null && bar.gradient is LinearGradient) {
-    color = lerpGradient(
-      bar.gradient!.colors,
-      bar.gradient!.getSafeColorStops(),
-      xPercentage / 100,
-    );
-  } else {
-    color = bar.gradient?.colors.first ?? bar.color ?? Colors.blueGrey;
-  }
-  return color.darken();
-}
-
 /// The callback passed to get the painter of a [FlSpot]
 ///
 /// The callback receives [FlSpot], which is the target spot,
@@ -748,11 +711,7 @@ FlDotPainter _defaultGetDotPainter(
   int index, {
   double? size,
 }) {
-  return FlDotCirclePainter(
-    radius: size,
-    color: _defaultGetDotColor(spot, xPercentage, bar),
-    strokeColor: _defaultGetDotStrokeColor(spot, xPercentage, bar),
-  );
+  return FlDotCirclePainter(radius: size, color: bar.color);
 }
 
 /// This class holds data about drawing spot dots on the drawing bar line.
@@ -998,9 +957,6 @@ List<TouchedSpotIndicatorData> defaultTouchedIndicators(
   return indicators.map((int index) {
     /// Indicator Line
     var lineColor = barData.gradient?.colors.first ?? barData.color;
-    if (barData.dotData.show) {
-      lineColor = _defaultGetDotColor(barData.spots[index], 0, barData);
-    }
     final flLine = FlLine(color: lineColor);
 
     var dotSize = 10.0;
@@ -1166,20 +1122,32 @@ typedef GetLineTooltipTitle = LineTooltipTitle? Function(
 /// (length should be equal to the [touchedSpots.length]),
 /// to show inside the tooltip popup.
 typedef GetLineTooltipItems = List<LineTooltipItem?> Function(
+  BuildContext context,
   List<LineBarSpot> touchedSpots,
 );
 
 /// Default implementation for [LineTouchTooltipData.getTooltipItems].
-List<LineTooltipItem> defaultLineTooltipItem(List<LineBarSpot> touchedSpots) {
+List<LineTooltipItem> defaultLineTooltipItem(
+  BuildContext context,
+  List<LineBarSpot> touchedSpots,
+) {
   return touchedSpots.map((LineBarSpot touchedSpot) {
     final textStyle = TextStyle(
       color: touchedSpot.bar.gradient?.colors.first ??
           touchedSpot.bar.color ??
-          Colors.blueGrey,
+          Theme.of(context).colorScheme.onBackground,
       fontWeight: FontWeight.bold,
       fontSize: 14,
     );
-    return LineTooltipItem(touchedSpot.y.toString(), textStyle: textStyle);
+    return LineTooltipItem(
+      touchedSpot.y.toString(),
+      textStyle: textStyle,
+      indicator: FlTooltipIndicator(
+        color: touchedSpot.bar.gradient?.colors.first ??
+            touchedSpot.bar.color ??
+            Theme.of(context).colorScheme.primary,
+      ),
+    );
   }).toList();
 }
 

@@ -4,7 +4,6 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/scatter_chart/scatter_chart_helper.dart';
-import 'package:fl_chart/src/extensions/color_extension.dart';
 import 'package:fl_chart/src/utils/lerp.dart';
 import 'package:flutter/material.dart';
 
@@ -524,13 +523,17 @@ class ScatterTouchTooltipData with EquatableMixin {
 /// then you should and pass your custom [ScatterTooltipItem]
 /// to show it inside the tooltip popup.
 typedef GetScatterTooltipItems = ScatterTooltipItem? Function(
+  BuildContext context,
   ScatterSpot touchedSpot,
 );
 
 /// Default implementation for [ScatterTouchTooltipData.getTooltipItems].
-ScatterTooltipItem? defaultScatterTooltipItem(ScatterSpot touchedSpot) {
+ScatterTooltipItem? defaultScatterTooltipItem(
+  BuildContext context,
+  ScatterSpot touchedSpot,
+) {
   final textStyle = TextStyle(
-    color: touchedSpot.dotPainter.mainColor,
+    color: touchedSpot.dotPainter.mainColor(context),
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
@@ -553,12 +556,16 @@ ScatterTooltipItem? defaultScatterTooltipItem(ScatterSpot touchedSpot) {
 /// then you should and pass your custom [Color]
 /// to show it inside the tooltip popup.
 typedef GetScatterTooltipColor = Color Function(
+  BuildContext context,
   ScatterSpot touchedSpot,
 );
 
 /// Default implementation for [ScatterTouchTooltipData.getTooltipItems].
-Color defaultScatterTooltipColor(ScatterSpot touchedSpot) {
-  return Colors.blueGrey.darken(15);
+Color defaultScatterTooltipColor(
+  BuildContext context,
+  ScatterSpot touchedSpot,
+) {
+  return Theme.of(context).colorScheme.primaryContainer;
 }
 
 /// Holds data of showing each item in the tooltip popup.
