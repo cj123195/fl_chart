@@ -34,6 +34,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
     this.sectionsBorder,
     bool? titleSunbeamLayout,
     bool showZeroValue = true,
+    bool? showZeroTitle,
   })  : assert(
           sectionsBorder == null ||
               (sectionsSpace == 0 &&
@@ -55,6 +56,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
         startDegreeOffset = startDegreeOffset ?? 0,
         pieTouchData = pieTouchData ?? PieTouchData(),
         titleSunbeamLayout = titleSunbeamLayout ?? false,
+        showZeroTitle = showZeroTitle ?? false,
         super(
           borderData: borderData ?? FlBorderData(show: false),
           touchData: pieTouchData ?? PieTouchData(),
@@ -91,8 +93,13 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// Whether to rotate the titles on each section of the chart
   final bool titleSunbeamLayout;
 
+  /// Whether to show the title with a value of 0 when [sumValue] is not 0
+  ///
+  /// Default to false.
+  final bool showZeroTitle;
+
   /// We hold this value to determine weight of each [PieChartSectionData.value].
-  double get sumValue => sections
+  num get sumValue => sections
       .map((data) => data.value)
       .reduce((first, second) => first + second);
 
@@ -107,6 +114,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
     PieTouchData? pieTouchData,
     FlBorderData? borderData,
     bool? titleSunbeamLayout,
+    bool? showZeroTitle,
   }) {
     return PieChartData(
       sections: sections ?? this.sections,
@@ -117,6 +125,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
       pieTouchData: pieTouchData ?? this.pieTouchData,
       borderData: borderData ?? this.borderData,
       titleSunbeamLayout: titleSunbeamLayout ?? this.titleSunbeamLayout,
+      showZeroTitle: showZeroTitle ?? this.showZeroTitle,
     );
   }
 
@@ -138,6 +147,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
             lerpDouble(a.startDegreeOffset, b.startDegreeOffset, t),
         sections: lerpPieChartSectionDataList(a.sections, b.sections, t),
         titleSunbeamLayout: b.titleSunbeamLayout,
+        showZeroTitle: t < 0.5 ? a.showZeroTitle : b.showZeroTitle,
       );
     } else {
       throw Exception('Illegal State');
@@ -155,6 +165,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
         startDegreeOffset,
         borderData,
         titleSunbeamLayout,
+        showZeroTitle,
       ];
 }
 
@@ -180,7 +191,7 @@ class PieChartSectionData {
   /// change the [badgePositionPercentageOffset] to have your desire design,
   /// the value works the same way as [titlePositionPercentageOffset].
   PieChartSectionData({
-    double? value,
+    num? value,
     this.color,
     this.gradient,
     this.radiusRatio,
@@ -206,7 +217,7 @@ class PieChartSectionData {
   /// occupy ([value] / sumValues) * 360 degrees.
   ///
   /// value can not be null.
-  final double value;
+  final num value;
 
   /// Defines the color of section.
   final Color? color;

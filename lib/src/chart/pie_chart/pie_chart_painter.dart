@@ -91,7 +91,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
   @visibleForTesting
   List<double> calculateSectionsAngle(
     List<PieChartSectionData> sections,
-    double sumValue,
+    num sumValue,
   ) {
     if (sections.every((e) => e.value == 0)) {
       return List.generate(sections.length, (index) => 360 / sections.length);
@@ -437,6 +437,13 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     for (var i = 0; i < data.sections.length; i++) {
       final section = data.sections[i];
       final sweepAngle = sectionsAngle[i];
+
+      if (!section.showTitle ||
+          (data.sumValue != 0 && section.value == 0 && !data.showZeroTitle)) {
+        tempAngle += sweepAngle;
+        continue;
+      }
+
       final sectionRadius = calculateSectionRadius(viewSize, data, section);
       var startAngle = tempAngle;
       if (section.borderRadius != null && section.borderRadius != 0) {
