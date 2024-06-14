@@ -16,7 +16,7 @@ void main() {
   group('PieChartRenderer', () {
     final data = PieChartData();
 
-    final targetData = PieChartData(centerSpaceRadius: 12);
+    final targetData = PieChartData(centerSpaceRadiusRatio: 0.1);
 
     const textScaler = TextScaler.linear(4);
 

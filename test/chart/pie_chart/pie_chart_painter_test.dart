@@ -926,7 +926,8 @@ void main() {
       ];
       final barChartPainter = PieChartPainter();
 
-      final data1 = PieChartData(sections: sections, centerSpaceRadius: 15);
+      final data1 =
+          PieChartData(sections: sections, centerSpaceRadiusRatio: 0.12);
       final result1 = barChartPainter.calculateCenterRadius(
         viewSize,
         PaintHolder<PieChartData>(data1, data1, TextScaler.noScaling),

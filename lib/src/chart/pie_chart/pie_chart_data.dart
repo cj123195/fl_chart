@@ -24,7 +24,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// You can modify [pieTouchData] to customize touch behaviors and responses.
   PieChartData({
     List<PieChartSectionData>? sections,
-    double? centerSpaceRadius,
+    double? centerSpaceRadiusRatio,
     Color? centerSpaceColor,
     double? sectionsSpace,
     double? startDegreeOffset,
@@ -35,6 +35,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
     bool? titleSunbeamLayout,
     bool showZeroValue = true,
     bool? showZeroTitle,
+    this.isStrokeCapRound,
   })  : assert(
           sectionsBorder == null ||
               (sectionsSpace == 0 &&
@@ -46,11 +47,15 @@ class PieChartData extends BaseChartData with EquatableMixin {
           'When the border is not null, sectionsSpace must be 0 and the radius '
           'of all sections must be equal.',
         ),
+        assert(
+          centerSpaceRadiusRatio == null ||
+              (centerSpaceRadiusRatio >= 0 && centerSpaceRadiusRatio <= 1),
+        ),
         sections = (showZeroValue
                 ? sections
                 : sections?.where((section) => section.value != 0).toList()) ??
             const [],
-        centerSpaceRadius = centerSpaceRadius ?? 0,
+        centerSpaceRadiusRatio = centerSpaceRadiusRatio ?? 0,
         centerSpaceColor = centerSpaceColor ?? Colors.transparent,
         sectionsSpace = sectionsSpace ?? 2,
         startDegreeOffset = startDegreeOffset ?? 0,
@@ -66,7 +71,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
   final List<PieChartSectionData> sections;
 
   /// Radius of free space in center of the circle.
-  final double centerSpaceRadius;
+  final double centerSpaceRadiusRatio;
 
   /// Color of free space in center of the circle.
   final Color centerSpaceColor;
@@ -98,6 +103,10 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// Default to false.
   final bool showZeroTitle;
 
+  /// Determine how to stroke the border of each section when center space radius
+  /// is not zero.
+  final bool? isStrokeCapRound;
+
   /// We hold this value to determine weight of each [PieChartSectionData.value].
   num get sumValue => sections
       .map((data) => data.value)
@@ -107,7 +116,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// and replaces provided values.
   PieChartData copyWith({
     List<PieChartSectionData>? sections,
-    double? centerSpaceRadius,
+    double? centerSpaceRadiusRatio,
     Color? centerSpaceColor,
     double? sectionsSpace,
     double? startDegreeOffset,
@@ -115,10 +124,12 @@ class PieChartData extends BaseChartData with EquatableMixin {
     FlBorderData? borderData,
     bool? titleSunbeamLayout,
     bool? showZeroTitle,
+    bool? isStrokeCapRound,
   }) {
     return PieChartData(
       sections: sections ?? this.sections,
-      centerSpaceRadius: centerSpaceRadius ?? this.centerSpaceRadius,
+      centerSpaceRadiusRatio:
+          centerSpaceRadiusRatio ?? this.centerSpaceRadiusRatio,
       centerSpaceColor: centerSpaceColor ?? this.centerSpaceColor,
       sectionsSpace: sectionsSpace ?? this.sectionsSpace,
       startDegreeOffset: startDegreeOffset ?? this.startDegreeOffset,
@@ -126,6 +137,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
       borderData: borderData ?? this.borderData,
       titleSunbeamLayout: titleSunbeamLayout ?? this.titleSunbeamLayout,
       showZeroTitle: showZeroTitle ?? this.showZeroTitle,
+      isStrokeCapRound: isStrokeCapRound,
     );
   }
 
@@ -136,9 +148,9 @@ class PieChartData extends BaseChartData with EquatableMixin {
       return PieChartData(
         borderData: FlBorderData.lerp(a.borderData, b.borderData, t),
         centerSpaceColor: Color.lerp(a.centerSpaceColor, b.centerSpaceColor, t),
-        centerSpaceRadius: lerpDoubleAllowInfinity(
-          a.centerSpaceRadius,
-          b.centerSpaceRadius,
+        centerSpaceRadiusRatio: lerpDoubleAllowInfinity(
+          a.centerSpaceRadiusRatio,
+          b.centerSpaceRadiusRatio,
           t,
         ),
         pieTouchData: b.pieTouchData,
@@ -148,6 +160,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
         sections: lerpPieChartSectionDataList(a.sections, b.sections, t),
         titleSunbeamLayout: b.titleSunbeamLayout,
         showZeroTitle: t < 0.5 ? a.showZeroTitle : b.showZeroTitle,
+        isStrokeCapRound: t < 0.5 ? a.isStrokeCapRound : b.isStrokeCapRound,
       );
     } else {
       throw Exception('Illegal State');
@@ -158,7 +171,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
   @override
   List<Object?> get props => [
         sections,
-        centerSpaceRadius,
+        centerSpaceRadiusRatio,
         centerSpaceColor,
         pieTouchData,
         sectionsSpace,
@@ -166,6 +179,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
         borderData,
         titleSunbeamLayout,
         showZeroTitle,
+        isStrokeCapRound,
       ];
 }
 
@@ -202,7 +216,6 @@ class PieChartSectionData {
     this.badgeWidget,
     double? titlePositionPercentageOffset,
     double? badgePositionPercentageOffset,
-    this.borderRadius,
   })  : assert(radiusRatio == null || (radiusRatio >= 0 && radiusRatio <= 1)),
         value = value ?? 0,
         showTitle = showTitle ?? true,
@@ -262,9 +275,6 @@ class PieChartSectionData {
   /// 1.0 means near the outside of the [PieChart].
   final double badgePositionPercentageOffset;
 
-  /// 两端圆角大小
-  final double? borderRadius;
-
   /// Copies current [PieChartSectionData] to a new [PieChartSectionData],
   /// and replaces provided values.
   PieChartSectionData copyWith({
@@ -295,7 +305,6 @@ class PieChartSectionData {
           titlePositionPercentageOffset ?? this.titlePositionPercentageOffset,
       badgePositionPercentageOffset:
           badgePositionPercentageOffset ?? this.badgePositionPercentageOffset,
-      borderRadius: borderRadius ?? this.borderRadius,
     );
   }
 
@@ -315,7 +324,6 @@ class PieChartSectionData {
       title: b.title,
       borderSide: BorderSide.lerp(a.borderSide, b.borderSide, t),
       badgeWidget: b.badgeWidget,
-      borderRadius: lerpDouble(a.borderRadius, b.borderRadius, t),
       titlePositionPercentageOffset: lerpDouble(
         a.titlePositionPercentageOffset,
         b.titlePositionPercentageOffset,

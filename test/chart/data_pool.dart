@@ -2230,7 +2230,7 @@ final PieChartData pieChartData1 = PieChartData(
     PieChartSectionData(value: 22, color: Colors.green),
   ],
   centerSpaceColor: Colors.white,
-  centerSpaceRadius: 12,
+  centerSpaceRadiusRatio: 0.1,
   pieTouchData: PieTouchData(
     enabled: false,
   ),
@@ -2255,7 +2255,9 @@ ScatterTooltipItem? scatterChartGetTooltipItems(
 }
 
 Color scatterChartGetTooltipGreenColor(
-    BuildContext context, ScatterSpot spots,) {
+  BuildContext context,
+  ScatterSpot spots,
+) {
   return Colors.green; //Color
 }
 

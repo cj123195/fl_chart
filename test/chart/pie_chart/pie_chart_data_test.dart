@@ -48,7 +48,7 @@ void main() {
               ),
               startDegreeOffset: 0,
               centerSpaceColor: Colors.white,
-              centerSpaceRadius: 12,
+              centerSpaceRadiusRatio: 0.1,
               pieTouchData: PieTouchData(
                 enabled: false,
               ),
@@ -112,7 +112,7 @@ void main() {
       expect(
         pieChartData1 ==
             pieChartData1Clone.copyWith(
-              centerSpaceRadius: 44,
+              centerSpaceRadiusRatio: 0.2,
             ),
         false,
       );

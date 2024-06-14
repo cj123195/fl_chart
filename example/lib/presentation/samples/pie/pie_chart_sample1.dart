@@ -90,7 +90,7 @@ class PieChartSample1State extends State {
                     show: false,
                   ),
                   sectionsSpace: 1,
-                  centerSpaceRadius: 0,
+                  centerSpaceRadiusRatio: 0,
                   sections: showingSections(),
                 ),
               ),

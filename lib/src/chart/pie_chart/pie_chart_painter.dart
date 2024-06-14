@@ -111,7 +111,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       radius = radius - data.sectionsBorder!.strokeOffset;
     }
     return (radius -
-            data.centerSpaceRadius -
+            viewSize.shortestSide * data.centerSpaceRadiusRatio / 2 -
             section.borderSide.strokeOffset * 2) *
         radiusRatio;
   }
@@ -164,6 +164,11 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       final section = data.sections[i];
       final sectionDegree = sectionsAngle[i];
       final sectionRadius = calculateSectionRadius(viewSize, data, section);
+
+      Radius? radius;
+      if (data.isStrokeCapRound == true && data.centerSpaceRadiusRatio > 0) {
+        radius = Radius.circular(sectionRadius / 2);
+      }
 
       if (sectionDegree == 360) {
         final radius = centerRadius + sectionRadius / 2;
@@ -226,6 +231,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         sectionDegree,
         center,
         centerRadius,
+        radius: radius,
       );
 
       drawSection(context, section, sectionPath, canvasWrapper);
@@ -243,8 +249,9 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     double tempAngle,
     double sectionDegree,
     Offset center,
-    double centerRadius,
-  ) {
+    double centerRadius, {
+    Radius? radius,
+  }) {
     final sectionRadiusRect = Rect.fromCircle(
       center: center,
       radius: centerRadius + sectionRadius,
@@ -264,31 +271,32 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
     final startLineFrom = center + startLineDirection * centerRadius;
     final startLineTo = startLineFrom + startLineDirection * sectionRadius;
-    final startLine = Line(startLineFrom, startLineTo);
 
     final endLineDirection = Offset(math.cos(endRadians), math.sin(endRadians));
 
     final endLineFrom = center + endLineDirection * centerRadius;
     final endLineTo = endLineFrom + endLineDirection * sectionRadius;
-    final endLine = Line(endLineFrom, endLineTo);
 
-    final radius = Radius.circular(section.borderRadius ?? 0);
-
-    var sectionPath = Path()
-      ..moveTo(startLine.from.dx, startLine.from.dy)
-      ..arcToPoint(
-        startLine.to,
-        radius: radius,
-      )
-      ..arcTo(sectionRadiusRect, startRadians, sweepRadians, false)
-      ..arcToPoint(
-        endLine.from,
-        radius: radius,
-        clockwise: false,
-      )
-      ..arcTo(centerRadiusRect, endRadians, -sweepRadians, false)
-      ..moveTo(startLine.from.dx, startLine.from.dy)
-      ..close();
+    var sectionPath = Path();
+    if (radius == null) {
+      sectionPath
+        ..moveTo(startLineFrom.dx, startLineFrom.dy)
+        ..lineTo(startLineTo.dx, startLineTo.dy)
+        ..arcTo(sectionRadiusRect, startRadians, sweepRadians, false)
+        ..lineTo(endLineFrom.dx, endLineFrom.dy)
+        ..arcTo(centerRadiusRect, endRadians, -sweepRadians, false)
+        ..moveTo(startLineFrom.dx, startLineFrom.dy)
+        ..close();
+    } else {
+      sectionPath
+        ..moveTo(startLineFrom.dx, startLineFrom.dy)
+        ..arcToPoint(startLineTo, radius: radius)
+        ..arcTo(sectionRadiusRect, startRadians, sweepRadians, false)
+        ..arcToPoint(endLineFrom, radius: radius, clockwise: false)
+        ..arcTo(centerRadiusRect, endRadians, -sweepRadians, false)
+        ..moveTo(startLineFrom.dx, startLineFrom.dy)
+        ..close();
+    }
 
     /// Subtract section space from the sectionPath
     if (sectionSpace != 0) {
@@ -443,15 +451,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       }
 
       final sectionRadius = calculateSectionRadius(viewSize, data, section);
-      var startAngle = tempAngle;
-      if (section.borderRadius != null && section.borderRadius != 0) {
-        final angle = sectionRadius / 2 > section.borderRadius!
-            ? sectionRadius / 3
-            : sectionRadius > section.borderRadius!
-                ? (sectionRadius - section.borderRadius!) / 2
-                : 0;
-        startAngle -= angle;
-      }
+      final startAngle = tempAngle;
       final sectionCenterAngle = startAngle + (sweepAngle / 2);
 
       double? rotateAngle;
@@ -506,14 +506,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     PaintHolder<PieChartData> holder,
   ) {
     final data = holder.data;
-    if (data.centerSpaceRadius.isFinite) {
-      return data.centerSpaceRadius;
-    }
-    final sectionsRadius = data.sections
-        .map((e) => calculateSectionRadius(viewSize, data, e))
-        .toList();
-    final maxRadius = sectionsRadius.reduce((a, b) => a > b ? a : b);
-    return (viewSize.shortestSide - (maxRadius * 2)) / 2;
+    return viewSize.shortestSide * data.centerSpaceRadiusRatio / 2;
   }
 
   /// Makes a [PieTouchedSection] based on the provided [localPosition]

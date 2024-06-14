@@ -39,7 +39,7 @@ class PieChartSample3State extends State {
               show: false,
             ),
             sectionsSpace: 0,
-            centerSpaceRadius: 0,
+            centerSpaceRadiusRatio: 0,
             sections: showingSections(),
           ),
         ),
