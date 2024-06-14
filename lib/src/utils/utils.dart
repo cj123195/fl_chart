@@ -139,8 +139,7 @@ class Utils {
     if (diffInAxis == 0) {
       return 1;
     }
-    final accurateInterval =
-        diffInAxis == 0 ? axisViewSize : diffInAxis / allowedCount;
+    final accurateInterval = diffInAxis / allowedCount;
     if (allowedCount <= 2) {
       return accurateInterval;
     }
@@ -191,11 +190,11 @@ class Utils {
 
     final scaled = input >= 10 ? input.round() / 10 : input;
 
-    if (scaled >= 7.6) {
+    if (scaled >= 7.5) {
       return 10 * pow(10, decimalCount).toInt().toDouble();
-    } else if (scaled >= 2.6) {
+    } else if (scaled >= 2.5) {
       return 5 * pow(10, decimalCount).toInt().toDouble();
-    } else if (scaled >= 1.6) {
+    } else if (scaled >= 1.5) {
       return 2 * pow(10, decimalCount).toInt().toDouble();
     } else {
       return 1 * pow(10, decimalCount).toInt().toDouble();

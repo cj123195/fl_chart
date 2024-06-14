@@ -5,7 +5,6 @@ import 'package:fl_chart/src/extensions/bar_chart_data_extension.dart';
 import 'package:fl_chart/src/extensions/edge_insets_extension.dart';
 import 'package:fl_chart/src/extensions/fl_border_data_extension.dart';
 import 'package:fl_chart/src/extensions/fl_titles_data_extension.dart';
-import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class SideTitlesWidget extends StatelessWidget {

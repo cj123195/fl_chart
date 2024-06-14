@@ -15,7 +15,6 @@ funding:
   - https://www.buymeacoffee.com/fl_chart
 
 dependencies:
-  decimal: ^2.3.3
   equatable: ^2.0.5
   flutter:
     sdk: flutter

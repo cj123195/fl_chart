@@ -1,39 +1,6 @@
-import 'package:decimal/decimal.dart';
+// import 'package:decimal/decimal.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/material.dart';
-
-extension NumExt on num {
-  Decimal get decimalize => Decimal.parse(toString());
-
-  num plus(num other) {
-    if (this is int && other is int) {
-      return this + other;
-    }
-    return (decimalize + other.decimalize).toDouble();
-  }
-
-  num minus(num other) {
-    if (this is int && other is int) {
-      return this - other;
-    }
-    return (decimalize - other.decimalize).toDouble();
-  }
-
-  num multiply(num other) {
-    if (this is int && other is int) {
-      return this * other;
-    }
-    return (decimalize * other.decimalize).toDouble();
-  }
-
-  num divide(num other) {
-    if (this is int && other is int) {
-      return this / other;
-    }
-    return (decimalize / other.decimalize).toDouble();
-  }
-}
 
 class AxisChartHelper {
   factory AxisChartHelper() {
@@ -70,7 +37,7 @@ class AxisChartHelper {
     }
     final diff = max - min;
     final count = diff ~/ interval;
-    final lastPosition = initialValue.plus(count.multiply(interval));
+    final lastPosition = initialValue + count * interval;
     final lastPositionOverlapsWithMax = lastPosition == max;
     final end =
         !maxIncluded && lastPositionOverlapsWithMax ? max - interval : max;
@@ -81,7 +48,8 @@ class AxisChartHelper {
     }
     while (axisSeek <= end + epsilon) {
       yield axisSeek;
-      axisSeek = axisSeek.plus(interval);
+      axisSeek += interval;
+      // axisSeek = axisSeek.plus(interval);
     }
     if (maxIncluded && !lastPositionOverlapsWithMax) {
       yield max;
