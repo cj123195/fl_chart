@@ -191,6 +191,7 @@ class SideTitles with EquatableMixin {
       getTitlesWidget: b.getTitlesWidget,
       reservedSize: lerpDouble(a.reservedSize, b.reservedSize, t)!,
       interval: lerpDouble(a.interval, b.interval, t),
+      showMaxTitle: t < 0.5 ? a.showMaxTitle : b.showMaxTitle,
     );
   }
 
@@ -201,12 +202,14 @@ class SideTitles with EquatableMixin {
     GetTitleWidgetFunction? getTitlesWidget,
     double? reservedSize,
     double? interval,
+    bool? showMaxTitle,
   }) {
     return SideTitles(
       showTitles: showTitles ?? this.showTitles,
       getTitlesWidget: getTitlesWidget ?? this.getTitlesWidget,
       reservedSize: reservedSize ?? this.reservedSize,
       interval: interval ?? this.interval,
+      showMaxTitle: showMaxTitle ?? this.showMaxTitle,
     );
   }
 
