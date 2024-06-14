@@ -96,7 +96,7 @@ void main() {
     final painter = MockFlDotPainter();
     final mockBuildContext = MockBuildContext();
     canvasWrapper.drawDot(
-        mockBuildContext, painter, MockData.lineBarSpot1, MockData.offset1);
+        mockBuildContext, painter, MockData.lineBarSpot1, MockData.offset1,);
     verify(painter.draw(mockCanvas, MockData.lineBarSpot1, MockData.offset1))
         .called(1);
   });

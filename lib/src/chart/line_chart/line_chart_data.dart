@@ -956,7 +956,7 @@ List<TouchedSpotIndicatorData> defaultTouchedIndicators(
 ) {
   return indicators.map((int index) {
     /// Indicator Line
-    var lineColor = barData.gradient?.colors.first ?? barData.color;
+    final lineColor = barData.gradient?.colors.first ?? barData.color;
     final flLine = FlLine(color: lineColor);
 
     var dotSize = 10.0;

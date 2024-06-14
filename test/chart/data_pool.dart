@@ -2255,7 +2255,7 @@ ScatterTooltipItem? scatterChartGetTooltipItems(
 }
 
 Color scatterChartGetTooltipGreenColor(
-    BuildContext context, ScatterSpot spots) {
+    BuildContext context, ScatterSpot spots,) {
   return Colors.green; //Color
 }
 

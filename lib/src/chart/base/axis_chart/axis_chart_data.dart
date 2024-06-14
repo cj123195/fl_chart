@@ -384,13 +384,11 @@ class FlTitlesData with EquatableMixin {
     this.topTitles = const AxisTitles(
       sideTitles: SideTitles(
         reservedSize: 30,
-        showTitles: false,
       ),
     ),
     this.rightTitles = const AxisTitles(
       sideTitles: SideTitles(
         reservedSize: 44,
-        showTitles: false,
       ),
     ),
     this.bottomTitles = const AxisTitles(
@@ -1448,9 +1446,9 @@ class FlDotCirclePainter extends FlDotPainter {
     double t,
   ) {
     return FlDotCirclePainter(
-      color: Color.lerp(a.color, b.color, t)!,
+      color: Color.lerp(a.color, b.color, t),
       radius: lerpDouble(a.radius, b.radius, t),
-      strokeColor: Color.lerp(a.strokeColor, b.strokeColor, t)!,
+      strokeColor: Color.lerp(a.strokeColor, b.strokeColor, t),
       strokeWidth: lerpDouble(a.strokeWidth, b.strokeWidth, t)!,
     );
   }
@@ -1567,9 +1565,9 @@ class FlDotSquarePainter extends FlDotPainter {
     double t,
   ) {
     return FlDotSquarePainter(
-      color: Color.lerp(a.color, b.color, t)!,
+      color: Color.lerp(a.color, b.color, t),
       size: lerpDouble(a.size, b.size, t)!,
-      strokeColor: Color.lerp(a.strokeColor, b.strokeColor, t)!,
+      strokeColor: Color.lerp(a.strokeColor, b.strokeColor, t),
       strokeWidth: lerpDouble(a.strokeWidth, b.strokeWidth, t)!,
     );
   }
@@ -1643,7 +1641,7 @@ class FlDotCrossPainter extends FlDotPainter {
     double t,
   ) {
     return FlDotCrossPainter(
-      color: Color.lerp(a.color, b.color, t)!,
+      color: Color.lerp(a.color, b.color, t),
       size: lerpDouble(a.size, b.size, t)!,
       width: lerpDouble(a.width, b.width, t)!,
     );

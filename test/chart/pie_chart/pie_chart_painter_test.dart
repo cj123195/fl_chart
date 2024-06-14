@@ -3,7 +3,6 @@ import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/chart/base/line.dart';
 import 'package:fl_chart/src/chart/pie_chart/pie_chart_painter.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
-import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/physics.dart';
 import 'package:flutter_test/flutter_test.dart';

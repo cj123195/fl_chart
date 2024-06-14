@@ -8,7 +8,6 @@ import 'package:fl_chart/src/extensions/paint_extension.dart';
 import 'package:fl_chart/src/extensions/path_extension.dart';
 import 'package:fl_chart/src/extensions/text_align_extension.dart';
 import 'package:fl_chart/src/utils/canvas_wrapper.dart';
-import 'package:fl_chart/src/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 const double _gap = 8;
