@@ -351,7 +351,7 @@ class LineChartBarData with EquatableMixin {
   final List<int> showingIndicators;
 
   /// Determines the dash length and space respectively, fill it if you want to have dashed line.
-  final List<int>? dashArray;
+  final List<double>? dashArray;
 
   /// Drops a shadow behind the bar line.
   final Shadow shadow;
@@ -384,7 +384,7 @@ class LineChartBarData with EquatableMixin {
         t,
       )!,
       dotData: FlDotData.lerp(a.dotData, b.dotData, t),
-      dashArray: lerpIntList(a.dashArray, b.dashArray, t),
+      dashArray: lerpDoubleList(a.dashArray, b.dashArray, t),
       color: Color.lerp(a.color, b.color, t),
       gradient: Gradient.lerp(a.gradient, b.gradient, t),
       spots: lerpFlSpotList(a.spots, b.spots, t)!,
@@ -413,7 +413,7 @@ class LineChartBarData with EquatableMixin {
     BarAreaData? belowBarData,
     BarAreaData? aboveBarData,
     FlDotData? dotData,
-    List<int>? dashArray,
+    List<double>? dashArray,
     List<int>? showingIndicators,
     Shadow? shadow,
     bool? isStepLineChart,

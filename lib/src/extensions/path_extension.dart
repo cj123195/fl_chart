@@ -9,11 +9,10 @@ extension DashedPath on Path {
   /// it is a circular array of dash offsets and lengths.
   /// For example, the array `[5, 10]` would result in dashes 5 pixels long
   /// followed by blank spaces 10 pixels long.
-  Path toDashedPath(List<int>? dashArray) {
+  Path toDashedPath(List<double>? dashArray) {
     if (dashArray != null) {
-      final castedArray = dashArray.map((value) => value.toDouble()).toList();
       final dashedPath =
-          dashPath(this, dashArray: CircularIntervalList<double>(castedArray));
+          dashPath(this, dashArray: CircularIntervalList<double>(dashArray));
 
       return dashedPath;
     } else {

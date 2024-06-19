@@ -1058,7 +1058,7 @@ class MockCanvasWrapper extends _i1.Mock implements _i6.CanvasWrapper {
     _i2.Offset? from,
     _i2.Offset? to,
     _i2.Paint? painter,
-    List<int>? dashArray,
+    List<double>? dashArray,
   ) =>
       super.noSuchMethod(
         Invocation.method(

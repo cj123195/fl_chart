@@ -353,7 +353,7 @@ class BarChartRodData with EquatableMixin {
   final BorderRadius? borderRadius;
 
   /// If you want to have dashed border, set this value.
-  final List<int>? borderDashArray;
+  final List<double>? borderDashArray;
 
   /// If you want to have a border for rod, set this value.
   final BorderSide borderSide;
@@ -406,7 +406,7 @@ class BarChartRodData with EquatableMixin {
       color: Color.lerp(a.color, b.color, t),
       width: lerpDouble(a.width, b.width, t),
       borderRadius: BorderRadius.lerp(a.borderRadius, b.borderRadius, t),
-      borderDashArray: lerpIntList(a.borderDashArray, b.borderDashArray, t),
+      borderDashArray: lerpDoubleList(a.borderDashArray, b.borderDashArray, t),
       borderSide: BorderSide.lerp(a.borderSide, b.borderSide, t),
       fromY: lerpDouble(a.fromY, b.fromY, t),
       toY: lerpDouble(a.toY, b.toY, t)!,
