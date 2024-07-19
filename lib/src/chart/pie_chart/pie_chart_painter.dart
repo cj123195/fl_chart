@@ -177,7 +177,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       final sectionRadius = calculateSectionRadius(viewSize, data, section);
 
       double? capAngle;
-      if (data.isStrokeCapRound == true && data.centerSpaceRadiusRatio > 0) {
+      if (data.strokeCapRoundMode != null && data.centerSpaceRadiusRatio > 0) {
         final d = math.min(viewSize.width, viewSize.height);
         capAngle = (sectionRadius / 2) / (math.pi * d) * 360;
       }
@@ -243,6 +243,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         sectionDegree,
         center,
         centerRadius,
+        strokeCapMode: data.strokeCapRoundMode,
         capAngle: capAngle,
       );
 
@@ -262,6 +263,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     double sectionDegree,
     Offset center,
     double centerRadius, {
+    PieStrokeCapRoundMode? strokeCapMode,
     double? capAngle,
   }) {
     final sectionRadiusRect = Rect.fromCircle(
@@ -274,14 +276,26 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       radius: centerRadius,
     );
 
-    var startRadians = Utils().radians(tempAngle);
-    final sweepRadians = Utils().radians(sectionDegree);
-    var endRadians = startRadians + sweepRadians;
+    var startAngle = tempAngle;
+    var endAngle = tempAngle + sectionDegree;
     if (capAngle != null && capAngle > 0) {
-      final capRadians = Utils().radians(capAngle);
-      startRadians += capRadians;
-      endRadians += capRadians;
+      switch (strokeCapMode!) {
+        case PieStrokeCapRoundMode.toStart:
+          startAngle += capAngle;
+          endAngle += capAngle;
+        case PieStrokeCapRoundMode.toEnd:
+          startAngle -= capAngle;
+          endAngle -= capAngle;
+        case PieStrokeCapRoundMode.both:
+          // TODO(cj123195): 优化算法.
+          startAngle += capAngle * 1.4;
+          endAngle -= capAngle * 1.4;
+      }
     }
+
+    final startRadians = Utils().radians(startAngle);
+    final endRadians = Utils().radians(endAngle);
+    final sweepRadians = endRadians - startRadians;
 
     final startLineDirection =
         Offset(math.cos(startRadians), math.sin(startRadians));
@@ -307,10 +321,17 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     } else {
       sectionPath
         ..moveTo(startLineFrom.dx, startLineFrom.dy)
-        ..arcToPoint(startLineTo, radius: Radius.circular(sectionRadius / 2))
+        ..arcToPoint(
+          startLineTo,
+          radius: Radius.circular(sectionRadius / 2),
+          clockwise: strokeCapMode != PieStrokeCapRoundMode.toEnd,
+        )
         ..arcTo(sectionRadiusRect, startRadians, sweepRadians, false)
-        ..arcToPoint(endLineFrom,
-            radius: Radius.circular(sectionRadius / 2), clockwise: false)
+        ..arcToPoint(
+          endLineFrom,
+          radius: Radius.circular(sectionRadius / 2),
+          clockwise: strokeCapMode != PieStrokeCapRoundMode.toStart,
+        )
         ..arcTo(centerRadiusRect, endRadians, -sweepRadians, false)
         ..moveTo(startLineFrom.dx, startLineFrom.dy)
         ..close();

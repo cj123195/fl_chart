@@ -35,8 +35,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
     bool? titleSunbeamLayout,
     bool showZeroValue = true,
     bool? showZeroTitle,
-    this.isStrokeCapRound,
-    // this.showingTooltipIndicators,
+    this.strokeCapRoundMode,
   })  : assert(
           sectionsBorder == null ||
               (sectionsSpace == 0 &&
@@ -106,9 +105,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
 
   /// Determine how to stroke the border of each section when center space radius
   /// is not zero.
-  final bool? isStrokeCapRound;
-
-  // final List<int>? showingTooltipIndicators;
+  final PieStrokeCapRoundMode? strokeCapRoundMode;
 
   /// We hold this value to determine weight of each [PieChartSectionData.value].
   num get sumValue => sections
@@ -127,7 +124,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
     FlBorderData? borderData,
     bool? titleSunbeamLayout,
     bool? showZeroTitle,
-    bool? isStrokeCapRound,
+    PieStrokeCapRoundMode? strokeCapRoundMode,
     List<int>? showingTooltipIndicators,
     BorderSide? centerSpaceBorder,
     BorderSide? sectionsBorder,
@@ -143,9 +140,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
       borderData: borderData ?? this.borderData,
       titleSunbeamLayout: titleSunbeamLayout ?? this.titleSunbeamLayout,
       showZeroTitle: showZeroTitle ?? this.showZeroTitle,
-      isStrokeCapRound: isStrokeCapRound ?? this.isStrokeCapRound,
-      // showingTooltipIndicators:
-      //     showingTooltipIndicators ?? this.showingTooltipIndicators,
+      strokeCapRoundMode: strokeCapRoundMode ?? this.strokeCapRoundMode,
       centerSpaceBorder: centerSpaceBorder ?? this.centerSpaceBorder,
       sectionsBorder: sectionsBorder ?? this.sectionsBorder,
     );
@@ -170,9 +165,8 @@ class PieChartData extends BaseChartData with EquatableMixin {
         sections: lerpPieChartSectionDataList(a.sections, b.sections, t),
         titleSunbeamLayout: b.titleSunbeamLayout,
         showZeroTitle: t < 0.5 ? a.showZeroTitle : b.showZeroTitle,
-        isStrokeCapRound: t < 0.5 ? a.isStrokeCapRound : b.isStrokeCapRound,
-        // showingTooltipIndicators:
-        //     t < 0.5 ? a.showingTooltipIndicators : b.showingTooltipIndicators,
+        strokeCapRoundMode:
+            t < 0.5 ? a.strokeCapRoundMode : b.strokeCapRoundMode,
         centerSpaceBorder: a.centerSpaceBorder == null
             ? b.centerSpaceBorder
             : b.centerSpaceBorder == null
@@ -205,8 +199,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
         borderData,
         titleSunbeamLayout,
         showZeroTitle,
-        isStrokeCapRound,
-        // showingTooltipIndicators,
+        strokeCapRoundMode,
       ];
 }
 
@@ -620,4 +613,10 @@ class PieChartDataTween extends Tween<PieChartData> {
   /// Lerps a [PieChartData] based on [t] value, check [Tween.lerp].
   @override
   PieChartData lerp(double t) => begin!.lerp(begin!, end!, t);
+}
+
+enum PieStrokeCapRoundMode {
+  toStart,
+  toEnd,
+  both,
 }
