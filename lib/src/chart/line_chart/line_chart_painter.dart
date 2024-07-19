@@ -61,8 +61,9 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<LineChartData> holder,
-  ) {
+    PaintHolder<LineChartData> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {
     final data = holder.data;
     if (data.lineBarsData.isEmpty) {
       return;
@@ -1046,11 +1047,12 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
     var sumTextsHeight = 0.0;
 
     TextPainter? titlePainter;
-    final title =
-        tooltipData.getTooltipTitle?.call(showingTooltipSpots.showingSpots);
+    final title = tooltipData.getTooltipTitle?.call(showOnSpot);
     if (title != null) {
+      final textStyle =
+          title.textStyle ?? Theme.of(context).textTheme.labelLarge!;
       final span = TextSpan(
-        style: Utils().getThemeAwareTextStyle(context, title.textStyle),
+        style: Utils().getThemeAwareTextStyle(context, textStyle),
         text: title.text,
       );
       titlePainter = TextPainter(

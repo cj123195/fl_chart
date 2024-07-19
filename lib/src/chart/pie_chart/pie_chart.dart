@@ -1,4 +1,4 @@
-import 'package:fl_chart/src/chart/pie_chart/pie_chart_data.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/pie_chart/pie_chart_renderer.dart';
 import 'package:flutter/material.dart';
 
@@ -35,6 +35,10 @@ class _PieChartState extends AnimatedWidgetBaseState<PieChart> {
   /// it lerps between the old [PieChartData] to the new one.
   PieChartDataTween? _pieChartDataTween;
 
+  BaseTouchCallback<PieTouchResponse>? _providedTouchCallback;
+
+  PieTouchResponse? _touchResponse;
+
   @override
   void initState() {
     /// Make sure that [_widgetsPositionHandler] is updated.
@@ -58,15 +62,48 @@ class _PieChartState extends AnimatedWidgetBaseState<PieChart> {
     final showingData = _getData();
 
     return PieChartLeaf(
-      data: _pieChartDataTween!.evaluate(animation),
       targetData: showingData,
+      data: _pieChartDataTween!.evaluate(animation),
+      touchResponse: _touchResponse,
     );
   }
 
   /// if builtIn touches are enabled, we should recreate our [pieChartData]
   /// to handle built in touches
   PieChartData _getData() {
-    return widget.data;
+    final newData = widget.data;
+
+    final pieTouchData = newData.pieTouchData;
+    if (pieTouchData.enabled && pieTouchData.handleBuiltInTouches) {
+      _providedTouchCallback = pieTouchData.touchCallback;
+      return newData.copyWith(
+        pieTouchData:
+            newData.pieTouchData.copyWith(touchCallback: _handleBuiltInTouch),
+      );
+    }
+    return newData;
+  }
+
+  void _handleBuiltInTouch(
+    FlTouchEvent event,
+    PieTouchResponse? touchResponse,
+  ) {
+    if (!mounted) {
+      return;
+    }
+    _providedTouchCallback?.call(event, touchResponse);
+
+    if (!event.isInterestedForInteractions ||
+        touchResponse == null ||
+        touchResponse.touchedSection == null) {
+      setState(() {
+        _touchResponse = null;
+      });
+      return;
+    }
+    setState(() {
+      _touchResponse = touchResponse;
+    });
   }
 
   @override
@@ -86,6 +123,7 @@ class BadgeWidgetsDelegate extends MultiChildLayoutDelegate {
     required this.badgeWidgetsCount,
     required this.badgeWidgetsOffsets,
   });
+
   final int badgeWidgetsCount;
   final Map<int, Offset> badgeWidgetsOffsets;
 

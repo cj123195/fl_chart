@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
@@ -37,8 +38,9 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<PieChartData> holder,
-  ) {
+    PaintHolder<PieChartData> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {
     super.paint(context, canvasWrapper, holder);
     final data = holder.data;
     if (data.sections.isEmpty) {
@@ -52,6 +54,15 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     drawSections(context, canvasWrapper, sectionsAngle, centerRadius, holder);
     drawBorder(canvasWrapper, centerRadius, holder);
     drawTexts(context, canvasWrapper, holder, centerRadius, sectionsAngle);
+
+    if (touchResponse != null) {
+      drawTouchTooltip(
+        context,
+        canvasWrapper,
+        holder,
+        touchResponse as PieTouchResponse,
+      );
+    }
   }
 
   @visibleForTesting
@@ -165,9 +176,10 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       final sectionDegree = sectionsAngle[i];
       final sectionRadius = calculateSectionRadius(viewSize, data, section);
 
-      Radius? radius;
+      double? capAngle;
       if (data.isStrokeCapRound == true && data.centerSpaceRadiusRatio > 0) {
-        radius = Radius.circular(sectionRadius / 2);
+        final d = math.min(viewSize.width, viewSize.height);
+        capAngle = (sectionRadius / 2) / (math.pi * d) * 360;
       }
 
       if (sectionDegree == 360) {
@@ -231,7 +243,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         sectionDegree,
         center,
         centerRadius,
-        radius: radius,
+        capAngle: capAngle,
       );
 
       drawSection(context, section, sectionPath, canvasWrapper);
@@ -250,7 +262,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     double sectionDegree,
     Offset center,
     double centerRadius, {
-    Radius? radius,
+    double? capAngle,
   }) {
     final sectionRadiusRect = Rect.fromCircle(
       center: center,
@@ -262,9 +274,14 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
       radius: centerRadius,
     );
 
-    final startRadians = Utils().radians(tempAngle);
+    var startRadians = Utils().radians(tempAngle);
     final sweepRadians = Utils().radians(sectionDegree);
-    final endRadians = startRadians + sweepRadians;
+    var endRadians = startRadians + sweepRadians;
+    if (capAngle != null && capAngle > 0) {
+      final capRadians = Utils().radians(capAngle);
+      startRadians += capRadians;
+      endRadians += capRadians;
+    }
 
     final startLineDirection =
         Offset(math.cos(startRadians), math.sin(startRadians));
@@ -278,7 +295,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     final endLineTo = endLineFrom + endLineDirection * sectionRadius;
 
     var sectionPath = Path();
-    if (radius == null) {
+    if (capAngle == null) {
       sectionPath
         ..moveTo(startLineFrom.dx, startLineFrom.dy)
         ..lineTo(startLineTo.dx, startLineTo.dy)
@@ -290,9 +307,10 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     } else {
       sectionPath
         ..moveTo(startLineFrom.dx, startLineFrom.dy)
-        ..arcToPoint(startLineTo, radius: radius)
+        ..arcToPoint(startLineTo, radius: Radius.circular(sectionRadius / 2))
         ..arcTo(sectionRadiusRect, startRadians, sweepRadians, false)
-        ..arcToPoint(endLineFrom, radius: radius, clockwise: false)
+        ..arcToPoint(endLineFrom,
+            radius: Radius.circular(sectionRadius / 2), clockwise: false)
         ..arcTo(centerRadiusRect, endRadians, -sweepRadians, false)
         ..moveTo(startLineFrom.dx, startLineFrom.dy)
         ..close();
@@ -499,6 +517,217 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     }
   }
 
+  @visibleForTesting
+  void drawTouchTooltip(
+    BuildContext context,
+    CanvasWrapper canvasWrapper,
+    PaintHolder<PieChartData> holder,
+    PieTouchResponse touchResponse,
+  ) {
+    final data = holder.data;
+    final tooltipData = data.pieTouchData.touchTooltipData;
+    final viewSize = canvasWrapper.size;
+
+    final section = touchResponse.touchedSection?.touchedSection;
+    if (section == null) {
+      return;
+    }
+    final sectionIndex = touchResponse.touchedSection!.touchedSectionIndex;
+
+    final tooltipItem = tooltipData.getTooltipItem(section, sectionIndex);
+    if (tooltipItem == null) {
+      return;
+    }
+
+    const textsBelowMargin = 4;
+
+    final span = TextSpan(
+      style: Utils().getThemeAwareTextStyle(context, tooltipItem.textStyle),
+      text: tooltipItem.text,
+      children: tooltipItem.children,
+    );
+
+    final tp = TextPainter(
+      text: span,
+      textAlign: tooltipItem.textAlign,
+      textDirection: tooltipItem.textDirection,
+      textScaler: holder.textScaler,
+    )..layout(maxWidth: tooltipData.maxContentWidth);
+
+    /// creating TextPainters to calculate the width and height of the tooltip
+    final drawingTextPainter = tp;
+
+    /// biggerWidth
+    /// some texts maybe larger, then we should
+    /// draw the tooltip' width as wide as biggerWidth
+    ///
+    /// sumTextsHeight
+    /// sum up all Texts height, then we should
+    /// draw the tooltip's height as tall as sumTextsHeight
+    final textWidth = drawingTextPainter.width;
+    final textHeight = drawingTextPainter.height + textsBelowMargin;
+
+    var innerWidth = textWidth;
+    var innerHeight = textHeight;
+    if (tooltipItem.indicator != null) {
+      innerWidth += tooltipItem.indicator!.width + 8.0;
+      innerHeight = max(innerHeight, tooltipItem.indicator!.height);
+    }
+    final tooltipWidth = innerWidth + tooltipData.tooltipPadding.horizontal;
+    final tooltipHeight = innerHeight + tooltipData.tooltipPadding.vertical;
+
+    final offset = touchResponse.touchPosition;
+    final margin = tooltipData.tooltipVerticalMargin;
+    final direction = tooltipData.direction;
+    var tooltipTop = switch (direction) {
+      TooltipDirection.auto => offset.dy - tooltipHeight - margin,
+      TooltipDirection.top => offset.dy - tooltipHeight - margin,
+      TooltipDirection.bottom => offset.dy + margin,
+    };
+    var tooltipLeft = offset.dx - tooltipWidth / 2;
+
+    if (tooltipData.fitInsideVertically) {
+      switch (tooltipData.direction) {
+        case TooltipDirection.auto:
+          if (tooltipTop < 0) {
+            tooltipTop = offset.dy + tooltipData.tooltipVerticalMargin;
+            if (tooltipTop + tooltipHeight > viewSize.height) {
+              tooltipTop = 0;
+            }
+          }
+        case TooltipDirection.top:
+          if (tooltipTop < 0) tooltipTop = 0;
+        case TooltipDirection.bottom:
+          if (tooltipTop + tooltipHeight > viewSize.height) {
+            tooltipTop = viewSize.height - tooltipHeight;
+          }
+      }
+    }
+
+    if (tooltipData.fitInsideHorizontally) {
+      if (tooltipLeft < 0) {
+        tooltipLeft = 0;
+      } else if (tooltipLeft + tooltipWidth > viewSize.width) {
+        tooltipLeft = viewSize.width - tooltipWidth;
+      }
+    }
+
+    /// draw the background rect with rounded radius
+    // ignore: omit_local_variable_types
+    final Rect rect = Rect.fromLTWH(
+      tooltipLeft,
+      tooltipTop,
+      tooltipWidth,
+      tooltipHeight,
+    );
+
+    final radius = Radius.circular(tooltipData.tooltipRoundedRadius);
+    final roundedRect = RRect.fromRectAndCorners(
+      rect,
+      topLeft: radius,
+      topRight: radius,
+      bottomLeft: radius,
+      bottomRight: radius,
+    );
+
+    /// set tooltip's background color for each rod
+    final bgTouchTooltipPaint = Paint()
+      ..style = PaintingStyle.fill
+      ..color = tooltipData.getTooltipColor == null
+          ? Theme.of(context).colorScheme.background
+          : tooltipData.getTooltipColor!(section, sectionIndex);
+
+    final tooltipRotateAngle = tooltipData.rotateAngle;
+    final rectRotationOffset = Offset(
+      0,
+      Utils().calculateRotationOffset(rect.size, tooltipRotateAngle).dy,
+    );
+    final rectDrawOffset = Offset(roundedRect.left, roundedRect.top);
+
+    final textRotationOffset =
+        Utils().calculateRotationOffset(tp.size, tooltipRotateAngle);
+
+    /// draw the texts one by one in below of each other
+    final top = tooltipData.tooltipPadding.top;
+    final drawOffset = Offset(
+      rect.center.dx - (innerWidth / 2),
+      rect.topCenter.dy + top - textRotationOffset.dy + rectRotationOffset.dy,
+    );
+
+    final borderTouchTooltipPaint = Paint()
+      ..style = PaintingStyle.stroke
+      ..color = Colors.transparent
+      ..strokeWidth = 1.0;
+    if (tooltipData.tooltipBorder != BorderSide.none) {
+      borderTouchTooltipPaint
+        ..color = tooltipData.tooltipBorder.color
+        ..strokeWidth = tooltipData.tooltipBorder.width;
+    }
+
+    canvasWrapper.drawRotated(
+      size: rect.size,
+      rotationOffset: rectRotationOffset,
+      drawOffset: rectDrawOffset,
+      angle: tooltipRotateAngle,
+      drawCallback: () {
+        canvasWrapper
+          ..drawShadow(
+            Path()..addRRect(roundedRect),
+            Theme.of(context).colorScheme.shadow.withOpacity(0.3),
+            10,
+          )
+          ..drawRRect(roundedRect, bgTouchTooltipPaint)
+          ..drawRRect(roundedRect, borderTouchTooltipPaint);
+        final indicator = tooltipItem.indicator;
+        var textOffset = drawOffset;
+        // canvasWrapper.drawText(tp, drawOffset);
+        if (indicator != null) {
+          drawTooltipIndicator(
+            canvasWrapper,
+            Offset(
+              drawOffset.dx,
+              drawOffset.dy + (innerHeight - indicator.height) / 2,
+            ),
+            indicator,
+          );
+          textOffset = textOffset.translate(
+            indicator.width + 8.0,
+            (innerHeight - tp.height) / 2,
+          );
+          canvasWrapper.drawText(tp, textOffset);
+        } else {
+          canvasWrapper.drawText(tp, drawOffset);
+        }
+      },
+    );
+  }
+
+  void drawTooltipIndicator(
+    CanvasWrapper canvasWrapper,
+    Offset offset,
+    FlTooltipIndicator indicator,
+  ) {
+    final width = indicator.width;
+    final height = indicator.height;
+    final radius = max(width, height) / 2;
+    final rect = Rect.fromLTWH(offset.dx, offset.dy, width, height);
+    final paint = Paint()
+      ..setColorOrGradient(indicator.color, indicator.gradient, rect)
+      ..style = indicator.style;
+    if (indicator.shape == BoxShape.rectangle) {
+      canvasWrapper.drawRRect(
+        RRect.fromRectAndRadius(rect, indicator.radius ?? Radius.zero),
+        paint,
+      );
+    } else {
+      canvasWrapper.drawCircle(
+        Offset(offset.dx + width / 2, offset.dy + height / 2),
+        radius,
+        paint,
+      );
+    }
+  }
+
   /// Calculates center radius based on the provided sections radius
   @visibleForTesting
   double calculateCenterRadius(
@@ -550,18 +779,18 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         sectionAngle %= 360;
       }
 
+      /// radius criteria
+      final centerRadius = calculateCenterRadius(viewSize, holder);
+      final sectionRadius =
+          centerRadius + calculateSectionRadius(viewSize, data, section);
+      final isInRadius = touchR > centerRadius && touchR <= sectionRadius;
+
       /// degree criteria
       final space = data.sectionsSpace / 2;
       final fromDegree = tempAngle + space;
       final toDegree = sectionAngle + tempAngle - space;
       final isInDegree =
           relativeTouchAngle >= fromDegree && relativeTouchAngle <= toDegree;
-
-      /// radius criteria
-      final centerRadius = calculateCenterRadius(viewSize, holder);
-      final sectionRadius =
-          centerRadius + calculateSectionRadius(viewSize, data, section);
-      final isInRadius = touchR > centerRadius && touchR <= sectionRadius;
 
       if (isInDegree && isInRadius) {
         foundSectionData = section;

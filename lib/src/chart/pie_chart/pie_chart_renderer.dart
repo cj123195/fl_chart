@@ -15,11 +15,13 @@ class PieChartLeaf extends MultiChildRenderObjectWidget {
   PieChartLeaf({
     required this.data,
     required this.targetData,
+    this.touchResponse,
     super.key,
   }) : super(children: targetData.sections.toWidgets());
 
   final PieChartData data;
   final PieChartData targetData;
+  final PieTouchResponse? touchResponse;
 
   @override
   RenderPieChart createRenderObject(BuildContext context) => RenderPieChart(
@@ -27,6 +29,7 @@ class PieChartLeaf extends MultiChildRenderObjectWidget {
         data,
         targetData,
         MediaQuery.of(context).textScaler,
+        touchResponse,
       );
 
   @override
@@ -35,6 +38,7 @@ class PieChartLeaf extends MultiChildRenderObjectWidget {
       ..data = data
       ..targetData = targetData
       ..textScaler = MediaQuery.of(context).textScaler
+      ..touchResponse = touchResponse
       ..buildContext = context;
   }
 }
@@ -51,9 +55,11 @@ class RenderPieChart extends RenderBaseChart<PieTouchResponse>
     PieChartData data,
     PieChartData targetData,
     TextScaler textScaler,
+    PieTouchResponse? touchResponse,
   )   : _data = data,
         _targetData = targetData,
         _textScaler = textScaler,
+        _touchResponse = touchResponse,
         super(targetData.pieTouchData, context);
 
   PieChartData get data => _data;
@@ -62,6 +68,16 @@ class RenderPieChart extends RenderBaseChart<PieTouchResponse>
   set data(PieChartData value) {
     if (_data == value) return;
     _data = value;
+    // We must update layout to draw badges correctly!
+    markNeedsLayout();
+  }
+
+  PieTouchResponse? get touchResponse => _touchResponse;
+  PieTouchResponse? _touchResponse;
+
+  set touchResponse(PieTouchResponse? value) {
+    if (_touchResponse == value) return;
+    _touchResponse = value;
     // We must update layout to draw badges correctly!
     markNeedsLayout();
   }
@@ -142,6 +158,7 @@ class RenderPieChart extends RenderBaseChart<PieTouchResponse>
       buildContext,
       CanvasWrapper(canvas, mockTestSize ?? size),
       paintHolder,
+      touchResponse,
     );
     canvas.restore();
     defaultPaint(context, offset);
@@ -154,7 +171,7 @@ class RenderPieChart extends RenderBaseChart<PieTouchResponse>
       mockTestSize ?? size,
       paintHolder,
     );
-    return PieTouchResponse(pieSection);
+    return PieTouchResponse(pieSection, localPosition);
   }
 
   @override

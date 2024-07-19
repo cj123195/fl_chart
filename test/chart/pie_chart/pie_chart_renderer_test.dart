@@ -26,6 +26,7 @@ void main() {
       data,
       targetData,
       textScaler,
+      null,
     );
 
     final mockPainter = MockPieChartPainter();

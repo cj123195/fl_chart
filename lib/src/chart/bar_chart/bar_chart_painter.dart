@@ -47,8 +47,9 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<BarChartData> holder,
-  ) {
+    PaintHolder<BarChartData> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {
     super.paint(context, canvasWrapper, holder);
     final data = holder.data;
     final targetData = holder.targetData;
@@ -495,7 +496,9 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     );
 
     /// set tooltip's background color for each rod
-    _bgTouchTooltipPaint.color = tooltipData.getTooltipColor(showOnBarGroup);
+    _bgTouchTooltipPaint.color = tooltipData.getTooltipColor == null
+        ? Theme.of(context).colorScheme.background
+        : tooltipData.getTooltipColor!(showOnBarGroup);
 
     final rotateAngle = tooltipData.rotateAngle;
     final rectRotationOffset = Offset(

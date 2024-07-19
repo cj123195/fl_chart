@@ -32,6 +32,7 @@ class RadarChartPainter extends BaseChartPainter<RadarChartData> {
     _ticksTextPaint = TextPainter();
     _titleTextPaint = TextPainter();
   }
+
   late Paint _borderPaint;
   late Paint _backgroundPaint;
   late Paint _gridPaint;
@@ -50,8 +51,9 @@ class RadarChartPainter extends BaseChartPainter<RadarChartData> {
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<RadarChartData> holder,
-  ) {
+    PaintHolder<RadarChartData> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {
     super.paint(context, canvasWrapper, holder);
     final data = holder.data;
 

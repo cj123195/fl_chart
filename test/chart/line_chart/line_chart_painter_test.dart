@@ -2544,7 +2544,6 @@ void main() {
         rotateAngle: 43,
         maxContentWidth: 100,
         tooltipMargin: 12,
-        tooltipHorizontalAlignment: FLHorizontalAlignment.left,
         tooltipPadding: const EdgeInsets.all(12),
         fitInsideVertically: true,
         getTooltipItems: (context, List<LineBarSpot> touchedSpots) {

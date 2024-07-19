@@ -534,6 +534,16 @@ num? lerpNum(num? a, num? b, double t) {
   return a * (1.0 - t) + b * t;
 }
 
+bool? lerpBool(bool? a, bool? b, double t) {
+  if (a == null) {
+    return b;
+  }
+  if (b == null) {
+    return a;
+  }
+  return t < 0.5 ? a : b;
+}
+
 /// Responsible to hold grid data,
 class FlGridData with EquatableMixin {
   /// Responsible for rendering grid lines behind the content of charts,
@@ -564,10 +574,14 @@ class FlGridData with EquatableMixin {
     this.horizontalInterval,
     this.getDrawingHorizontalLine = defaultGridLine,
     this.checkToShowHorizontalLine = showAllGrids,
+    this.drawMaxHorizontalLine,
+    this.drawMinHorizontalLine,
     this.drawVerticalLine = false,
     this.verticalInterval,
     this.getDrawingVerticalLine = defaultGridLine,
     this.checkToShowVerticalLine = showAllGrids,
+    this.drawMaxVerticalLine,
+    this.drawMinVerticalLine,
   })  : assert(
           horizontalInterval != 0,
           "FlGridData.horizontalInterval couldn't be zero",
@@ -604,6 +618,18 @@ class FlGridData with EquatableMixin {
   /// Gives you a x value, and gets a boolean that determines showing or hiding specified line.
   final CheckToShowGrid checkToShowVerticalLine;
 
+  /// Determines showing max vertical line.
+  final bool? drawMaxVerticalLine;
+
+  /// Determines showing min vertical line.
+  final bool? drawMinVerticalLine;
+
+  /// Determines showing max horizontal line.
+  final bool? drawMaxHorizontalLine;
+
+  /// Determines showing min horizontal line.
+  final bool? drawMinHorizontalLine;
+
   /// Lerps a [FlGridData] based on [t] value, check [Tween.lerp].
   static FlGridData lerp(FlGridData a, FlGridData b, double t) {
     return FlGridData(
@@ -613,10 +639,18 @@ class FlGridData with EquatableMixin {
           lerpDouble(a.horizontalInterval, b.horizontalInterval, t),
       getDrawingHorizontalLine: b.getDrawingHorizontalLine,
       checkToShowHorizontalLine: b.checkToShowHorizontalLine,
+      drawMaxHorizontalLine:
+          lerpBool(a.drawMaxHorizontalLine, b.drawMaxHorizontalLine, t),
+      drawMinHorizontalLine:
+          lerpBool(a.drawMinHorizontalLine, b.drawMinHorizontalLine, t),
       drawVerticalLine: b.drawVerticalLine,
       verticalInterval: lerpDouble(a.verticalInterval, b.verticalInterval, t),
       getDrawingVerticalLine: b.getDrawingVerticalLine,
       checkToShowVerticalLine: b.checkToShowVerticalLine,
+      drawMaxVerticalLine:
+          lerpBool(a.drawMaxVerticalLine, b.drawMaxVerticalLine, t),
+      drawMinVerticalLine:
+          lerpBool(a.drawMinVerticalLine, b.drawMinVerticalLine, t),
     );
   }
 
@@ -632,6 +666,10 @@ class FlGridData with EquatableMixin {
     double? verticalInterval,
     GetDrawingGridLine? getDrawingVerticalLine,
     CheckToShowGrid? checkToShowVerticalLine,
+    bool? drawMaxVerticalLine,
+    bool? drawMinVerticalLine,
+    bool? drawMaxHorizontalLine,
+    bool? drawMinHorizontalLine,
   }) {
     return FlGridData(
       show: show ?? this.show,
@@ -641,12 +679,18 @@ class FlGridData with EquatableMixin {
           getDrawingHorizontalLine ?? this.getDrawingHorizontalLine,
       checkToShowHorizontalLine:
           checkToShowHorizontalLine ?? this.checkToShowHorizontalLine,
+      drawMaxHorizontalLine:
+          drawMaxHorizontalLine ?? this.drawMaxHorizontalLine,
+      drawMinHorizontalLine:
+          drawMinHorizontalLine ?? this.drawMinHorizontalLine,
       drawVerticalLine: drawVerticalLine ?? this.drawVerticalLine,
       verticalInterval: verticalInterval ?? this.verticalInterval,
       getDrawingVerticalLine:
           getDrawingVerticalLine ?? this.getDrawingVerticalLine,
       checkToShowVerticalLine:
           checkToShowVerticalLine ?? this.checkToShowVerticalLine,
+      drawMaxVerticalLine: drawMaxHorizontalLine ?? this.drawMaxVerticalLine,
+      drawMinVerticalLine: drawMinVerticalLine ?? this.drawMinVerticalLine,
     );
   }
 

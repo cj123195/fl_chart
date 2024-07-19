@@ -33,8 +33,9 @@ class ScatterChartPainter extends AxisChartPainter<ScatterChartData> {
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<ScatterChartData> holder,
-  ) {
+    PaintHolder<ScatterChartData> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {
     super.paint(context, canvasWrapper, holder);
     drawSpots(context, canvasWrapper, holder);
     drawTouchTooltips(context, canvasWrapper, holder);

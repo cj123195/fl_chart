@@ -4,7 +4,6 @@ import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:fl_chart/src/extensions/color_extension.dart';
 import 'package:fl_chart/src/utils/lerp.dart';
 import 'package:flutter/material.dart';
 
@@ -705,13 +704,13 @@ class BarTouchTooltipData with EquatableMixin {
     double? tooltipHorizontalOffset,
     double? maxContentWidth,
     GetBarTooltipItem? getTooltipItem,
-    GetBarTooltipColor? getTooltipColor,
+    this.getTooltipColor,
     bool? fitInsideHorizontally,
     bool? fitInsideVertically,
     TooltipDirection? direction,
     double? rotateAngle,
     BorderSide? tooltipBorder,
-  })  : tooltipRoundedRadius = tooltipRoundedRadius ?? 4,
+  })  : tooltipRoundedRadius = tooltipRoundedRadius ?? 8,
         tooltipPadding = tooltipPadding ??
             const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         tooltipMargin = tooltipMargin ?? 16,
@@ -720,7 +719,6 @@ class BarTouchTooltipData with EquatableMixin {
         tooltipHorizontalOffset = tooltipHorizontalOffset ?? 0,
         maxContentWidth = maxContentWidth ?? 120,
         getTooltipItem = getTooltipItem ?? defaultBarTooltipItem,
-        getTooltipColor = getTooltipColor ?? defaultBarTooltipColor,
         fitInsideHorizontally = fitInsideHorizontally ?? false,
         fitInsideVertically = fitInsideVertically ?? false,
         direction = direction ?? TooltipDirection.auto,
@@ -765,7 +763,7 @@ class BarTouchTooltipData with EquatableMixin {
   final BorderSide tooltipBorder;
 
   /// Retrieves data for setting background color of the tooltip.
-  final GetBarTooltipColor getTooltipColor;
+  final GetBarTooltipColor? getTooltipColor;
 
   /// Used for equality check, see [EquatableMixin].
   @override
@@ -863,11 +861,6 @@ class BarTooltipItem with EquatableMixin {
 typedef GetBarTooltipColor = Color Function(
   BarChartGroupData group,
 );
-
-/// Default implementation for [BarTouchTooltipData.getTooltipColor].
-Color defaultBarTooltipColor(BarChartGroupData group) {
-  return Colors.blueGrey.darken(15);
-}
 
 /// Holds information about touch response in the [BarChart].
 ///

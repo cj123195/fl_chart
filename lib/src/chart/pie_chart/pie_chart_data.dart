@@ -36,6 +36,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
     bool showZeroValue = true,
     bool? showZeroTitle,
     this.isStrokeCapRound,
+    // this.showingTooltipIndicators,
   })  : assert(
           sectionsBorder == null ||
               (sectionsSpace == 0 &&
@@ -107,6 +108,8 @@ class PieChartData extends BaseChartData with EquatableMixin {
   /// is not zero.
   final bool? isStrokeCapRound;
 
+  // final List<int>? showingTooltipIndicators;
+
   /// We hold this value to determine weight of each [PieChartSectionData.value].
   num get sumValue => sections
       .map((data) => data.value)
@@ -125,6 +128,9 @@ class PieChartData extends BaseChartData with EquatableMixin {
     bool? titleSunbeamLayout,
     bool? showZeroTitle,
     bool? isStrokeCapRound,
+    List<int>? showingTooltipIndicators,
+    BorderSide? centerSpaceBorder,
+    BorderSide? sectionsBorder,
   }) {
     return PieChartData(
       sections: sections ?? this.sections,
@@ -137,7 +143,11 @@ class PieChartData extends BaseChartData with EquatableMixin {
       borderData: borderData ?? this.borderData,
       titleSunbeamLayout: titleSunbeamLayout ?? this.titleSunbeamLayout,
       showZeroTitle: showZeroTitle ?? this.showZeroTitle,
-      isStrokeCapRound: isStrokeCapRound,
+      isStrokeCapRound: isStrokeCapRound ?? this.isStrokeCapRound,
+      // showingTooltipIndicators:
+      //     showingTooltipIndicators ?? this.showingTooltipIndicators,
+      centerSpaceBorder: centerSpaceBorder ?? this.centerSpaceBorder,
+      sectionsBorder: sectionsBorder ?? this.sectionsBorder,
     );
   }
 
@@ -161,6 +171,22 @@ class PieChartData extends BaseChartData with EquatableMixin {
         titleSunbeamLayout: b.titleSunbeamLayout,
         showZeroTitle: t < 0.5 ? a.showZeroTitle : b.showZeroTitle,
         isStrokeCapRound: t < 0.5 ? a.isStrokeCapRound : b.isStrokeCapRound,
+        // showingTooltipIndicators:
+        //     t < 0.5 ? a.showingTooltipIndicators : b.showingTooltipIndicators,
+        centerSpaceBorder: a.centerSpaceBorder == null
+            ? b.centerSpaceBorder
+            : b.centerSpaceBorder == null
+                ? a.centerSpaceBorder
+                : BorderSide.lerp(
+                    a.centerSpaceBorder!,
+                    b.centerSpaceBorder!,
+                    t,
+                  ),
+        sectionsBorder: a.sectionsBorder == null
+            ? b.sectionsBorder
+            : b.sectionsBorder == null
+                ? a.sectionsBorder
+                : BorderSide.lerp(a.sectionsBorder!, b.sectionsBorder!, t),
       );
     } else {
       throw Exception('Illegal State');
@@ -180,6 +206,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
         titleSunbeamLayout,
         showZeroTitle,
         isStrokeCapRound,
+        // showingTooltipIndicators,
       ];
 }
 
@@ -360,12 +387,36 @@ class PieTouchData extends FlTouchData<PieTouchResponse> with EquatableMixin {
     BaseTouchCallback<PieTouchResponse>? touchCallback,
     MouseCursorResolver<PieTouchResponse>? mouseCursorResolver,
     Duration? longPressDuration,
-  }) : super(
+    PieTouchTooltipData? touchTooltipData,
+    this.handleBuiltInTouches = true,
+  })  : touchTooltipData = touchTooltipData ?? PieTouchTooltipData(),
+        super(
           enabled ?? true,
           touchCallback,
           mouseCursorResolver,
           longPressDuration,
         );
+
+  final PieTouchTooltipData touchTooltipData;
+  final bool handleBuiltInTouches;
+
+  PieTouchData copyWith({
+    bool? enabled,
+    BaseTouchCallback<PieTouchResponse>? touchCallback,
+    MouseCursorResolver<PieTouchResponse>? mouseCursorResolver,
+    Duration? longPressDuration,
+    PieTouchTooltipData? touchTooltipData,
+    bool? handleBuiltInTouches,
+  }) {
+    return PieTouchData(
+      enabled: enabled ?? this.enabled,
+      touchCallback: touchCallback ?? this.touchCallback,
+      mouseCursorResolver: mouseCursorResolver ?? this.mouseCursorResolver,
+      longPressDuration: longPressDuration ?? this.longPressDuration,
+      touchTooltipData: touchTooltipData ?? this.touchTooltipData,
+      handleBuiltInTouches: handleBuiltInTouches ?? this.handleBuiltInTouches,
+    );
+  }
 
   /// Used for equality check, see [EquatableMixin].
   @override
@@ -374,7 +425,130 @@ class PieTouchData extends FlTouchData<PieTouchResponse> with EquatableMixin {
         touchCallback,
         mouseCursorResolver,
         longPressDuration,
+        handleBuiltInTouches,
+        touchTooltipData,
       ];
+}
+
+class PieTouchTooltipData with EquatableMixin {
+  /// if [BarTouchData.handleBuiltInTouches] is true,
+  /// [BarChart] shows a tooltip popup on top of rods automatically when touch happens,
+  /// otherwise you can show it manually using [BarChartGroupData.showingTooltipIndicators].
+  /// Tooltip shows on top of rods, with [getTooltipColor] as a background color,
+  /// and you can set corner radius using [tooltipRoundedRadius].
+  /// If you want to have a padding inside the tooltip, fill [tooltipPadding],
+  /// or If you want to have a bottom margin, set [tooltipMargin].
+  /// Content of the tooltip will provide using [getTooltipItem] callback, you can override it
+  /// and pass your custom data to show in the tooltip.
+  /// You can restrict the tooltip's width using [maxContentWidth].
+  /// Sometimes, [BarChart] shows the tooltip outside of the chart,
+  /// you can set [fitInsideHorizontally] true to force it to shift inside the chart horizontally,
+  /// also you can set [fitInsideVertically] true to force it to shift inside the chart vertically.
+  PieTouchTooltipData({
+    double? tooltipRoundedRadius,
+    EdgeInsets? tooltipPadding,
+    double? tooltipVerticalMargin,
+    double? maxContentWidth,
+    GetPieTooltipItem? getTooltipItem,
+    this.getTooltipColor,
+    bool? fitInsideHorizontally,
+    bool? fitInsideVertically,
+    TooltipDirection? direction,
+    double? rotateAngle,
+    BorderSide? tooltipBorder,
+  })  : tooltipRoundedRadius = tooltipRoundedRadius ?? 8,
+        tooltipPadding = tooltipPadding ??
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        tooltipVerticalMargin = tooltipVerticalMargin ?? 8.0,
+        maxContentWidth = maxContentWidth ?? 120,
+        getTooltipItem = getTooltipItem ?? defaultPieTooltipItem,
+        fitInsideHorizontally = fitInsideHorizontally ?? false,
+        fitInsideVertically = fitInsideVertically ?? false,
+        direction = direction ?? TooltipDirection.auto,
+        rotateAngle = rotateAngle ?? 0.0,
+        tooltipBorder = tooltipBorder ?? BorderSide.none,
+        super();
+
+  /// Sets a rounded radius for the tooltip.
+  final double tooltipRoundedRadius;
+
+  /// Applies a padding for showing contents inside the tooltip.
+  final EdgeInsets tooltipPadding;
+
+  /// Applies vertical offset for showing tooltip, default is 8.
+  final double tooltipVerticalMargin;
+
+  /// Restricts the tooltip's width.
+  final double maxContentWidth;
+
+  /// Retrieves data for showing content inside the tooltip.
+  final GetPieTooltipItem getTooltipItem;
+
+  /// Forces the tooltip to shift horizontally inside the chart, if overflow happens.
+  final bool fitInsideHorizontally;
+
+  /// Forces the tooltip to shift vertically inside the chart, if overflow happens.
+  final bool fitInsideVertically;
+
+  /// Controls showing tooltip on top or bottom, default is auto.
+  final TooltipDirection direction;
+
+  /// Controls the rotation of the tooltip.
+  final double rotateAngle;
+
+  /// The tooltip border color.
+  final BorderSide tooltipBorder;
+
+  /// Retrieves data for setting background color of the tooltip.
+  final GetPieTooltipColor? getTooltipColor;
+
+  /// Used for equality check, see [EquatableMixin].
+  @override
+  List<Object?> get props => [
+        tooltipRoundedRadius,
+        tooltipPadding,
+        tooltipVerticalMargin,
+        maxContentWidth,
+        getTooltipItem,
+        fitInsideHorizontally,
+        fitInsideVertically,
+        rotateAngle,
+        tooltipBorder,
+        getTooltipColor,
+        direction,
+      ];
+}
+
+typedef GetPieTooltipItem = PieTooltipItem? Function(
+  PieChartSectionData touchedSection,
+  int touchedIndex,
+);
+
+PieTooltipItem? defaultPieTooltipItem(
+  PieChartSectionData touchedSection,
+  int touchedIndex,
+) {
+  final color = touchedSection.gradient?.colors.first ?? touchedSection.color;
+  return PieTooltipItem(
+    touchedSection.value.toString(),
+    indicator: FlTooltipIndicator(color: color),
+  );
+}
+
+typedef GetPieTooltipColor = Color Function(
+  PieChartSectionData touchedSection,
+  int touchedIndex,
+);
+
+class PieTooltipItem extends BarTooltipItem {
+  PieTooltipItem(
+    super.text, {
+    super.textStyle,
+    super.textAlign = TextAlign.center,
+    super.textDirection = TextDirection.ltr,
+    super.children,
+    super.indicator,
+  });
 }
 
 class PieTouchedSection with EquatableMixin {
@@ -418,18 +592,21 @@ class PieTouchedSection with EquatableMixin {
 class PieTouchResponse extends BaseTouchResponse {
   /// If touch happens, [PieChart] processes it internally and passes out a
   /// [PieTouchResponse]
-  PieTouchResponse(this.touchedSection) : super();
+  PieTouchResponse(this.touchedSection, this.touchPosition) : super();
 
   /// Contains information about touched section, like index, angle, radius, ...
   final PieTouchedSection? touchedSection;
+  final Offset touchPosition;
 
   /// Copies current [PieTouchResponse] to a new [PieTouchResponse],
   /// and replaces provided values.
   PieTouchResponse copyWith({
     PieTouchedSection? touchedSection,
+    Offset? touchPosition,
   }) {
     return PieTouchResponse(
       touchedSection ?? this.touchedSection,
+      touchPosition ?? this.touchPosition,
     );
   }
 }

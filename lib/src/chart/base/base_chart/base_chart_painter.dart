@@ -12,8 +12,9 @@ class BaseChartPainter<D extends BaseChartData> {
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<D> holder,
-  ) {}
+    PaintHolder<D> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {}
 }
 
 /// Holds data for painting on canvas

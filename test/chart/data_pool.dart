@@ -1236,7 +1236,6 @@ const LineTouchTooltipData lineTouchTooltipData3 = LineTouchTooltipData(
   tooltipRoundedRadius: 12,
   tooltipMargin: 33,
   tooltipBorder: BorderSide(color: Colors.red),
-  tooltipHorizontalAlignment: FLHorizontalAlignment.left,
 );
 const LineTouchTooltipData lineTouchTooltipData4 = LineTouchTooltipData(
   tooltipPadding: EdgeInsets.all(0.1),
@@ -1269,7 +1268,6 @@ const LineTouchTooltipData lineTouchTooltipData6 = LineTouchTooltipData(
   tooltipRoundedRadius: 12,
   tooltipMargin: 33,
   tooltipBorder: BorderSide(color: Colors.pink),
-  tooltipHorizontalAlignment: FLHorizontalAlignment.left,
   tooltipHorizontalOffset: -10,
 );
 const LineTouchTooltipData lineTouchTooltipData7 = LineTouchTooltipData(

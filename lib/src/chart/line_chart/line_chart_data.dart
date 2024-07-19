@@ -1029,11 +1029,11 @@ class LineTouchTooltipData with EquatableMixin {
   /// also you can set [fitInsideVertically] true to force it to shift inside the chart vertically.
   const LineTouchTooltipData({
     this.getTooltipTitle,
-    this.tooltipRoundedRadius = 4,
+    this.tooltipRoundedRadius = 8,
     this.tooltipPadding =
         const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
     this.tooltipMargin = 16,
-    this.tooltipHorizontalAlignment = FLHorizontalAlignment.center,
+    this.tooltipHorizontalAlignment = FLHorizontalAlignment.left,
     this.tooltipHorizontalOffset = 0,
     this.maxContentWidth = 120,
     this.getTooltipItems = defaultLineTooltipItem,
@@ -1111,7 +1111,7 @@ class LineTouchTooltipData with EquatableMixin {
 }
 
 typedef GetLineTooltipTitle = LineTooltipTitle? Function(
-  List<LineBarSpot> touchedSpots,
+  FlSpot showOnSpot,
 );
 
 /// Provides a [LineTooltipItem] for showing content inside the [LineTouchTooltipData].
@@ -1214,7 +1214,7 @@ class LineTooltipItem with EquatableMixin {
   const LineTooltipItem(
     this.text, {
     this.textStyle,
-    this.textAlign = TextAlign.center,
+    this.textAlign = TextAlign.left,
     this.textDirection = TextDirection.ltr,
     this.children,
     this.indicator,

@@ -38,8 +38,9 @@ abstract class AxisChartPainter<D extends AxisChartData>
   void paint(
     BuildContext context,
     CanvasWrapper canvasWrapper,
-    PaintHolder<D> holder,
-  ) {
+    PaintHolder<D> holder, [
+    BaseTouchResponse? touchResponse,
+  ]) {
     super.paint(context, canvasWrapper, holder);
     drawBackground(canvasWrapper, holder);
     drawRangeAnnotation(canvasWrapper, holder);
@@ -62,9 +63,9 @@ abstract class AxisChartPainter<D extends AxisChartData>
           );
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: data.minX,
-        minIncluded: false,
+        minIncluded: data.gridData.drawMinVerticalLine == true,
         max: data.maxX,
-        maxIncluded: false,
+        maxIncluded: data.gridData.drawMaxVerticalLine == true,
         baseLine: data.baselineX,
         interval: verticalInterval,
       );
@@ -107,9 +108,9 @@ abstract class AxisChartPainter<D extends AxisChartData>
 
       final axisValues = AxisChartHelper().iterateThroughAxis(
         min: data.minY,
-        minIncluded: false,
+        minIncluded: data.gridData.drawMinHorizontalLine == true,
         max: data.maxY,
-        maxIncluded: false,
+        maxIncluded: data.gridData.drawMaxHorizontalLine == true,
         baseLine: data.baselineY,
         interval: horizontalInterval,
       );

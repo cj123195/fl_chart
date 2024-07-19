@@ -294,12 +294,10 @@ class Utils {
     BuildContext context,
     TextStyle? providedStyle,
   ) {
-    final defaultTextStyle = DefaultTextStyle.of(context);
     var effectiveTextStyle = providedStyle;
     if (providedStyle == null || providedStyle.inherit) {
-      effectiveTextStyle = defaultTextStyle.style
-          .copyWith(color: Colors.white)
-          .merge(providedStyle);
+      effectiveTextStyle =
+          Theme.of(context).textTheme.labelMedium!.merge(providedStyle);
     }
     if (MediaQuery.boldTextOf(context)) {
       effectiveTextStyle = effectiveTextStyle!
