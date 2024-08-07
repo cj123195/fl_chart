@@ -139,6 +139,12 @@ Widget defaultGetTitle(num value, TitleMeta meta) {
   );
 }
 
+enum MaxTitleDisplayMode {
+  none,
+  always,
+  whenLast,
+}
+
 /// Holds data for showing label values on axis numbers
 class SideTitles with EquatableMixin {
   /// It draws some title on an axis, per axis values,
@@ -161,7 +167,7 @@ class SideTitles with EquatableMixin {
     this.getTitlesWidget = defaultGetTitle,
     this.reservedSize = 22,
     this.interval,
-    this.showMaxTitle,
+    this.maxTitleDisplayMode = MaxTitleDisplayMode.whenLast,
   }) : assert(interval != 0, "SideTitles.interval couldn't be zero");
 
   /// Determines showing or hiding this side titles
@@ -182,7 +188,7 @@ class SideTitles with EquatableMixin {
   /// It determines whether the title of the maximum value is displayed.
   ///
   /// Default to false.
-  final bool? showMaxTitle;
+  final MaxTitleDisplayMode maxTitleDisplayMode;
 
   /// Lerps a [SideTitles] based on [t] value, check [Tween.lerp].
   static SideTitles lerp(SideTitles a, SideTitles b, double t) {
@@ -191,7 +197,8 @@ class SideTitles with EquatableMixin {
       getTitlesWidget: b.getTitlesWidget,
       reservedSize: lerpDouble(a.reservedSize, b.reservedSize, t)!,
       interval: lerpDouble(a.interval, b.interval, t),
-      showMaxTitle: t < 0.5 ? a.showMaxTitle : b.showMaxTitle,
+      maxTitleDisplayMode:
+          t < 0.5 ? a.maxTitleDisplayMode : b.maxTitleDisplayMode,
     );
   }
 
@@ -202,14 +209,14 @@ class SideTitles with EquatableMixin {
     GetTitleWidgetFunction? getTitlesWidget,
     double? reservedSize,
     double? interval,
-    bool? showMaxTitle,
+    MaxTitleDisplayMode? maxTitleDisplayMode,
   }) {
     return SideTitles(
       showTitles: showTitles ?? this.showTitles,
       getTitlesWidget: getTitlesWidget ?? this.getTitlesWidget,
       reservedSize: reservedSize ?? this.reservedSize,
       interval: interval ?? this.interval,
-      showMaxTitle: showMaxTitle ?? this.showMaxTitle,
+      maxTitleDisplayMode: maxTitleDisplayMode ?? this.maxTitleDisplayMode,
     );
   }
 

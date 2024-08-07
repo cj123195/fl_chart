@@ -135,7 +135,10 @@ class SideTitlesWidget extends StatelessWidget {
         max: axisMax,
         baseLine: axisBaseLine,
         interval: interval,
-        maxIncluded: axisTitles.sideTitles.showMaxTitle != false,
+        maxIncludeWhenIsLast: axisTitles.sideTitles.maxTitleDisplayMode ==
+            MaxTitleDisplayMode.whenLast,
+        maxIncluded: axisTitles.sideTitles.maxTitleDisplayMode ==
+            MaxTitleDisplayMode.always,
       );
       axisPositions = axisValues.map((axisValue) {
         final axisDiff = axisMax - axisMin;

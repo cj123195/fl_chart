@@ -27,6 +27,7 @@ class AxisChartHelper {
     bool maxIncluded = true,
     required num baseLine,
     required num interval,
+    bool maxIncludeWhenIsLast = false,
   }) sync* {
     final initialValue = Utils()
         .getBestInitialIntervalValue(min, max, interval, baseline: baseLine);
@@ -39,6 +40,7 @@ class AxisChartHelper {
     final count = diff ~/ interval;
     final lastPosition = initialValue + count * interval;
     final lastPositionOverlapsWithMax = lastPosition == max;
+
     final end =
         !maxIncluded && lastPositionOverlapsWithMax ? max - interval : max;
 
@@ -51,7 +53,8 @@ class AxisChartHelper {
       axisSeek += interval;
       // axisSeek = axisSeek.plus(interval);
     }
-    if (maxIncluded && !lastPositionOverlapsWithMax) {
+    if ((maxIncluded && !lastPositionOverlapsWithMax) ||
+        (maxIncludeWhenIsLast && lastPositionOverlapsWithMax)) {
       yield max;
     }
   }
