@@ -33,7 +33,6 @@ class PieChartData extends BaseChartData with EquatableMixin {
     this.centerSpaceBorder,
     this.sectionsBorder,
     bool? titleSunbeamLayout,
-    bool showZeroValue = true,
     bool? showZeroTitle,
     this.strokeCapRoundMode,
   })  : assert(
@@ -51,10 +50,7 @@ class PieChartData extends BaseChartData with EquatableMixin {
           centerSpaceRadiusRatio == null ||
               (centerSpaceRadiusRatio >= 0 && centerSpaceRadiusRatio <= 1),
         ),
-        sections = (showZeroValue
-                ? sections
-                : sections?.where((section) => section.value != 0).toList()) ??
-            const [],
+        sections = sections ?? [],
         centerSpaceRadiusRatio = centerSpaceRadiusRatio ?? 0,
         centerSpaceColor = centerSpaceColor ?? Colors.transparent,
         sectionsSpace = sectionsSpace ?? 2,
@@ -226,7 +222,7 @@ class PieChartSectionData {
   /// the value works the same way as [titlePositionPercentageOffset].
   PieChartSectionData({
     num? value,
-    this.color,
+    Color? color,
     this.gradient,
     this.radiusRatio,
     bool? showTitle,
@@ -237,6 +233,7 @@ class PieChartSectionData {
     double? titlePositionPercentageOffset,
     double? badgePositionPercentageOffset,
   })  : assert(radiusRatio == null || (radiusRatio >= 0 && radiusRatio <= 1)),
+        color = color ?? (gradient != null ? null : kDefaultChartColor),
         value = value ?? 0,
         showTitle = showTitle ?? true,
         title = title ?? (value == null ? '' : value.toString()),
@@ -521,7 +518,7 @@ PieTooltipItem? defaultPieTooltipItem(
   PieChartSectionData touchedSection,
   int touchedIndex,
 ) {
-  final color = touchedSection.gradient?.colors.first ?? touchedSection.color;
+  final color = touchedSection.gradient?.colors.first ?? touchedSection.color!;
   return PieTooltipItem(
     touchedSection.value.toString(),
     indicator: FlTooltipIndicator(color: color),

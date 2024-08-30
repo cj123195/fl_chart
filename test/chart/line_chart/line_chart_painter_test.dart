@@ -1818,8 +1818,6 @@ void main() {
 
   group('drawBar()', () {
     test('test 1', () {
-      final mockBuildContext = MockBuildContext();
-
       const viewSize = Size(100, 100);
 
       const barSpots1 = [
@@ -1862,7 +1860,6 @@ void main() {
         ..lineTo(80, 10);
 
       lineChartPainter.drawBar(
-        mockBuildContext,
         mockCanvasWrapper,
         barPath,
         lineChartBarData1,
@@ -1872,8 +1869,6 @@ void main() {
     });
 
     test('test 2', () {
-      final mockBuildContext = MockBuildContext();
-
       const viewSize = Size(100, 100);
 
       const barSpots1 = [
@@ -1916,7 +1911,6 @@ void main() {
         ..lineTo(80, 10);
 
       lineChartPainter.drawBar(
-        mockBuildContext,
         mockCanvasWrapper,
         barPath,
         lineChartBarData1,
@@ -1935,8 +1929,6 @@ void main() {
     });
 
     test('test 3', () {
-      final mockBuildContext = MockBuildContext();
-
       const viewSize = Size(100, 100);
 
       const barSpots1 = [
@@ -1977,7 +1969,6 @@ void main() {
         ..lineTo(80, 10);
 
       lineChartPainter.drawBar(
-        mockBuildContext,
         mockCanvasWrapper,
         barPath,
         lineChartBarData1,

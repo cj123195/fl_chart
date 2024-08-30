@@ -117,10 +117,10 @@ class BarChartSample1State extends State<BarChartSample1> {
   }) {
     barColor ??= widget.barColor;
     return BarChartGroupData(
-      x: x,
+      index: x,
       barRods: [
         BarChartRodData(
-          toY: isTouched ? y + 1 : y,
+          to: isTouched ? y + 1 : y,
           color: isTouched ? widget.touchedBarColor : barColor,
           width: width,
           borderSide: isTouched
@@ -128,7 +128,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 20,
+            to: 20,
             color: widget.barBackgroundColor,
           ),
         ),
@@ -167,7 +167,7 @@ class BarChartSample1State extends State<BarChartSample1> {
           tooltipMargin: -10,
           getTooltipItem: (group, groupIndex, rod, rodIndex) {
             String weekDay;
-            switch (group.x) {
+            switch (group.index) {
               case 0:
                 weekDay = 'Monday';
                 break;
@@ -201,7 +201,7 @@ class BarChartSample1State extends State<BarChartSample1> {
               ),
               children: <TextSpan>[
                 TextSpan(
-                  text: (rod.toY - 1).toString(),
+                  text: (rod.to - 1).toString(),
                   style: const TextStyle(
                     color: Colors.white, //widget.touchedBarColor,
                     fontSize: 16,

@@ -29,15 +29,15 @@ class _BarChartSample7State extends State<BarChartSample7> {
     double shadowValue,
   ) {
     return BarChartGroupData(
-      x: x,
+      index: x,
       barRods: [
         BarChartRodData(
-          toY: value,
+          to: value,
           color: color,
           width: 6,
         ),
         BarChartRodData(
-          toY: shadowValue,
+          to: shadowValue,
           color: widget.shadowColor,
           width: 6,
         ),
@@ -117,7 +117,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
                 data.shadowValue,
               );
             }).toList(),
-            maxY: 20,
+            maxvalue: 20,
             barTouchData: BarTouchData(
               enabled: true,
               handleBuiltInTouches: false,
@@ -131,7 +131,7 @@ class _BarChartSample7State extends State<BarChartSample7> {
                   int rodIndex,
                 ) {
                   return BarTooltipItem(
-                    rod.toY.toString(),
+                    rod.to.toString(),
                     textStyle: TextStyle(
                       fontWeight: FontWeight.bold,
                       color: rod.color,

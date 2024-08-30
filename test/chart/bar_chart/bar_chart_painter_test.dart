@@ -23,10 +23,10 @@ void main() {
       const viewSize = Size(400, 400);
       final barGroups = <BarChartGroupData>[
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
-            BarChartRodData(fromY: 1, toY: 10),
-            BarChartRodData(fromY: 2, toY: 10),
+            BarChartRodData(from: 1, to: 10),
+            BarChartRodData(from: 2, to: 10),
           ],
           showingTooltipIndicators: [
             1,
@@ -34,10 +34,10 @@ void main() {
           ],
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(fromY: 3, toY: 10),
-            BarChartRodData(fromY: 4, toY: 10),
+            BarChartRodData(from: 3, to: 10),
+            BarChartRodData(from: 4, to: 10),
           ],
         ),
       ];
@@ -46,8 +46,8 @@ void main() {
 
       final data = BarChartData(
         barGroups: barGroups,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -91,29 +91,29 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
@@ -159,19 +159,19 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
@@ -206,29 +206,29 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
@@ -273,22 +273,22 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 11,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 12,
               color: const Color(0x22222222),
               borderRadius: const BorderRadius.all(Radius.circular(0.3)),
@@ -297,48 +297,48 @@ void main() {
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               borderRadius: const BorderRadius.all(Radius.circular(0.4)),
             ),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               backDrawRodData: BackgroundBarChartRodData(
-                toY: 8,
+                to: 8,
                 show: true,
               ),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 10,
               backDrawRodData: BackgroundBarChartRodData(
                 show: false,
               ),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 10,
               backDrawRodData: BackgroundBarChartRodData(
-                toY: -3,
+                to: -3,
                 show: true,
               ),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 10,
               backDrawRodData: BackgroundBarChartRodData(
-                toY: 0,
+                to: 0,
               ),
             ),
           ],
@@ -353,8 +353,8 @@ void main() {
         groupsSpace: 10,
         barGroups: barGroups,
         alignment: BarChartAlignment.center,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -392,9 +392,7 @@ void main() {
         });
       });
 
-      final mockBuildContext = MockBuildContext();
       barChartPainter.drawBars(
-        mockBuildContext,
         mockCanvasWrapper,
         barGroupsPosition,
         holder,
@@ -560,26 +558,26 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           groupVertically: true,
           barRods: [
             BarChartRodData(
-              fromY: -9,
-              toY: -10,
+              from: -9,
+              to: -10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              fromY: -11,
-              toY: -20,
+              from: -11,
+              to: -20,
               width: 11,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
             ),
             BarChartRodData(
-              fromY: -21,
-              toY: -30,
+              from: -21,
+              to: -30,
               width: 12,
               color: const Color(0x22222222),
               borderRadius: const BorderRadius.all(Radius.circular(0.3)),
@@ -588,26 +586,26 @@ void main() {
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           groupVertically: true,
           barRods: [
             BarChartRodData(
-              fromY: 9,
-              toY: 10,
+              from: 9,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              fromY: 11,
-              toY: 20,
+              from: 11,
+              to: 20,
               width: 11,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
             ),
             BarChartRodData(
-              fromY: 21,
-              toY: 30,
+              from: 21,
+              to: 30,
               width: 12,
               color: const Color(0x22222222),
               borderRadius: const BorderRadius.all(Radius.circular(0.3)),
@@ -624,8 +622,8 @@ void main() {
         groupsSpace: 10,
         barGroups: barGroups,
         alignment: BarChartAlignment.center,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -663,9 +661,7 @@ void main() {
         });
       });
 
-      final mockBuildContext = MockBuildContext();
       barChartPainter.drawBars(
-        mockBuildContext,
         mockCanvasWrapper,
         barGroupsPosition,
         holder,
@@ -764,11 +760,11 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              fromY: -10,
-              toY: 10,
+              from: -10,
+              to: 10,
               color: const Color(0x00000000),
               rodStackItems: [
                 BarChartRodStackItem(-5, -10, const Color(0x11111111)),
@@ -807,9 +803,7 @@ void main() {
         });
       });
 
-      final mockBuildContext = MockBuildContext();
       barChartPainter.drawBars(
-        mockBuildContext,
         mockCanvasWrapper,
         barGroupsPosition,
         holder,
@@ -826,33 +820,33 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              fromY: 0,
-              toY: 5,
+              from: 0,
+              to: 5,
               borderRadius: BorderRadius.zero,
               color: Colors.white,
             ),
           ],
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              fromY: 0,
-              toY: 10,
+              from: 0,
+              to: 10,
               borderRadius: BorderRadius.zero,
               color: Colors.white,
             ),
           ],
         ),
         BarChartGroupData(
-          x: 3,
+          index: 3,
           barRods: [
             BarChartRodData(
-              fromY: 0,
-              toY: 15,
+              from: 0,
+              to: 15,
               borderDashArray: [4, 4],
               borderSide: const BorderSide(
                 color: Colors.white,
@@ -869,8 +863,8 @@ void main() {
 
       final data = BarChartData(
         barGroups: barGroups,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -911,9 +905,7 @@ void main() {
         });
       });
 
-      final mockBuildContext = MockBuildContext();
       barChartPainter.drawBars(
-        mockBuildContext,
         mockCanvasWrapper,
         barGroupsPosition,
         holder,
@@ -938,33 +930,33 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              fromY: 0,
-              toY: 5,
+              from: 0,
+              to: 5,
               borderRadius: BorderRadius.zero,
               color: Colors.white,
             ),
           ],
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              fromY: 0,
-              toY: 10,
+              from: 0,
+              to: 10,
               borderRadius: BorderRadius.zero,
               color: Colors.white,
             ),
           ],
         ),
         BarChartGroupData(
-          x: 3,
+          index: 3,
           barRods: [
             BarChartRodData(
-              fromY: 0,
-              toY: 15,
+              from: 0,
+              to: 15,
               borderSide: const BorderSide(
                 color: Colors.white,
                 width: 2,
@@ -980,8 +972,8 @@ void main() {
 
       final data = BarChartData(
         barGroups: barGroups,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -1022,9 +1014,7 @@ void main() {
         });
       });
 
-      final mockBuildContext = MockBuildContext();
       barChartPainter.drawBars(
-        mockBuildContext,
         mockCanvasWrapper,
         barGroupsPosition,
         holder,
@@ -1065,22 +1055,22 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 11,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 12,
               color: const Color(0x22222222),
               borderRadius: const BorderRadius.all(Radius.circular(0.3)),
@@ -1089,24 +1079,24 @@ void main() {
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               borderRadius: const BorderRadius.all(Radius.circular(0.4)),
             ),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
@@ -1146,8 +1136,8 @@ void main() {
           touchTooltipData: tooltipData,
         ),
         alignment: BarChartAlignment.center,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -1262,22 +1252,22 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 11,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 12,
               color: const Color(0x22222222),
               borderRadius: const BorderRadius.all(Radius.circular(0.3)),
@@ -1286,24 +1276,24 @@ void main() {
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               borderRadius: const BorderRadius.all(Radius.circular(0.4)),
             ),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
@@ -1346,8 +1336,8 @@ void main() {
           touchTooltipData: tooltipData,
         ),
         alignment: BarChartAlignment.center,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -1462,16 +1452,16 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              toY: -10,
+              to: -10,
               width: 10,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
@@ -1521,8 +1511,8 @@ void main() {
           touchTooltipData: tooltipData,
         ),
         alignment: BarChartAlignment.center,
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -1632,7 +1622,7 @@ void main() {
       ];
 
       final barRod = BarChartRodData(
-        toY: 10,
+        to: 10,
         width: 10,
         color: const Color(0x00000000),
         borderRadius: const BorderRadius.all(Radius.circular(0.1)),
@@ -1640,7 +1630,7 @@ void main() {
       );
 
       final barGroups = [
-        BarChartGroupData(x: 0, barRods: [barRod], barsSpace: 5),
+        BarChartGroupData(index: 0, barRods: [barRod], barsSpace: 5),
       ];
 
       final axisValues = BarChartHelper().calculateMaxAxisValues(barGroups);
@@ -1649,8 +1639,8 @@ void main() {
         groupsSpace: 10,
         barGroups: barGroups,
         barTouchData: BarTouchData(),
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final barChartPainter = BarChartPainter();
@@ -1774,22 +1764,22 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 11,
               color: const Color(0x11111111),
               borderRadius: const BorderRadius.all(Radius.circular(0.2)),
             ),
             BarChartRodData(
-              toY: 8,
+              to: 8,
               width: 12,
               color: const Color(0x22222222),
               borderRadius: const BorderRadius.all(Radius.circular(0.3)),
@@ -1798,24 +1788,24 @@ void main() {
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               borderRadius: const BorderRadius.all(Radius.circular(0.4)),
             ),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(toY: 10, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
-            BarChartRodData(toY: 8, width: 10),
+            BarChartRodData(to: 10, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
+            BarChartRodData(to: 8, width: 10),
           ],
           barsSpace: 5,
         ),
@@ -1832,8 +1822,8 @@ void main() {
           handleBuiltInTouches: true,
           touchExtraThreshold: const EdgeInsets.all(1),
         ),
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final painter = BarChartPainter();
@@ -1897,10 +1887,10 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               width: 10,
               color: const Color(0x00000000),
               borderRadius: const BorderRadius.all(Radius.circular(0.1)),
@@ -1912,10 +1902,10 @@ void main() {
           barsSpace: 5,
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: -10,
+              to: -10,
               width: 10,
               borderRadius: const BorderRadius.all(Radius.circular(0.4)),
             ),
@@ -1935,8 +1925,8 @@ void main() {
           handleBuiltInTouches: true,
           touchExtraThreshold: const EdgeInsets.all(1),
         ),
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
       );
 
       final painter = BarChartPainter();
@@ -1983,27 +1973,27 @@ void main() {
 
       final barGroups = [
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: 5,
+              to: 5,
               backDrawRodData: BackgroundBarChartRodData(
                 show: true,
-                fromY: -5,
-                toY: 5,
+                from: -5,
+                to: 5,
               ),
             ),
           ],
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: -6,
+              to: -6,
               backDrawRodData: BackgroundBarChartRodData(
                 show: true,
-                fromY: 5,
-                toY: -6,
+                from: 5,
+                to: -6,
               ),
             ),
           ],
@@ -2015,8 +2005,8 @@ void main() {
         titlesData: const FlTitlesData(show: false),
         alignment: BarChartAlignment.start,
         groupsSpace: 10,
-        minY: -10,
-        maxY: 15,
+        minvalue: -10,
+        maxvalue: 15,
         barTouchData: BarTouchData(
           enabled: true,
           handleBuiltInTouches: true,
@@ -2060,10 +2050,10 @@ void main() {
       final data = BarChartData(
         barGroups: [
           BarChartGroupData(
-            x: 1,
+            index: 1,
             barRods: [
-              BarChartRodData(fromY: 1, toY: 10),
-              BarChartRodData(fromY: 2, toY: 10),
+              BarChartRodData(from: 1, to: 10),
+              BarChartRodData(from: 2, to: 10),
             ],
             showingTooltipIndicators: [
               1,
@@ -2071,10 +2061,10 @@ void main() {
             ],
           ),
           BarChartGroupData(
-            x: 2,
+            index: 2,
             barRods: [
-              BarChartRodData(fromY: 3, toY: 10),
-              BarChartRodData(fromY: 4, toY: 10),
+              BarChartRodData(from: 3, to: 10),
+              BarChartRodData(from: 4, to: 10),
             ],
           ),
         ],
@@ -2112,10 +2102,10 @@ void main() {
       final data = BarChartData(
         barGroups: [
           BarChartGroupData(
-            x: 1,
+            index: 1,
             barRods: [
-              BarChartRodData(fromY: 1, toY: 10),
-              BarChartRodData(fromY: 2, toY: 10),
+              BarChartRodData(from: 1, to: 10),
+              BarChartRodData(from: 2, to: 10),
             ],
             showingTooltipIndicators: [
               1,
@@ -2123,10 +2113,10 @@ void main() {
             ],
           ),
           BarChartGroupData(
-            x: 2,
+            index: 2,
             barRods: [
-              BarChartRodData(fromY: 3, toY: 10),
-              BarChartRodData(fromY: 4, toY: 10),
+              BarChartRodData(from: 3, to: 10),
+              BarChartRodData(from: 4, to: 10),
             ],
           ),
         ],
@@ -2163,10 +2153,10 @@ void main() {
 
       final barGroups = <BarChartGroupData>[
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
-            BarChartRodData(fromY: 1, toY: 10),
-            BarChartRodData(fromY: 2, toY: 10),
+            BarChartRodData(from: 1, to: 10),
+            BarChartRodData(from: 2, to: 10),
           ],
           showingTooltipIndicators: [
             1,
@@ -2174,10 +2164,10 @@ void main() {
           ],
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(fromY: 3, toY: 10),
-            BarChartRodData(fromY: 4, toY: 10),
+            BarChartRodData(from: 3, to: 10),
+            BarChartRodData(from: 4, to: 10),
           ],
         ),
       ];
@@ -2185,8 +2175,8 @@ void main() {
       final axisValues = BarChartHelper().calculateMaxAxisValues(barGroups);
 
       final data = BarChartData(
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
         barGroups: barGroups,
         extraLinesData: ExtraLinesData(
           verticalLines: [verticalLine1],
@@ -2263,14 +2253,14 @@ void main() {
       );
 
       final data = BarChartData(
-        minY: -10,
-        maxY: 10,
+        minvalue: -10,
+        maxvalue: 10,
         barGroups: [
           BarChartGroupData(
-            x: 1,
+            index: 1,
             barRods: [
-              BarChartRodData(fromY: 1, toY: 10),
-              BarChartRodData(fromY: 2, toY: 10),
+              BarChartRodData(from: 1, to: 10),
+              BarChartRodData(from: 2, to: 10),
             ],
             showingTooltipIndicators: [
               1,
@@ -2278,10 +2268,10 @@ void main() {
             ],
           ),
           BarChartGroupData(
-            x: 2,
+            index: 2,
             barRods: [
-              BarChartRodData(fromY: 3, toY: 10),
-              BarChartRodData(fromY: 4, toY: 10),
+              BarChartRodData(from: 3, to: 10),
+              BarChartRodData(from: 4, to: 10),
             ],
           ),
         ],
@@ -2359,10 +2349,10 @@ void main() {
 
       final barGroups = <BarChartGroupData>[
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
-            BarChartRodData(fromY: 1, toY: 10),
-            BarChartRodData(fromY: 2, toY: 10),
+            BarChartRodData(from: 1, to: 10),
+            BarChartRodData(from: 2, to: 10),
           ],
           showingTooltipIndicators: [
             1,
@@ -2370,10 +2360,10 @@ void main() {
           ],
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
-            BarChartRodData(fromY: 3, toY: 10),
-            BarChartRodData(fromY: 4, toY: 10),
+            BarChartRodData(from: 3, to: 10),
+            BarChartRodData(from: 4, to: 10),
           ],
         ),
       ];
@@ -2381,8 +2371,8 @@ void main() {
       final axisValues = BarChartHelper().calculateMaxAxisValues(barGroups);
 
       final data = BarChartData(
-        minY: axisValues.minY,
-        maxY: axisValues.maxY,
+        minvalue: axisValues.minvalue,
+        maxvalue: axisValues.maxvalue,
         barGroups: barGroups,
         extraLinesData: ExtraLinesData(
           horizontalLines: [horizontalLine, horizontalLine1],
@@ -2459,14 +2449,14 @@ void main() {
     test('should draw extra horizontal lines under chart', () {
       const viewSize = Size(100, 100);
       final data = BarChartData(
-        minY: -10,
-        maxY: 10,
+        minvalue: -10,
+        maxvalue: 10,
         barGroups: [
           BarChartGroupData(
-            x: 1,
+            index: 1,
             barRods: [
-              BarChartRodData(fromY: 1, toY: 10),
-              BarChartRodData(fromY: 2, toY: 10),
+              BarChartRodData(from: 1, to: 10),
+              BarChartRodData(from: 2, to: 10),
             ],
           ),
         ],

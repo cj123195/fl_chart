@@ -63,10 +63,10 @@ class BarChartSample1State extends State<BarChartSample8> {
     double y,
   ) {
     return BarChartGroupData(
-      x: x,
+      index: x,
       barRods: [
         BarChartRodData(
-          toY: y,
+          to: y,
           color: x >= 4 ? Colors.transparent : widget.barColor,
           borderRadius: BorderRadius.zero,
           borderDashArray: x >= 4 ? [4, 4] : null,
@@ -99,7 +99,7 @@ class BarChartSample1State extends State<BarChartSample8> {
 
   BarChartData randomData() {
     return BarChartData(
-      maxY: 300.0,
+      maxvalue: 300.0,
       barTouchData: BarTouchData(
         enabled: false,
       ),

@@ -18,24 +18,24 @@ class BarChartSample6 extends StatelessWidget {
     double cycling,
   ) {
     return BarChartGroupData(
-      x: x,
+      index: x,
       groupVertically: true,
       barRods: [
         BarChartRodData(
-          fromY: 0,
-          toY: pilates,
+          from: 0,
+          to: pilates,
           color: pilateColor,
           width: 5,
         ),
         BarChartRodData(
-          fromY: pilates + betweenSpace,
-          toY: pilates + betweenSpace + quickWorkout,
+          from: pilates + betweenSpace,
+          to: pilates + betweenSpace + quickWorkout,
           color: quickWorkoutColor,
           width: 5,
         ),
         BarChartRodData(
-          fromY: pilates + betweenSpace + quickWorkout + betweenSpace,
-          toY: pilates + betweenSpace + quickWorkout + betweenSpace + cycling,
+          from: pilates + betweenSpace + quickWorkout + betweenSpace,
+          to: pilates + betweenSpace + quickWorkout + betweenSpace + cycling,
           color: cyclingColor,
           width: 5,
         ),
@@ -151,7 +151,7 @@ class BarChartSample6 extends StatelessWidget {
                   generateGroupData(10, 1, 4.8, 3),
                   generateGroupData(11, 2, 4.4, 2.8),
                 ],
-                maxY: 11 + (betweenSpace * 3),
+                maxvalue: 11 + (betweenSpace * 3),
                 extraLinesData: ExtraLinesData(
                   horizontalLines: [
                     HorizontalLine(

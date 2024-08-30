@@ -58,7 +58,11 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       return;
     }
 
-    final groupsX = data.calculateGroupsX(canvasWrapper.size.width);
+    final groupsX = data.calculateGroupsX(
+      data.direction == Axis.vertical
+          ? canvasWrapper.size.width
+          : canvasWrapper.size.height,
+    );
     _groupBarsPosition = calculateGroupAndBarsPosition(
       canvasWrapper.size,
       groupsX,
@@ -74,7 +78,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       );
     }
 
-    drawBars(context, canvasWrapper, _groupBarsPosition!, holder);
+    drawBars(canvasWrapper, _groupBarsPosition!, holder);
 
     if (data.extraLinesData.extraLinesOnTop) {
       super.drawHorizontalLines(
@@ -147,7 +151,6 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
 
   @visibleForTesting
   void drawBars(
-    BuildContext context,
     CanvasWrapper canvasWrapper,
     List<GroupBarsPosition> groupBarsPosition,
     PaintHolder<BarChartData> holder,
@@ -160,184 +163,402 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       for (var j = 0; j < barGroup.barRods.length; j++) {
         final barRod = barGroup.barRods[j];
         final widthHalf = barRod.width / 2;
-        var borderRadius = barRod.borderRadius;
+        final borderRadius = barRod.borderRadius;
         final borderSide = barRod.borderSide;
 
         final x = groupBarsPosition[i].barsX[j];
 
-        final left = x - widthHalf;
-        final right = x + widthHalf;
-
-        double getCornerHeight(BorderRadius borderRadius) {
-          return max(borderRadius.topLeft.y, borderRadius.topRight.y) +
-              max(borderRadius.bottomLeft.y, borderRadius.bottomRight.y);
-        }
-
-        RRect barRRect;
-
-        /// Draw [BackgroundBarChartRodData]
-        if (barRod.backDrawRodData.show &&
-            barRod.backDrawRodData.toY != barRod.backDrawRodData.fromY) {
-          if (barRod.backDrawRodData.toY > barRod.backDrawRodData.fromY) {
-            // positive
-            borderRadius ??=
-                BorderRadius.vertical(top: Radius.circular(barRod.width / 2));
-            final bottom = getPixelY(
-              max(data.minY, barRod.backDrawRodData.fromY),
-              viewSize,
-              holder,
-            );
-            final top = min(
-              getPixelY(barRod.backDrawRodData.toY, viewSize, holder),
-              bottom - getCornerHeight(borderRadius),
-            );
-
-            barRRect = RRect.fromLTRBAndCorners(
-              left,
-              top,
-              right,
-              bottom,
-              topLeft: borderRadius.topLeft,
-              topRight: borderRadius.topRight,
-              bottomLeft: borderRadius.bottomLeft,
-              bottomRight: borderRadius.bottomRight,
-            );
-          } else {
-            // negative
-            borderRadius ??= BorderRadius.vertical(
-              bottom: Radius.circular(barRod.width / 2),
-            );
-            final top = getPixelY(
-              min(data.maxY, barRod.backDrawRodData.fromY),
-              viewSize,
-              holder,
-            );
-            final bottom = max(
-              getPixelY(barRod.backDrawRodData.toY, viewSize, holder),
-              top + getCornerHeight(borderRadius),
-            );
-
-            barRRect = RRect.fromLTRBAndCorners(
-              left,
-              top,
-              right,
-              bottom,
-              topLeft: borderRadius.topLeft,
-              topRight: borderRadius.topRight,
-              bottomLeft: borderRadius.bottomLeft,
-              bottomRight: borderRadius.bottomRight,
-            );
-          }
-
-          final backDraw = barRod.backDrawRodData;
-          _barPaint.setColorOrGradient(
-            backDraw.color,
-            backDraw.gradient,
-            barRRect.getRect(),
+        if (data.direction == Axis.vertical) {
+          drawVerticalBar(
+            viewSize,
+            data,
+            holder,
+            canvasWrapper,
+            barRod,
+            widthHalf,
+            borderRadius,
+            borderSide,
+            x,
           );
-          canvasWrapper.drawRRect(barRRect, _barPaint);
-        }
-
-        // draw Main Rod
-        if (barRod.toY != barRod.fromY) {
-          if (barRod.toY > barRod.fromY) {
-            // positive
-            borderRadius ??=
-                BorderRadius.vertical(top: Radius.circular(barRod.width / 2));
-            final bottom =
-                getPixelY(max(data.minY, barRod.fromY), viewSize, holder);
-            final top = min(
-              getPixelY(barRod.toY, viewSize, holder),
-              bottom - getCornerHeight(borderRadius),
-            );
-
-            barRRect = RRect.fromLTRBAndCorners(
-              left,
-              top,
-              right,
-              bottom,
-              topLeft: borderRadius.topLeft,
-              topRight: borderRadius.topRight,
-              bottomLeft: borderRadius.bottomLeft,
-              bottomRight: borderRadius.bottomRight,
-            );
-          } else {
-            // negative
-            borderRadius ??=
-                BorderRadius.vertical(top: Radius.circular(barRod.width / 2));
-            final top =
-                getPixelY(min(data.maxY, barRod.fromY), viewSize, holder);
-            final bottom = max(
-              getPixelY(barRod.toY, viewSize, holder),
-              top + getCornerHeight(borderRadius),
-            );
-
-            barRRect = RRect.fromLTRBAndCorners(
-              left,
-              top,
-              right,
-              bottom,
-              topLeft: borderRadius.topLeft,
-              topRight: borderRadius.topRight,
-              bottomLeft: borderRadius.bottomLeft,
-              bottomRight: borderRadius.bottomRight,
-            );
-          }
-          _barPaint.setColorOrGradient(
-            barRod.color ?? Theme.of(context).colorScheme.primary,
-            barRod.gradient,
-            barRRect.getRect(),
+        } else {
+          drawHorizontalBar(
+            viewSize,
+            data,
+            holder,
+            canvasWrapper,
+            barRod,
+            widthHalf,
+            borderRadius,
+            borderSide,
+            x,
           );
-          canvasWrapper.drawRRect(barRRect, _barPaint);
-
-          // draw rod stack
-          if (barRod.rodStackItems.isNotEmpty) {
-            for (var i = 0; i < barRod.rodStackItems.length; i++) {
-              final stackItem = barRod.rodStackItems[i];
-              final stackFromY = getPixelY(stackItem.fromY, viewSize, holder);
-              final stackToY = getPixelY(stackItem.toY, viewSize, holder);
-
-              final isNegative = stackItem.toY < stackItem.fromY;
-              _barPaint.color = stackItem.color;
-              final rect = isNegative
-                  ? Rect.fromLTRB(left, stackFromY, right, stackToY)
-                  : Rect.fromLTRB(left, stackToY, right, stackFromY);
-              canvasWrapper
-                ..save()
-                ..clipRect(rect)
-                ..drawRRect(barRRect, _barPaint)
-                ..restore();
-
-              // draw border stroke for each stack item
-              drawStackItemBorderStroke(
-                canvasWrapper,
-                stackItem,
-                i,
-                barRod.rodStackItems.length,
-                barRod.width,
-                barRRect,
-                viewSize,
-                holder,
-              );
-            }
-          }
-
-          // draw border stroke
-          if (borderSide.width > 0 && borderSide.color.opacity > 0) {
-            _barStrokePaint
-              ..color = borderSide.color
-              ..strokeWidth = borderSide.width;
-
-            final borderPath = Path()..addRRect(barRRect);
-
-            canvasWrapper.drawPath(
-              borderPath.toDashedPath(
-                barRod.borderDashArray,
-              ),
-              _barStrokePaint,
-            );
-          }
         }
+      }
+    }
+  }
+
+  void drawVerticalBar(
+    Size viewSize,
+    BarChartData data,
+    PaintHolder<BarChartData> holder,
+    CanvasWrapper canvasWrapper,
+    BarChartRodData barRod,
+    double widthHalf,
+    BorderRadius? borderRadius,
+    BorderSide borderSide,
+    double x,
+  ) {
+    final left = x - widthHalf;
+    final right = x + widthHalf;
+
+    double getCornerHeight(BorderRadius borderRadius) {
+      return max(borderRadius.topLeft.y, borderRadius.topRight.y) +
+          max(borderRadius.bottomLeft.y, borderRadius.bottomRight.y);
+    }
+
+    RRect barRRect;
+
+    /// Draw [BackgroundBarChartRodData]
+    if (barRod.backDrawRodData.show &&
+        barRod.backDrawRodData.to != barRod.backDrawRodData.from) {
+      if (barRod.backDrawRodData.to > barRod.backDrawRodData.from) {
+        // positive
+        borderRadius ??=
+            BorderRadius.vertical(top: Radius.circular(barRod.width / 2));
+        final bottom = getPixelY(
+          max(data.minY, barRod.backDrawRodData.from),
+          viewSize,
+          holder,
+        );
+        final top = min(
+          getPixelY(barRod.backDrawRodData.to, viewSize, holder),
+          bottom - getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      } else {
+        // negative
+        borderRadius ??= BorderRadius.vertical(
+          bottom: Radius.circular(barRod.width / 2),
+        );
+        final top = getPixelY(
+          min(data.maxY, barRod.backDrawRodData.from),
+          viewSize,
+          holder,
+        );
+        final bottom = max(
+          getPixelY(barRod.backDrawRodData.to, viewSize, holder),
+          top + getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      }
+
+      final backDraw = barRod.backDrawRodData;
+      _barPaint.setColorOrGradient(
+        backDraw.color,
+        backDraw.gradient,
+        barRRect.getRect(),
+      );
+      canvasWrapper.drawRRect(barRRect, _barPaint);
+    }
+
+    // draw Main Rod
+    if (barRod.to != barRod.from) {
+      if (barRod.to > barRod.from) {
+        // positive
+        borderRadius ??=
+            BorderRadius.vertical(top: Radius.circular(barRod.width / 2));
+        final bottom = getPixelY(max(data.minY, barRod.from), viewSize, holder);
+        final top = min(
+          getPixelY(barRod.to, viewSize, holder),
+          bottom - getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      } else {
+        // negative
+
+        borderRadius ??=
+            BorderRadius.vertical(top: Radius.circular(barRod.width / 2));
+        final top = getPixelY(min(data.maxY, barRod.from), viewSize, holder);
+        final bottom = max(
+          getPixelY(barRod.to, viewSize, holder),
+          top + getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      }
+      _barPaint.setColorOrGradient(
+        barRod.color,
+        barRod.gradient,
+        barRRect.getRect(),
+      );
+      canvasWrapper.drawRRect(barRRect, _barPaint);
+
+      // draw rod stack
+      if (barRod.rodStackItems.isNotEmpty) {
+        for (var i = 0; i < barRod.rodStackItems.length; i++) {
+          final stackItem = barRod.rodStackItems[i];
+          final stackFromY = getPixelY(stackItem.from, viewSize, holder);
+          final stackToY = getPixelY(stackItem.to, viewSize, holder);
+
+          final isNegative = stackItem.to < stackItem.from;
+          _barPaint.color = stackItem.color;
+          final rect = isNegative
+              ? Rect.fromLTRB(left, stackFromY, right, stackToY)
+              : Rect.fromLTRB(left, stackToY, right, stackFromY);
+          canvasWrapper
+            ..save()
+            ..clipRect(rect)
+            ..drawRRect(barRRect, _barPaint)
+            ..restore();
+
+          // draw border stroke for each stack item
+          drawStackItemBorderStroke(
+            canvasWrapper,
+            stackItem,
+            i,
+            barRod.rodStackItems.length,
+            barRod.width,
+            barRRect,
+            viewSize,
+            holder,
+          );
+        }
+      }
+
+      // draw border stroke
+      if (borderSide.width > 0 && borderSide.color.opacity > 0) {
+        _barStrokePaint
+          ..color = borderSide.color
+          ..strokeWidth = borderSide.width;
+
+        final borderPath = Path()..addRRect(barRRect);
+
+        canvasWrapper.drawPath(
+          borderPath.toDashedPath(
+            barRod.borderDashArray,
+          ),
+          _barStrokePaint,
+        );
+      }
+    }
+  }
+
+  void drawHorizontalBar(
+    Size viewSize,
+    BarChartData data,
+    PaintHolder<BarChartData> holder,
+    CanvasWrapper canvasWrapper,
+    BarChartRodData barRod,
+    double widthHalf,
+    BorderRadius? borderRadius,
+    BorderSide borderSide,
+    double y,
+  ) {
+    final top = y - widthHalf;
+    final bottom = y + widthHalf;
+
+    double getCornerHeight(BorderRadius borderRadius) {
+      return max(borderRadius.topLeft.x, borderRadius.topRight.x) +
+          max(borderRadius.bottomLeft.x, borderRadius.bottomRight.x);
+    }
+
+    final radius = Radius.circular(widthHalf);
+
+    RRect barRRect;
+
+    /// Draw [BackgroundBarChartRodData]
+    if (barRod.backDrawRodData.show &&
+        barRod.backDrawRodData.to != barRod.backDrawRodData.from) {
+      if (barRod.backDrawRodData.to > barRod.backDrawRodData.from) {
+        // positive
+        borderRadius ??= BorderRadius.horizontal(right: radius);
+        final left = getPixelX(
+          min(data.minX, barRod.backDrawRodData.from),
+          viewSize,
+          holder,
+        );
+        final right = max(
+          getPixelX(barRod.backDrawRodData.to, viewSize, holder),
+          left + getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      } else {
+        // negative
+        borderRadius ??= BorderRadius.horizontal(left: radius);
+        final right = getPixelX(
+          max(data.maxX, barRod.backDrawRodData.from),
+          viewSize,
+          holder,
+        );
+        final left = min(
+          getPixelX(barRod.backDrawRodData.to, viewSize, holder),
+          right - getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      }
+
+      final backDraw = barRod.backDrawRodData;
+      _barPaint.setColorOrGradient(
+        backDraw.color,
+        backDraw.gradient,
+        barRRect.getRect(),
+      );
+      canvasWrapper.drawRRect(barRRect, _barPaint);
+    }
+
+    // draw Main Rod
+    if (barRod.to != barRod.from) {
+      if (barRod.to > barRod.from) {
+        // positive
+        borderRadius ??= BorderRadius.horizontal(right: radius);
+        final left = getPixelX(max(data.minX, barRod.from), viewSize, holder);
+        final right = max(
+          getPixelX(barRod.to, viewSize, holder),
+          left + getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      } else {
+        // negative
+        borderRadius ??= BorderRadius.horizontal(left: radius);
+        final right = getPixelX(min(data.maxX, barRod.from), viewSize, holder);
+        final left = min(
+          getPixelY(barRod.to, viewSize, holder),
+          right - getCornerHeight(borderRadius),
+        );
+
+        barRRect = RRect.fromLTRBAndCorners(
+          left,
+          top,
+          right,
+          bottom,
+          topLeft: borderRadius.topLeft,
+          topRight: borderRadius.topRight,
+          bottomLeft: borderRadius.bottomLeft,
+          bottomRight: borderRadius.bottomRight,
+        );
+      }
+      _barPaint.setColorOrGradient(
+        barRod.color,
+        barRod.gradient,
+        barRRect.getRect(),
+      );
+      canvasWrapper.drawRRect(barRRect, _barPaint);
+
+      // draw rod stack
+      if (barRod.rodStackItems.isNotEmpty) {
+        for (var i = 0; i < barRod.rodStackItems.length; i++) {
+          final stackItem = barRod.rodStackItems[i];
+          final stackFromX = getPixelX(stackItem.from, viewSize, holder);
+          final stackToX = getPixelX(stackItem.to, viewSize, holder);
+
+          final isNegative = stackItem.to < stackItem.from;
+          _barPaint.color = stackItem.color;
+          final rect = isNegative
+              ? Rect.fromLTRB(stackFromX, top, stackToX, bottom)
+              : Rect.fromLTRB(stackToX, top, stackFromX, bottom);
+          canvasWrapper
+            ..save()
+            ..clipRect(rect)
+            ..drawRRect(barRRect, _barPaint)
+            ..restore();
+
+          // draw border stroke for each stack item
+          drawStackItemBorderStroke(
+            canvasWrapper,
+            stackItem,
+            i,
+            barRod.rodStackItems.length,
+            barRod.width,
+            barRRect,
+            viewSize,
+            holder,
+          );
+        }
+      }
+
+      // draw border stroke
+      if (borderSide.width > 0 && borderSide.color.opacity > 0) {
+        _barStrokePaint
+          ..color = borderSide.color
+          ..strokeWidth = borderSide.width;
+
+        final borderPath = Path()..addRRect(barRRect);
+
+        canvasWrapper.drawPath(
+          borderPath.toDashedPath(
+            barRod.borderDashArray,
+          ),
+          _barStrokePaint,
+        );
       }
     }
   }
@@ -394,53 +615,39 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     /// draw the tooltip's height as tall as sumTextsHeight
     final textWidth = drawingTextPainter.width;
     final textHeight = drawingTextPainter.height + textsBelowMargin;
-
-    /// if we have multiple bar lines,
-    /// there are more than one FlCandidate on touch area,
-    /// we should get the most top FlSpot Offset to draw the tooltip on top of it
-    final barToYPixel = Offset(
-      groupPositions[barGroupIndex].barsX[barRodIndex],
-      getPixelY(showOnRodData.toY, viewSize, holder),
-    );
-
-    final barFromYPixel = Offset(
-      groupPositions[barGroupIndex].barsX[barRodIndex],
-      getPixelY(showOnRodData.fromY, viewSize, holder),
-    );
-
     var innerWidth = textWidth;
     var innerHeight = textHeight;
     if (tooltipItem.indicator != null) {
       innerWidth += tooltipItem.indicator!.width + 8.0;
       innerHeight = max(innerHeight, tooltipItem.indicator!.height);
     }
-    final tooltipWidth = innerWidth + tooltipData.tooltipPadding.horizontal;
-    final tooltipHeight = innerHeight + tooltipData.tooltipPadding.vertical;
-
-    final barTopY = min(barToYPixel.dy, barFromYPixel.dy);
-    final barBottomY = max(barToYPixel.dy, barFromYPixel.dy);
-    final drawTooltipOnTop = tooltipData.direction == TooltipDirection.top ||
-        (tooltipData.direction == TooltipDirection.auto &&
-            showOnRodData.isUpward());
-    final tooltipTop = drawTooltipOnTop
-        ? barTopY - tooltipHeight - tooltipData.tooltipMargin
-        : barBottomY + tooltipData.tooltipMargin;
-
-    final tooltipLeft = getTooltipLeft(
-      barToYPixel.dx,
-      tooltipWidth,
-      tooltipData.tooltipHorizontalAlignment,
-      tooltipData.tooltipHorizontalOffset,
-    );
+    final tooltipWidth = textWidth + tooltipData.tooltipPadding.horizontal;
+    final tooltipHeight = textHeight + tooltipData.tooltipPadding.vertical;
 
     /// draw the background rect with rounded radius
     // ignore: omit_local_variable_types
-    Rect rect = Rect.fromLTWH(
-      tooltipLeft,
-      tooltipTop,
-      tooltipWidth,
-      tooltipHeight,
-    );
+    final x = groupPositions[barGroupIndex].barsX[barRodIndex];
+    var rect = holder.targetData.direction == Axis.vertical
+        ? getVerticalTooltipRect(
+            holder,
+            viewSize,
+            showOnRodData,
+            tooltipData,
+            tooltipItem,
+            tooltipWidth,
+            tooltipHeight,
+            x,
+          )
+        : getHorizontalTooltipRect(
+            holder,
+            viewSize,
+            showOnRodData,
+            tooltipData,
+            tooltipItem,
+            tooltipWidth,
+            tooltipHeight,
+            x,
+          );
 
     if (tooltipData.fitInsideHorizontally) {
       if (rect.left < 0) {
@@ -561,6 +768,88 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     );
   }
 
+  Rect getVerticalTooltipRect(
+    PaintHolder<BarChartData> holder,
+    Size viewSize,
+    BarChartRodData showOnRodData,
+    BarTouchTooltipData tooltipData,
+    BarTooltipItem tooltipItem,
+    double tooltipWidth,
+    double tooltipHeight,
+    double dx,
+  ) {
+    final barToYPixel = Offset(
+      dx,
+      getPixelY(showOnRodData.to, viewSize, holder),
+    );
+
+    final barFromYPixel = Offset(
+      dx,
+      getPixelY(showOnRodData.from, viewSize, holder),
+    );
+
+    final barTopY = min(barToYPixel.dy, barFromYPixel.dy);
+    final barBottomY = max(barToYPixel.dy, barFromYPixel.dy);
+    final drawTooltipOnTop = tooltipData.direction == TooltipDirection.top ||
+        (tooltipData.direction == TooltipDirection.auto &&
+            showOnRodData.isUpward());
+    final tooltipTop = drawTooltipOnTop
+        ? barTopY - tooltipHeight - tooltipData.tooltipMargin
+        : barBottomY + tooltipData.tooltipMargin;
+
+    final tooltipLeft = getTooltipLeft(
+      barToYPixel.dx,
+      tooltipWidth,
+      tooltipData.tooltipHorizontalAlignment,
+      tooltipData.tooltipHorizontalOffset,
+    );
+
+    /// draw the background rect with rounded radius
+    // ignore: omit_local_variable_types
+    return Rect.fromLTWH(
+      tooltipLeft,
+      tooltipTop,
+      tooltipWidth,
+      tooltipHeight,
+    );
+  }
+
+  Rect getHorizontalTooltipRect(
+    PaintHolder<BarChartData> holder,
+    Size viewSize,
+    BarChartRodData showOnRodData,
+    BarTouchTooltipData tooltipData,
+    BarTooltipItem tooltipItem,
+    double tooltipWidth,
+    double tooltipHeight,
+    double dy,
+  ) {
+    final barToXPixel = Offset(
+      getPixelX(showOnRodData.to, viewSize, holder),
+      dy,
+    );
+
+    final barFromXPixel = Offset(
+      getPixelX(showOnRodData.from, viewSize, holder),
+      dy,
+    );
+
+    final barRightY = max(barToXPixel.dx, barFromXPixel.dx);
+
+    final tooltipTop = dy - tooltipHeight - tooltipData.tooltipMargin;
+
+    final tooltipLeft = barRightY - tooltipWidth / 2;
+
+    /// draw the background rect with rounded radius
+    // ignore: omit_local_variable_types
+    return Rect.fromLTWH(
+      tooltipLeft,
+      tooltipTop,
+      tooltipWidth,
+      tooltipHeight,
+    );
+  }
+
   void drawTooltipIndicator(
     CanvasWrapper canvasWrapper,
     Offset offset,
@@ -604,39 +893,39 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     if (index == 0) {
       strokeBarRect = RRect.fromLTRBAndCorners(
         barRRect.left,
-        getPixelY(stackItem.toY, drawSize, holder),
+        getPixelY(stackItem.to, drawSize, holder),
         barRRect.right,
-        getPixelY(stackItem.fromY, drawSize, holder),
+        getPixelY(stackItem.from, drawSize, holder),
         bottomLeft:
-            stackItem.fromY < stackItem.toY ? barRRect.blRadius : Radius.zero,
+            stackItem.from < stackItem.to ? barRRect.blRadius : Radius.zero,
         bottomRight:
-            stackItem.fromY < stackItem.toY ? barRRect.brRadius : Radius.zero,
+            stackItem.from < stackItem.to ? barRRect.brRadius : Radius.zero,
         topLeft:
-            stackItem.fromY < stackItem.toY ? Radius.zero : barRRect.tlRadius,
+            stackItem.from < stackItem.to ? Radius.zero : barRRect.tlRadius,
         topRight:
-            stackItem.fromY < stackItem.toY ? Radius.zero : barRRect.trRadius,
+            stackItem.from < stackItem.to ? Radius.zero : barRRect.trRadius,
       );
     } else if (index == rodStacksSize - 1) {
       strokeBarRect = RRect.fromLTRBAndCorners(
         barRRect.left,
-        max(getPixelY(stackItem.toY, drawSize, holder), barRRect.top),
+        max(getPixelY(stackItem.to, drawSize, holder), barRRect.top),
         barRRect.right,
-        getPixelY(stackItem.fromY, drawSize, holder),
+        getPixelY(stackItem.from, drawSize, holder),
         bottomLeft:
-            stackItem.fromY < stackItem.toY ? Radius.zero : barRRect.blRadius,
+            stackItem.from < stackItem.to ? Radius.zero : barRRect.blRadius,
         bottomRight:
-            stackItem.fromY < stackItem.toY ? Radius.zero : barRRect.brRadius,
+            stackItem.from < stackItem.to ? Radius.zero : barRRect.brRadius,
         topLeft:
-            stackItem.fromY < stackItem.toY ? barRRect.tlRadius : Radius.zero,
+            stackItem.from < stackItem.to ? barRRect.tlRadius : Radius.zero,
         topRight:
-            stackItem.fromY < stackItem.toY ? barRRect.trRadius : Radius.zero,
+            stackItem.from < stackItem.to ? barRRect.trRadius : Radius.zero,
       );
     } else {
       strokeBarRect = RRect.fromLTRBR(
         barRRect.left,
-        getPixelY(stackItem.toY, drawSize, holder),
+        getPixelY(stackItem.to, drawSize, holder),
         barRRect.right,
-        getPixelY(stackItem.fromY, drawSize, holder),
+        getPixelY(stackItem.from, drawSize, holder),
         Radius.zero,
       );
     }
@@ -666,7 +955,9 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     }
 
     if (_groupBarsPosition == null) {
-      final groupsX = data.calculateGroupsX(viewSize.width);
+      final groupsX = data.calculateGroupsX(
+        data.direction == Axis.vertical ? viewSize.width : viewSize.height,
+      );
       _groupBarsPosition =
           calculateGroupAndBarsPosition(viewSize, groupsX, data.barGroups);
     }
@@ -676,82 +967,31 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       final groupBarPos = _groupBarsPosition![i];
       for (var j = 0; j < groupBarPos.barsX.length; j++) {
         final barX = groupBarPos.barsX[j];
-        final barWidth = targetData.barGroups[i].barRods[j].width;
-        final halfBarWidth = barWidth / 2;
+        final barRod = targetData.barGroups[i].barRods[j];
+        final halfBarWidth = barRod.width / 2;
 
-        double barTopY;
-        double barBotY;
-
-        final isUpward = targetData.barGroups[i].barRods[j].isUpward();
-        if (isUpward) {
-          barTopY = getPixelY(
-            targetData.barGroups[i].barRods[j].toY,
-            viewSize,
-            holder,
-          );
-          barBotY = getPixelY(
-            targetData.barGroups[i].barRods[j].fromY +
-                targetData.barGroups[i].barRods[j].backDrawRodData.fromY,
-            viewSize,
-            holder,
-          );
-        } else {
-          barTopY = getPixelY(
-            targetData.barGroups[i].barRods[j].fromY +
-                targetData.barGroups[i].barRods[j].backDrawRodData.fromY,
-            viewSize,
-            holder,
-          );
-          barBotY = getPixelY(
-            targetData.barGroups[i].barRods[j].toY,
-            viewSize,
-            holder,
-          );
-        }
-
-        final backDrawBarY = getPixelY(
-          targetData.barGroups[i].barRods[j].backDrawRodData.toY,
-          viewSize,
+        final isXInTouchBounds = _isXInTouchBounds(
           holder,
+          viewSize,
+          targetData.barGroups[i].barRods[j],
+          touchedPoint,
+          barX,
+          halfBarWidth,
         );
-        final touchExtraThreshold = targetData.barTouchData.touchExtraThreshold;
-
-        final isXInTouchBounds = (touchedPoint.dx <=
-                barX + halfBarWidth + touchExtraThreshold.right) &&
-            (touchedPoint.dx >= barX - halfBarWidth - touchExtraThreshold.left);
-
-        bool isYInBarBounds;
-        if (isUpward) {
-          isYInBarBounds =
-              (touchedPoint.dy <= barBotY + touchExtraThreshold.bottom) &&
-                  (touchedPoint.dy >= barTopY - touchExtraThreshold.top);
-        } else {
-          isYInBarBounds =
-              (touchedPoint.dy >= barTopY - touchExtraThreshold.top) &&
-                  (touchedPoint.dy <= barBotY + touchExtraThreshold.bottom);
-        }
-
-        bool isYInBarBackDrawBounds;
-        if (isUpward) {
-          isYInBarBackDrawBounds =
-              (touchedPoint.dy <= barBotY + touchExtraThreshold.bottom) &&
-                  (touchedPoint.dy >= backDrawBarY - touchExtraThreshold.top);
-        } else {
-          isYInBarBackDrawBounds = (touchedPoint.dy >=
-                  barTopY - touchExtraThreshold.top) &&
-              (touchedPoint.dy <= backDrawBarY + touchExtraThreshold.bottom);
-        }
-
-        final isYInTouchBounds =
-            (targetData.barTouchData.allowTouchBarBackDraw &&
-                    isYInBarBackDrawBounds) ||
-                isYInBarBounds;
+        final isYInTouchBounds = _isYInTouchBounds(
+          holder,
+          viewSize,
+          barRod,
+          touchedPoint,
+          barX,
+          halfBarWidth,
+        );
 
         if (isXInTouchBounds && isYInTouchBounds) {
           final nearestGroup = targetData.barGroups[i];
           final nearestBarRod = nearestGroup.barRods[j];
           final nearestSpot =
-              FlSpot(nearestGroup.x.toDouble(), nearestBarRod.toY);
+              FlSpot(nearestGroup.index.toDouble(), nearestBarRod.to);
           final nearestSpotPos =
               Offset(barX, getPixelY(nearestSpot.y, viewSize, holder));
 
@@ -761,8 +1001,8 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
               stackIndex < nearestBarRod.rodStackItems.length;
               stackIndex++) {
             final stackItem = nearestBarRod.rodStackItems[stackIndex];
-            final fromPixel = getPixelY(stackItem.fromY, viewSize, holder);
-            final toPixel = getPixelY(stackItem.toY, viewSize, holder);
+            final fromPixel = getPixelY(stackItem.from, viewSize, holder);
+            final toPixel = getPixelY(stackItem.to, viewSize, holder);
             if (touchedPoint.dy <= fromPixel && touchedPoint.dy >= toPixel) {
               touchedStackIndex = stackIndex;
               touchedStack = stackItem;
@@ -785,6 +1025,138 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
     }
 
     return null;
+  }
+
+  bool _isXInTouchBounds(
+    PaintHolder<BarChartData> holder,
+    Size viewSize,
+    BarChartRodData barRod,
+    Offset touchedPoint,
+    double barX,
+    double halfBarWidth,
+  ) {
+    final targetData = holder.targetData;
+    final touchExtraThreshold = targetData.barTouchData.touchExtraThreshold;
+
+    if (targetData.direction == Axis.vertical) {
+      return (touchedPoint.dx <=
+              barX + halfBarWidth + touchExtraThreshold.right) &&
+          (touchedPoint.dx >= barX - halfBarWidth - touchExtraThreshold.left);
+    }
+
+    double barLeftX;
+    double barRightX;
+
+    final isUpward = barRod.isUpward();
+    if (isUpward) {
+      barRightX = getPixelX(barRod.to, viewSize, holder);
+      barLeftX = getPixelX(
+        barRod.from - barRod.backDrawRodData.from,
+        viewSize,
+        holder,
+      );
+    } else {
+      barRightX = getPixelX(
+        barRod.from + barRod.backDrawRodData.from,
+        viewSize,
+        holder,
+      );
+      barLeftX = getPixelX(barRod.to, viewSize, holder);
+    }
+
+    final backDrawBarX = getPixelX(
+      barRod.backDrawRodData.to,
+      viewSize,
+      holder,
+    );
+
+    final isXInBarBounds =
+        (touchedPoint.dx >= barLeftX - touchExtraThreshold.left) &&
+            (touchedPoint.dx <= barRightX + touchExtraThreshold.right);
+
+    bool isXInBarBackDrawBounds;
+    if (isUpward) {
+      isXInBarBackDrawBounds =
+          (touchedPoint.dx >= barLeftX - touchExtraThreshold.left) &&
+              (touchedPoint.dx >= backDrawBarX + touchExtraThreshold.right);
+    } else {
+      isXInBarBackDrawBounds =
+          (touchedPoint.dx <= barRightX + touchExtraThreshold.right) &&
+              (touchedPoint.dy >= backDrawBarX - touchExtraThreshold.left);
+    }
+
+    return (targetData.barTouchData.allowTouchBarBackDraw &&
+            isXInBarBackDrawBounds) ||
+        isXInBarBounds;
+  }
+
+  bool _isYInTouchBounds(
+    PaintHolder<BarChartData> holder,
+    Size viewSize,
+    BarChartRodData barRod,
+    Offset touchedPoint,
+    double barY,
+    double halfBarWidth,
+  ) {
+    final targetData = holder.targetData;
+    final touchExtraThreshold = targetData.barTouchData.touchExtraThreshold;
+
+    if (targetData.direction == Axis.horizontal) {
+      return (touchedPoint.dy >=
+              barY - halfBarWidth - touchExtraThreshold.top) &&
+          (touchedPoint.dy <= barY + halfBarWidth + touchExtraThreshold.bottom);
+    }
+
+    double barTopY;
+    double barBotY;
+
+    final isUpward = barRod.isUpward();
+    if (isUpward) {
+      barTopY = getPixelY(barRod.to, viewSize, holder);
+      barBotY = getPixelY(
+        barRod.from + barRod.backDrawRodData.from,
+        viewSize,
+        holder,
+      );
+    } else {
+      barTopY = getPixelY(
+        barRod.from + barRod.backDrawRodData.from,
+        viewSize,
+        holder,
+      );
+      barBotY = getPixelY(barRod.to, viewSize, holder);
+    }
+
+    final backDrawBarY = getPixelY(
+      barRod.backDrawRodData.to,
+      viewSize,
+      holder,
+    );
+
+    bool isYInBarBounds;
+    if (isUpward) {
+      isYInBarBounds =
+          (touchedPoint.dy <= barBotY + touchExtraThreshold.bottom) &&
+              (touchedPoint.dy >= barTopY - touchExtraThreshold.top);
+    } else {
+      isYInBarBounds = (touchedPoint.dy >= barTopY - touchExtraThreshold.top) &&
+          (touchedPoint.dy <= barBotY + touchExtraThreshold.bottom);
+    }
+
+    bool isYInBarBackDrawBounds;
+    if (isUpward) {
+      isYInBarBackDrawBounds =
+          (touchedPoint.dy <= barBotY + touchExtraThreshold.bottom) &&
+              (touchedPoint.dy >= backDrawBarY - touchExtraThreshold.top);
+    } else {
+      isYInBarBackDrawBounds =
+          (touchedPoint.dy >= barTopY - touchExtraThreshold.top) &&
+              (touchedPoint.dy <= backDrawBarY + touchExtraThreshold.bottom);
+    }
+
+    return (targetData.barTouchData.allowTouchBarBackDraw &&
+            isYInBarBackDrawBounds) ||
+        isYInBarBounds;
   }
 }
 

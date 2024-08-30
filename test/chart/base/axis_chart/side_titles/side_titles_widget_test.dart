@@ -108,21 +108,21 @@ void main() {
   final barChartDataWithOnlyBottomTitles = BarChartData(
     barGroups: [
       BarChartGroupData(
-        x: 0,
+        index: 0,
         barRods: [
-          BarChartRodData(toY: 10),
+          BarChartRodData(to: 10),
         ],
       ),
       BarChartGroupData(
-        x: 1,
+        index: 1,
         barRods: [
-          BarChartRodData(toY: 10),
+          BarChartRodData(to: 10),
         ],
       ),
       BarChartGroupData(
-        x: 2,
+        index: 2,
         barRods: [
-          BarChartRodData(toY: 10),
+          BarChartRodData(to: 10),
         ],
       ),
     ],
@@ -150,21 +150,21 @@ void main() {
   BarChartData createBarChartDataWithOnlyRightTitles() {
     final barGroups = <BarChartGroupData>[
       BarChartGroupData(
-        x: 0,
+        index: 0,
         barRods: [
-          BarChartRodData(toY: 10),
+          BarChartRodData(to: 10),
         ],
       ),
       BarChartGroupData(
-        x: 1,
+        index: 1,
         barRods: [
-          BarChartRodData(toY: 10),
+          BarChartRodData(to: 10),
         ],
       ),
       BarChartGroupData(
-        x: 2,
+        index: 2,
         barRods: [
-          BarChartRodData(toY: 10),
+          BarChartRodData(to: 10),
         ],
       ),
     ];
@@ -193,8 +193,8 @@ void main() {
         ),
         bottomTitles: const AxisTitles(),
       ),
-      minY: axisValues.minY,
-      maxY: axisValues.maxY,
+      minvalue: axisValues.minvalue,
+      maxvalue: axisValues.maxvalue,
     );
   }
 
@@ -224,8 +224,8 @@ void main() {
         ),
         bottomTitles: const AxisTitles(),
       ),
-      minY: axisValues.minY,
-      maxY: axisValues.maxY,
+      minvalue: axisValues.minvalue,
+      maxvalue: axisValues.maxvalue,
     );
   }
 

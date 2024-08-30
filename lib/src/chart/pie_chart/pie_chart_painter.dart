@@ -51,7 +51,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
     final centerRadius = calculateCenterRadius(canvasWrapper.size, holder);
 
     drawCenterSpace(canvasWrapper, centerRadius, holder);
-    drawSections(context, canvasWrapper, sectionsAngle, centerRadius, holder);
+    drawSections(canvasWrapper, sectionsAngle, centerRadius, holder);
     drawBorder(canvasWrapper, centerRadius, holder);
     drawTexts(context, canvasWrapper, holder, centerRadius, sectionsAngle);
 
@@ -158,7 +158,6 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
   @visibleForTesting
   void drawSections(
-    BuildContext context,
     CanvasWrapper canvasWrapper,
     List<double> sectionsAngle,
     double centerRadius,
@@ -247,7 +246,7 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
         capAngle: capAngle,
       );
 
-      drawSection(context, section, sectionPath, canvasWrapper);
+      drawSection(section, sectionPath, canvasWrapper);
       drawSectionStroke(section, sectionPath, canvasWrapper, viewSize);
       tempAngle += sectionDegree;
     }
@@ -419,14 +418,13 @@ class PieChartPainter extends BaseChartPainter<PieChartData> {
 
   @visibleForTesting
   void drawSection(
-    BuildContext context,
     PieChartSectionData section,
     Path sectionPath,
     CanvasWrapper canvasWrapper,
   ) {
     _sectionPaint
       ..setColorOrGradient(
-        section.color ?? Theme.of(context).colorScheme.primary,
+        section.color,
         section.gradient,
         sectionPath.getBounds(),
       )

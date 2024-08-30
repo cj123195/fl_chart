@@ -88,8 +88,8 @@ class _BarChartState extends AnimatedWidgetBaseState<BarChart> {
     if (newData.minY.isNaN || newData.maxY.isNaN) {
       final values = _barChartHelper.calculateMaxAxisValues(newData.barGroups);
       newData = newData.copyWith(
-        minY: newData.minY.isNaN ? values.minY : newData.minY,
-        maxY: newData.maxY.isNaN ? values.maxY : newData.maxY,
+        minvalue: newData.minY.isNaN ? values.minvalue : newData.minvalue,
+        maxvalue: newData.maxY.isNaN ? values.maxvalue : newData.maxvalue,
       );
     }
 

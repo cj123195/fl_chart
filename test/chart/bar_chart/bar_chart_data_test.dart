@@ -32,15 +32,15 @@ void main() {
     test('BarChartRodStackItem equality test', () {
       expect(barChartRodStackItem1 == barChartRodStackItem1Clone, true);
       expect(
-        barChartRodStackItem1 == barChartRodStackItem1Clone.copyWith(fromY: 2),
+        barChartRodStackItem1 == barChartRodStackItem1Clone.copyWith(from: 2),
         false,
       );
       expect(
-        barChartRodStackItem1 == barChartRodStackItem1Clone.copyWith(toY: 2),
+        barChartRodStackItem1 == barChartRodStackItem1Clone.copyWith(to: 2),
         true,
       );
       expect(
-        barChartRodStackItem1 == barChartRodStackItem1Clone.copyWith(toY: 3),
+        barChartRodStackItem1 == barChartRodStackItem1Clone.copyWith(to: 3),
         false,
       );
       expect(
@@ -65,7 +65,7 @@ void main() {
       expect(backgroundBarChartRodData2 == backgroundBarChartRodData3, false);
 
       final changed = BackgroundBarChartRodData(
-        toY: 21,
+        to: 21,
         color: Colors.blue,
         show: false,
       );
@@ -73,7 +73,7 @@ void main() {
       expect(backgroundBarChartRodData1 == changed, false);
 
       final changed2 = BackgroundBarChartRodData(
-        toY: 22,
+        to: 22,
         color: Colors.blue,
         show: true,
       );

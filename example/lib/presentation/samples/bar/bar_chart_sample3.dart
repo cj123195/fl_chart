@@ -16,7 +16,7 @@ class _BarChart extends StatelessWidget {
         barGroups: barGroups,
         gridData: const FlGridData(show: false),
         alignment: BarChartAlignment.spaceAround,
-        maxY: 20,
+        maxvalue: 20,
       ),
     );
   }
@@ -34,7 +34,7 @@ class _BarChart extends StatelessWidget {
             int rodIndex,
           ) {
             return BarTooltipItem(
-              rod.toY.round().toString(),
+              rod.to.round().toString(),
               textStyle: const TextStyle(
                 color: AppColors.contentColorCyan,
                 fontWeight: FontWeight.bold,
@@ -119,70 +119,70 @@ class _BarChart extends StatelessWidget {
 
   List<BarChartGroupData> get barGroups => [
         BarChartGroupData(
-          x: 0,
+          index: 0,
           barRods: [
             BarChartRodData(
-              toY: 8,
+              to: 8,
               gradient: _barsGradient,
             )
           ],
           showingTooltipIndicators: [0],
         ),
         BarChartGroupData(
-          x: 1,
+          index: 1,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               gradient: _barsGradient,
             )
           ],
           showingTooltipIndicators: [0],
         ),
         BarChartGroupData(
-          x: 2,
+          index: 2,
           barRods: [
             BarChartRodData(
-              toY: 14,
+              to: 14,
               gradient: _barsGradient,
             )
           ],
           showingTooltipIndicators: [0],
         ),
         BarChartGroupData(
-          x: 3,
+          index: 3,
           barRods: [
             BarChartRodData(
-              toY: 15,
+              to: 15,
               gradient: _barsGradient,
             )
           ],
           showingTooltipIndicators: [0],
         ),
         BarChartGroupData(
-          x: 4,
+          index: 4,
           barRods: [
             BarChartRodData(
-              toY: 13,
+              to: 13,
               gradient: _barsGradient,
             )
           ],
           showingTooltipIndicators: [0],
         ),
         BarChartGroupData(
-          x: 5,
+          index: 5,
           barRods: [
             BarChartRodData(
-              toY: 10,
+              to: 10,
               gradient: _barsGradient,
             )
           ],
           showingTooltipIndicators: [0],
         ),
         BarChartGroupData(
-          x: 6,
+          index: 6,
           barRods: [
             BarChartRodData(
-              toY: 16,
+              to: 16,
               gradient: _barsGradient,
             )
           ],

@@ -263,7 +263,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
         barData,
       );
       drawBarShadow(canvasWrapper, barPath, barData);
-      drawBar(context, canvasWrapper, barPath, barData, holder);
+      drawBar(canvasWrapper, barPath, barData, holder);
     }
   }
 
@@ -954,7 +954,6 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
   /// draw the main bar line by the [barPath]
   @visibleForTesting
   void drawBar(
-    BuildContext context,
     CanvasWrapper canvasWrapper,
     Path barPath,
     LineChartBarData barData,
@@ -978,7 +977,7 @@ class LineChartPainter extends AxisChartPainter<LineChartData> {
     );
     _barPaint
       ..setColorOrGradient(
-        barData.color ?? Theme.of(context).colorScheme.primary,
+        barData.color,
         barData.gradient,
         rectAroundTheLine,
       )

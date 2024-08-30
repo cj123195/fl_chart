@@ -225,7 +225,7 @@ class LineChartBarData with EquatableMixin {
   LineChartBarData({
     this.spots = const [],
     this.show = true,
-    this.color,
+    Color? color,
     this.gradient,
     this.barWidth = 2.0,
     this.isCurved = false,
@@ -242,7 +242,8 @@ class LineChartBarData with EquatableMixin {
     this.shadow = const Shadow(color: Colors.transparent),
     this.isStepLineChart = false,
     this.lineChartStepData = const LineChartStepData(),
-  })  : belowBarData = belowBarData ?? BarAreaData(),
+  })  : color = color ?? (gradient != null ? null : kDefaultChartColor),
+        belowBarData = belowBarData ?? BarAreaData(),
         aboveBarData = aboveBarData ?? BarAreaData() {
     FlSpot? mostLeft;
     FlSpot? mostTop;
@@ -527,7 +528,7 @@ class BarAreaData with EquatableMixin {
     this.applyCutOffY = false,
   }) : color = color ??
             ((color == null && gradient == null)
-                ? Colors.blueGrey.withOpacity(0.5)
+                ? kDefaultChartColor.withOpacity(0.5)
                 : null);
 
   final bool show;
@@ -585,7 +586,7 @@ class BetweenBarsData with EquatableMixin {
     this.gradient,
   }) : color = color ??
             ((color == null && gradient == null)
-                ? Colors.blueGrey.withOpacity(0.5)
+                ? kDefaultChartColor.withOpacity(0.5)
                 : null);
 
   /// The index of the lineBarsData from where the area has to be rendered
@@ -603,6 +604,20 @@ class BetweenBarsData with EquatableMixin {
   /// Otherwise we use [color] to draw the background.
   /// It throws an exception if you provide both [color] and [gradient]
   final Gradient? gradient;
+
+  BetweenBarsData copyWith({
+    int? fromIndex,
+    int? toIndex,
+    Color? color,
+    Gradient? gradient,
+  }) {
+    return BetweenBarsData(
+      fromIndex: fromIndex ?? this.fromIndex,
+      toIndex: toIndex ?? this.toIndex,
+      color: color ?? this.color,
+      gradient: gradient ?? this.gradient,
+    );
+  }
 
   /// Lerps a [BetweenBarsData] based on [t] value, check [Tween.lerp].
   static BetweenBarsData lerp(BetweenBarsData a, BetweenBarsData b, double t) {
@@ -711,7 +726,10 @@ FlDotPainter _defaultGetDotPainter(
   int index, {
   double? size,
 }) {
-  return FlDotCirclePainter(radius: size, color: bar.color);
+  return FlDotCirclePainter(
+    radius: size,
+    color: bar.color ?? bar.gradient!.colors.first,
+  );
 }
 
 /// This class holds data about drawing spot dots on the drawing bar line.
@@ -1143,9 +1161,7 @@ List<LineTooltipItem> defaultLineTooltipItem(
       touchedSpot.y.toString(),
       textStyle: textStyle,
       indicator: FlTooltipIndicator(
-        color: touchedSpot.bar.gradient?.colors.first ??
-            touchedSpot.bar.color ??
-            Theme.of(context).colorScheme.primary,
+        color: touchedSpot.bar.gradient?.colors.first ?? touchedSpot.bar.color!,
       ),
     );
   }).toList();
@@ -1328,7 +1344,7 @@ class LineChartDataTween extends Tween<LineChartData> {
 class FlTooltipIndicator with EquatableMixin {
   /// Shows a indicator as a row in the tooltip popup.
   const FlTooltipIndicator({
-    this.color,
+    required this.color,
     this.shape = BoxShape.circle,
     this.style = PaintingStyle.fill,
     this.gradient,
@@ -1338,7 +1354,7 @@ class FlTooltipIndicator with EquatableMixin {
   });
 
   /// Color of showing indicator.
-  final Color? color;
+  final Color color;
 
   /// Width of showing indicator.
   final double width;

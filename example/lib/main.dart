@@ -1,10 +1,10 @@
 import 'package:fl_chart_app/cubits/app/app_cubit.dart';
-import 'package:fl_chart_app/presentation/resources/app_resources.dart';
+import 'package:fl_chart_app/presentation/resources/app_colors.dart';
+import 'package:fl_chart_app/presentation/resources/app_texts.dart';
+import 'package:fl_chart_app/presentation/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'presentation/router/app_router.dart';
 
 void main() {
   runApp(const MyApp());

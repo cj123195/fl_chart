@@ -149,12 +149,12 @@ class BarChartSample5State extends State<BarChartSample5> {
     final sum = value1 + value2 + value3 + value4;
     final isTouched = touchedIndex == x;
     return BarChartGroupData(
-      x: x,
+      index: x,
       groupVertically: true,
       showingTooltipIndicators: isTouched ? [0] : [],
       barRods: [
         BarChartRodData(
-          toY: sum,
+          to: sum,
           width: barWidth,
           borderRadius: isTop
               ? const BorderRadius.only(
@@ -205,7 +205,7 @@ class BarChartSample5State extends State<BarChartSample5> {
           ],
         ),
         BarChartRodData(
-          toY: -sum,
+          to: -sum,
           width: barWidth,
           color: Colors.transparent,
           borderRadius: isTop
@@ -263,8 +263,8 @@ class BarChartSample5State extends State<BarChartSample5> {
         child: BarChart(
           BarChartData(
             alignment: BarChartAlignment.center,
-            maxY: 20,
-            minY: -20,
+            minvalue: 20,
+            maxvalue: -20,
             groupsSpace: 12,
             barTouchData: BarTouchData(
               handleBuiltInTouches: false,

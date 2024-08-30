@@ -35,25 +35,25 @@ class BarChartHelper {
       return BarChartMinMaxAxisValues(0, 0);
     }
 
-    var maxY = max(barGroup.barRods[0].fromY, barGroup.barRods[0].toY);
-    var minY = min(barGroup.barRods[0].fromY, barGroup.barRods[0].toY);
+    var maxY = max(barGroup.barRods[0].from, barGroup.barRods[0].to);
+    var minY = min(barGroup.barRods[0].from, barGroup.barRods[0].to);
 
     for (var i = 0; i < barGroups.length; i++) {
       final barGroup = barGroups[i];
       for (var j = 0; j < barGroup.barRods.length; j++) {
         final rod = barGroup.barRods[j];
 
-        maxY = max(maxY, rod.fromY);
-        minY = min(minY, rod.fromY);
+        maxY = max(maxY, rod.from);
+        minY = min(minY, rod.from);
 
-        maxY = max(maxY, rod.toY);
-        minY = min(minY, rod.toY);
+        maxY = max(maxY, rod.to);
+        minY = min(minY, rod.to);
 
         if (rod.backDrawRodData.show) {
-          maxY = max(maxY, rod.backDrawRodData.fromY);
-          minY = min(minY, rod.backDrawRodData.fromY);
-          maxY = max(maxY, rod.backDrawRodData.toY);
-          minY = min(minY, rod.backDrawRodData.toY);
+          maxY = max(maxY, rod.backDrawRodData.from);
+          minY = min(minY, rod.backDrawRodData.from);
+          maxY = max(maxY, rod.backDrawRodData.to);
+          minY = min(minY, rod.backDrawRodData.to);
         }
       }
     }
@@ -66,23 +66,27 @@ class BarChartHelper {
 
 /// Holds minY, and maxY for use in [BarChartData]
 class BarChartMinMaxAxisValues with EquatableMixin {
-  BarChartMinMaxAxisValues(this.minY, this.maxY, {this.readFromCache = false});
+  BarChartMinMaxAxisValues(
+    this.minvalue,
+    this.maxvalue, {
+    this.readFromCache = false,
+  });
 
-  final num minY;
-  final num maxY;
+  final num minvalue;
+  final num maxvalue;
   final bool readFromCache;
 
   @override
-  List<Object?> get props => [minY, maxY, readFromCache];
+  List<Object?> get props => [minvalue, maxvalue, readFromCache];
 
   BarChartMinMaxAxisValues copyWith({
-    double? minY,
-    double? maxY,
+    double? minvalue,
+    double? maxvalue,
     bool? readFromCache,
   }) {
     return BarChartMinMaxAxisValues(
-      minY ?? this.minY,
-      maxY ?? this.maxY,
+      minvalue ?? this.minvalue,
+      maxvalue ?? this.maxvalue,
       readFromCache: readFromCache ?? this.readFromCache,
     );
   }

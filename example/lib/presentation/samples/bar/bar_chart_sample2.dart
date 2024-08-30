@@ -82,7 +82,7 @@ class BarChartSample2State extends State<BarChartSample2> {
             Expanded(
               child: BarChart(
                 BarChartData(
-                  maxY: 20,
+                  maxvalue: 20,
                   barTouchData: BarTouchData(
                     touchTooltipData: BarTouchTooltipData(
                       getTooltipColor: ((group) {
@@ -112,7 +112,7 @@ class BarChartSample2State extends State<BarChartSample2> {
                           var sum = 0.0;
                           for (final rod
                               in showingBarGroups[touchedGroupIndex].barRods) {
-                            sum += rod.toY;
+                            sum += rod.to;
                           }
                           final avg = sum /
                               showingBarGroups[touchedGroupIndex]
@@ -125,7 +125,7 @@ class BarChartSample2State extends State<BarChartSample2> {
                                 .barRods
                                 .map((rod) {
                               return rod.copyWith(
-                                  toY: avg, color: widget.avgColor);
+                                  to: avg, color: widget.avgColor);
                             }).toList(),
                           );
                         }
@@ -218,15 +218,15 @@ class BarChartSample2State extends State<BarChartSample2> {
   BarChartGroupData makeGroupData(int x, double y1, double y2) {
     return BarChartGroupData(
       barsSpace: 4,
-      x: x,
+      index: x,
       barRods: [
         BarChartRodData(
-          toY: y1,
+          to: y1,
           color: widget.leftBarColor,
           width: width,
         ),
         BarChartRodData(
-          toY: y2,
+          to: y2,
           color: widget.rightBarColor,
           width: width,
         ),

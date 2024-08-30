@@ -171,7 +171,6 @@ void main() {
 
   group('drawSections()', () {
     test('test 1', () {
-      final mockBuildContext = MockBuildContext();
       const viewSize = Size(200, 200);
 
       const radius = 30.0;
@@ -199,7 +198,6 @@ void main() {
       when(mockCanvasWrapper.size).thenAnswer((realInvocation) => viewSize);
       when(mockCanvasWrapper.canvas).thenReturn(MockCanvas());
       barChartPainter.drawSections(
-        mockBuildContext,
         mockCanvasWrapper,
         [360],
         10,
@@ -277,9 +275,7 @@ void main() {
         });
       });
 
-      final mockBuildContext = MockBuildContext();
       barChartPainter.drawSections(
-        mockBuildContext,
         mockCanvasWrapper,
         [36, 72, 108, 144],
         10,
@@ -648,28 +644,23 @@ void main() {
         });
       });
 
-      final mockContent = MockBuildContext();
       barChartPainter
         ..drawSection(
-          mockContent,
           data.sections[0],
           MockData.path1,
           mockCanvasWrapper,
         )
         ..drawSection(
-          mockContent,
           data.sections[1],
           MockData.path2,
           mockCanvasWrapper,
         )
         ..drawSection(
-          mockContent,
           data.sections[2],
           MockData.path3,
           mockCanvasWrapper,
         )
         ..drawSection(
-          mockContent,
           data.sections[3],
           MockData.path4,
           mockCanvasWrapper,

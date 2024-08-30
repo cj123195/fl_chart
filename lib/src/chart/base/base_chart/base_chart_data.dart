@@ -7,6 +7,8 @@ import 'package:fl_chart/src/chart/base/base_chart/base_chart_painter.dart';
 import 'package:fl_chart/src/extensions/border_extension.dart';
 import 'package:flutter/material.dart';
 
+const kDefaultChartColor = Color(0xFF4BB4AA);
+
 /// This class holds all data needed for [BaseChartPainter].
 ///
 /// In this phase we draw the border,

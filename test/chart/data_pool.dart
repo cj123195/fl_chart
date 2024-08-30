@@ -331,10 +331,10 @@ class MockData {
   static final lineTouchResponse1 =
       LineTouchResponse([lineBarSpot1, lineBarSpot2]);
 
-  static final barChartRodData1 = BarChartRodData(toY: 11);
-  static final barChartRodData2 = BarChartRodData(toY: 22);
+  static final barChartRodData1 = BarChartRodData(to: 11);
+  static final barChartRodData2 = BarChartRodData(to: 22);
   static final barTouchedSpot = BarTouchedSpot(
-    BarChartGroupData(x: 0, barRods: [barChartRodData1, barChartRodData2]),
+    BarChartGroupData(index: 0, barRods: [barChartRodData1, barChartRodData2]),
     0,
     barChartRodData1,
     0,
@@ -352,17 +352,17 @@ class MockData {
   );
 
   static final barGroupData0 = BarChartGroupData(
-    x: 0,
+    index: 0,
     barRods: [MockData.barChartRodData1, MockData.barChartRodData2],
   );
 
   static final barGroupData1 = BarChartGroupData(
-    x: 1,
+    index: 1,
     barRods: [MockData.barChartRodData1, MockData.barChartRodData2],
   );
 
   static final barGroupData2 = BarChartGroupData(
-    x: 2,
+    index: 2,
     barRods: [MockData.barChartRodData1, MockData.barChartRodData2],
   );
 
@@ -2423,32 +2423,32 @@ final BarChartRodStackItem barChartRodStackItem2 = BarChartRodStackItem(
 
 final BackgroundBarChartRodData backgroundBarChartRodData1 =
     BackgroundBarChartRodData(
-  toY: 21,
+  to: 21,
   color: Colors.blue,
   show: true,
 );
 final BackgroundBarChartRodData backgroundBarChartRodData1Clone =
     BackgroundBarChartRodData(
-  toY: 21,
+  to: 21,
   color: Colors.blue,
   show: true,
 );
 final BackgroundBarChartRodData backgroundBarChartRodData2 =
     BackgroundBarChartRodData(
-  toY: 44,
+  to: 44,
   color: Colors.red,
   show: true,
 );
 final BackgroundBarChartRodData backgroundBarChartRodData3 =
     BackgroundBarChartRodData(
-  toY: 44,
+  to: 44,
   color: Colors.green,
   show: true,
 );
 
 final BarChartRodData barChartRodData1 = BarChartRodData(
   color: Colors.red,
-  toY: 12,
+  to: 12,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   rodStackItems: [
@@ -2467,7 +2467,7 @@ final BarChartRodData barChartRodData1Clone = barChartRodData1.copyWith(
 
 final BarChartRodData barChartRodData2 = BarChartRodData(
   color: Colors.red,
-  toY: 1132,
+  to: 1132,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   rodStackItems: [
@@ -2478,7 +2478,7 @@ final BarChartRodData barChartRodData2 = BarChartRodData(
 );
 final BarChartRodData barChartRodData3 = BarChartRodData(
   color: Colors.green,
-  toY: 12,
+  to: 12,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   rodStackItems: [
@@ -2488,7 +2488,7 @@ final BarChartRodData barChartRodData3 = BarChartRodData(
 );
 final BarChartRodData barChartRodData4 = BarChartRodData(
   color: Colors.red,
-  toY: 12,
+  to: 12,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   rodStackItems: [
@@ -2499,7 +2499,7 @@ final BarChartRodData barChartRodData4 = BarChartRodData(
 );
 final BarChartRodData barChartRodData5 = BarChartRodData(
   color: Colors.red,
-  toY: 12,
+  to: 12,
   width: 55,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   rodStackItems: [
@@ -2510,14 +2510,14 @@ final BarChartRodData barChartRodData5 = BarChartRodData(
 );
 final BarChartRodData barChartRodData6 = BarChartRodData(
   color: Colors.red,
-  toY: 12,
+  to: 12,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   backDrawRodData: backgroundBarChartRodData1,
 );
 final BarChartRodData barChartRodData7 = BarChartRodData(
   color: Colors.red,
-  toY: 12,
+  to: 12,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(12)),
   rodStackItems: [
@@ -2528,7 +2528,7 @@ final BarChartRodData barChartRodData7 = BarChartRodData(
 );
 final BarChartRodData barChartRodData8 = BarChartRodData(
   color: Colors.red,
-  toY: 12,
+  to: 12,
   width: 32,
   borderRadius: const BorderRadius.all(Radius.circular(14)),
   rodStackItems: [
@@ -2539,7 +2539,7 @@ final BarChartRodData barChartRodData8 = BarChartRodData(
 );
 
 final BarChartGroupData barChartGroupData1 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData1,
@@ -2550,7 +2550,7 @@ final BarChartGroupData barChartGroupData1 = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData1Clone = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData1Clone,
@@ -2561,7 +2561,7 @@ final BarChartGroupData barChartGroupData1Clone = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData2 = BarChartGroupData(
-  x: 13,
+  index: 13,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData1,
@@ -2572,7 +2572,7 @@ final BarChartGroupData barChartGroupData2 = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData3 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1],
   barRods: [
     barChartRodData1,
@@ -2583,7 +2583,7 @@ final BarChartGroupData barChartGroupData3 = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData4 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData1,
@@ -2593,12 +2593,12 @@ final BarChartGroupData barChartGroupData4 = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData5 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData6 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData2,
@@ -2609,7 +2609,7 @@ final BarChartGroupData barChartGroupData6 = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData7 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData1,
@@ -2620,7 +2620,7 @@ final BarChartGroupData barChartGroupData7 = BarChartGroupData(
   barsSpace: 44,
 );
 final BarChartGroupData barChartGroupData8 = BarChartGroupData(
-  x: 12,
+  index: 12,
   barRods: [
     barChartRodData1,
     barChartRodData2,
@@ -2630,7 +2630,7 @@ final BarChartGroupData barChartGroupData8 = BarChartGroupData(
   barsSpace: 23,
 );
 final BarChartGroupData barChartGroupData9 = BarChartGroupData(
-  x: 12,
+  index: 12,
   showingTooltipIndicators: [0, 1, 2],
   barRods: [
     barChartRodData1,
@@ -2768,7 +2768,7 @@ BarTooltipItem getTooltipItem(
     fontWeight: FontWeight.bold,
     fontSize: 14,
   );
-  return BarTooltipItem(rod.toY.toString(), textStyle: textStyle);
+  return BarTooltipItem(rod.to.toString(), textStyle: textStyle);
 }
 
 Color getTooltipGreenColor(
@@ -3015,11 +3015,11 @@ final BarTouchData barTouchData10 = BarTouchData(
 );
 
 final BarChartData barChartData1 = BarChartData(
-  minY: 12,
+  minvalue: 12,
   titlesData: MockData.flTitlesData1,
   gridData: flGridData1,
   rangeAnnotations: rangeAnnotations1,
-  maxY: 23,
+  maxvalue: 23,
   backgroundColor: Colors.green,
   borderData: borderData1,
   alignment: BarChartAlignment.spaceAround,
@@ -3041,7 +3041,7 @@ final BarChartData barChartData1Clone = barChartData1.copyWith(
 );
 
 final BarChartData barChartData2 = barChartData1.copyWith(
-  minY: 11,
+  minvalue: 11,
 );
 final BarChartData barChartData3 = barChartData1.copyWith(
   titlesData: MockData.flTitlesData2,
@@ -3053,7 +3053,7 @@ final BarChartData barChartData5 = barChartData1.copyWith(
   rangeAnnotations: rangeAnnotations2,
 );
 final BarChartData barChartData6 = barChartData1.copyWith(
-  maxY: 52345,
+  maxvalue: 52345,
 );
 final BarChartData barChartData7 = barChartData1.copyWith(
   backgroundColor: Colors.red,
