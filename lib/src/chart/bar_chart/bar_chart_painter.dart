@@ -577,7 +577,7 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
   ) {
     final viewSize = canvasWrapper.size;
 
-    const textsBelowMargin = 4;
+    const textsBelowMargin = 0;
 
     final tooltipItem = tooltipData.getTooltipItem(
       showOnBarGroup,
@@ -737,11 +737,6 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
       angle: rotateAngle,
       drawCallback: () {
         canvasWrapper
-          ..drawShadow(
-            Path()..addRRect(roundedRect),
-            Theme.of(context).colorScheme.shadow.withOpacity(0.3),
-            10,
-          )
           ..drawRRect(roundedRect, _bgTouchTooltipPaint)
           ..drawRRect(roundedRect, _borderTouchTooltipPaint);
         final indicator = tooltipItem.indicator;
@@ -836,9 +831,9 @@ class BarChartPainter extends AxisChartPainter<BarChartData> {
 
     final barRightY = max(barToXPixel.dx, barFromXPixel.dx);
 
-    final tooltipTop = dy - tooltipHeight - tooltipData.tooltipMargin;
+    final tooltipTop = dy - tooltipHeight / 2;
 
-    final tooltipLeft = barRightY - tooltipWidth / 2;
+    final tooltipLeft = barRightY + tooltipData.tooltipMargin;
 
     /// draw the background rect with rounded radius
     // ignore: omit_local_variable_types
