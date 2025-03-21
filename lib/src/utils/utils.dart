@@ -289,16 +289,48 @@ class Utils {
     return resultNumber + symbol;
   }
 
+  /// Calculate the appropriate text color based on the background color.
+  Color _getTextColorForBackground(Color backgroundColor) {
+    // Calculate Brightness - Use the relative brightness formula.
+    final luminance = backgroundColor.computeLuminance();
+
+    // Get the hue value to judge whether it's warm or cold.
+    final hslColor = HSLColor.fromColor(backgroundColor);
+    final hue = hslColor.hue;
+
+    // Cool tones range from about 180 300 degrees.
+    final isCoolColor = hue >= 180 && hue <= 300;
+
+    // Choose the text color based on brightness and color temperature.
+    if (luminance > 0.5) {
+      // Bright background
+      return isCoolColor ? Colors.black87 : Colors.black;
+    } else {
+      // Dark background
+      return isCoolColor ? Colors.white : Colors.white70;
+    }
+  }
+
   /// Returns a TextStyle based on provided [context], if [providedStyle] provided we try to merge it.
   TextStyle getThemeAwareTextStyle(
     BuildContext context,
-    TextStyle? providedStyle,
-  ) {
+    TextStyle? providedStyle, [
+    Color? backgroundColor,
+  ]) {
     var effectiveTextStyle = providedStyle;
     if (providedStyle == null || providedStyle.inherit) {
       effectiveTextStyle =
           Theme.of(context).textTheme.labelMedium!.merge(providedStyle);
     }
+
+    // If a background color is provided, adjust the text color according to the
+    // background color.
+    if (backgroundColor != null) {
+      effectiveTextStyle = effectiveTextStyle!.copyWith(
+        color: _getTextColorForBackground(backgroundColor),
+      );
+    }
+
     if (MediaQuery.boldTextOf(context)) {
       effectiveTextStyle = effectiveTextStyle!
           .merge(const TextStyle(fontWeight: FontWeight.bold));
